@@ -14,7 +14,7 @@ const Input = styled.input`
   background-color: ${props => props.bg};
 `
 const errorColor = "#db6f93";
-
+const greyTile = "#dedde5";
 Input.defaultProps = {
   bg: "white",
   borderColor: "black",
@@ -49,14 +49,12 @@ gridGenerator(){
               onChange={(e) => {
                 this.props.handleChange(e, y, x);
               }}
-              borderColor={
-                this.state.error ? errorColor : null
-              }
+              borderColor={this.state.error ? errorColor : null}
               bg={
                 (Math.floor(x / 3) % 2 === 0 && Math.floor(y / 3) % 2 === 0) ||
                 (Math.floor(x / 3) % 2 === 1 && Math.floor(y / 3) % 2 === 1)
-                  ? "#dedde5"
-                  : null
+                  ? null
+                  : greyTile
               }
               key={`Grid_ID_(${y},${x})`}
               required

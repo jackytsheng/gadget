@@ -21,6 +21,7 @@
   },
   "homepage": ".",
   "scripts": {
+    "predeploy": "yarn run build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "deploy": "gh-pages -d build",
