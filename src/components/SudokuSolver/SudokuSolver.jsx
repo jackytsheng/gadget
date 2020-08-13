@@ -52,9 +52,8 @@ class SudokuSolver extends React.Component {
   }
 
   registerNumberOnGrid(y, x, n) {
-    console.log(n);
     grid[y][x] = n;
-    this.setState({ grid }, () => console.log(this.state.grid));
+    this.setState({ grid });
   }
   handleChange(e, y, x) {
     e.preventDefault();
