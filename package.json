@@ -19,7 +19,7 @@
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1"
   },
-  "homepage": ".",
+  "homepage": "https://gaget.jiajinzheng.com/",
   "scripts": {
     "predeploy": "yarn run build",
     "start": "react-scripts start",
