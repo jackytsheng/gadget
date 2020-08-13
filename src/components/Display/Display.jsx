@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, useLocation } from 'react-router-dom';
-import SudukuSolver from '../SudukuSolver';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -15,7 +14,6 @@ export default () => {
   return (
     <Route path={url}>
       <Wrapper>
-        <SudukuSolver />
       </Wrapper>
     </Route>
   );
