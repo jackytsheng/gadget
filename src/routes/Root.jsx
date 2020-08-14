@@ -4,6 +4,7 @@ import Home from './Home';
 import SudokuSolver from '../components/SudokuSolver';
 import FullSizeCanvas from '../Layout/FullSizeCanvas';
 
+//TODO: Fixed the Client router problem with Gh-pages
 export default () => (
   <Router basename="/">
     <Switch>

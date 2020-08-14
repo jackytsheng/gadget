@@ -30,15 +30,17 @@ const Wrapper = styled.div`
 
 
 
-class Grid extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      error:"",
+export default ({ handleChange, errorQueue }) => {
+const validError = (errorQueue,y,x) => {
+  let result = false;
+  errorQueue.forEach((cor) => {
+    if (cor.y === y && cor.x === x) {
+      result = true;
     }
-  }
-
-gridGenerator(){
+  });
+  return result;
+}
+const gridGenerator = () =>{
   let renderArray = []
   for (let y = 0; y < 9; y++){
     let row = [];
@@ -46,10 +48,11 @@ gridGenerator(){
         row.push(
           <CenterWrapper key={`Grid_Wrapper_(${y},${x})`}>
             <Input
+              onFocus={(e) => e.currentTarget.select()}
               onChange={(e) => {
-                this.props.handleChange(e, y, x);
+                handleChange(e, y, x);
               }}
-              borderColor={this.state.error ? errorColor : null}
+              borderColor={validError(errorQueue, y, x) ? errorColor : null}
               bg={
                 (Math.floor(x / 3) % 2 === 0 && Math.floor(y / 3) % 2 === 0) ||
                 (Math.floor(x / 3) % 2 === 1 && Math.floor(y / 3) % 2 === 1)
@@ -67,15 +70,13 @@ gridGenerator(){
       renderArray.push(row);
     }
     return renderArray;
-  }
-  render(){
-    return (
-    <CenterWrapper>
-      <FillCanvas>
-        <Wrapper>{this.gridGenerator()}</Wrapper>
-      </FillCanvas>
-    </CenterWrapper>)
-  }
+
+}
+  return (
+  <CenterWrapper>
+    <FillCanvas>
+      <Wrapper>{gridGenerator()}</Wrapper>
+    </FillCanvas>
+  </CenterWrapper>);
 }
 
-export default Grid;
