@@ -4,11 +4,11 @@ import styled from "styled-components";
 import Grid from './components/Grid';
 import {Button,CircularProgress} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
+import axios from "axios";
 
-
-
-const  MINIMUM_INPUT = 19;
-
+const MINIMUM_INPUT = 19;
+const SOLVER_URL =
+  "https://umvovqu86c.execute-api.ap-southeast-2.amazonaws.com/test/sudokusolver";
 const SudokuGridWrapper = styled.div`
   width: 415px;
   height: 400px;
@@ -81,7 +81,24 @@ class SudokuSolver extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-
+  async postGrid(){
+    this.setState({loading:true});
+    await axios
+      .post(SOLVER_URL, {
+        "grid":JSON.stringify(this.state.grid),
+      })
+      .then((res) => {
+        this.setState({
+          loading: false,
+          result: res.data,
+        });
+        console.log(res.data);
+      })
+      .catch(err=>{
+          this.setState({ loading: false });
+          console.log(err);
+        });
+  }
   
 //   isValidNumber(y,x,n){
 //     const {grid} = this.state;
@@ -183,12 +200,14 @@ class SudokuSolver extends React.Component {
           <Button
             variant="contained"
             color="default"
-            onClick={(e) => console.log(this.state.grid)}
+            onClick={(e) => {
+            console.log(this.state.grid)
+            this.postGrid();
+            }}
             disabled={
               !(
                 this.state.errorQueue.length === 0 &&
-                this.countGrid() > MINIMUM_INPUT &&
-                this.state.validGrid
+                this.countGrid() > MINIMUM_INPUT 
               )
             }
           >
