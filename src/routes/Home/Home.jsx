@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import Profile from '../../components/Profile';
-import Navbar from "../../components/Navbar";
-import Display from "../../components/Display";
 import {Redirect} from 'react-router-dom';
+import { Button } from "@material-ui/core";
+import {Alert,AlertTitle} from '@material-ui/lab';
 
 const Layout = styled.section`
   display:flex;
   flex-direction:column;
   justify-content:space-evenly;
   align-items:center;
+  height:300px; 
 `;
 
 
@@ -31,13 +31,14 @@ class Home extends React.Component {
   render() {
     return (
       <Layout>
-        <Profile />
-        <Navbar />
-        <button onClick = {this.handleClick}>
-          Redirect
-        </button>
+        <Alert severity="info">
+          <AlertTitle>Progress</AlertTitle>
+          I'm currently working on this home page...
+        </Alert>
+        <Button variant="outlined" color="primary" onClick={this.handleClick}>
+          Redirect to sudoku solver
+        </Button>
         {this.state.redirect ? <Redirect to="/sudokusolver" /> : null}
-        <Display header="Current Header" />
       </Layout>
     );
   }

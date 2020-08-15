@@ -23,6 +23,10 @@ const Wrapper = styled(CenterWrapper)`
   @media (max-width: 850px) {
     flex-direction: column;
   }
+  @media (max-width: 500px) {
+    margin-top:20px;
+    justify-content:flex-start;
+  }
 `;
 const SOLVER_URL =
   "https://umvovqu86c.execute-api.ap-southeast-2.amazonaws.com/test/sudokusolver";
@@ -30,13 +34,13 @@ const SudokuGridWrapper = styled.div`
   width: ${GRID_WIDTH};
   height: ${GRID_HEIGHT};
   @media (max-width: 500px) {
+    margin-bottom: 10px 0;
     width: ${GRID_WIDTH_SM};
     height: ${GRID_HEIGHT_SM};
   }
   margin: 20px 0;
   border-radius: 5px;
   position: relative;
-  
 `;
 const Title = styled.div`
   width: ${GRID_WIDTH};
@@ -44,7 +48,8 @@ const Title = styled.div`
   font-size: 50px;
   font-weight: 700;
   @media (max-width: 500px) {
-    font-size: 30px;
+    font-size: 25px;
+    margin-bottom: 10px;
     width: ${GRID_WIDTH_SM};
   }
 `;
@@ -75,8 +80,11 @@ const WarningFlexWrapper = styled.div`
   bottom: -120px;
   display: flex;
   flex-direction: column;
-  height:100px;
-  justify-content:space-between;
+  height: 100px;
+  justify-content: space-between;
+  @media (max-width: 500px) {
+    bottom: -110px;
+  }
 `;
 
 const ButtonFlexWrapper = styled.div`
@@ -85,6 +93,7 @@ const ButtonFlexWrapper = styled.div`
   display: flex;
   width: ${GRID_WIDTH};
   @media (max-width: 500px) {
+    margin-top: 30px;
     width: ${GRID_WIDTH_SM};
   }
   justify-content: space-evenly;
@@ -100,18 +109,21 @@ const ClearBtn = styled(Button)`
   align-self:flex-start;
 `;
 
-const LoaderWrapper =styled.div`
-  z-index:5;
-  background-color: rgba(0,0,0,0.4);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  bottom:0;
-  left:0;
-  right:0;
-  top:0;
-  position:absolute;
-`
+const LoaderWrapper = styled.div`
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  position: absolute;
+  @media (max-width: 500px) {
+    position: fixed;
+  }
+`;
 
 const defaultGrid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],

@@ -15,6 +15,7 @@ const Input = styled.input`
   @media (max-width: 500px) {
     font-size: 20px;
     font-weight: 400;
+    outline:none;
     border: 1px solid #b2b1c0;
   }
   background-color: ${(props) => props.bg};
