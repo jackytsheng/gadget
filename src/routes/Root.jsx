@@ -1,25 +1,52 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import Home from './Home';
 import SudokuSolver from '../components/SudokuSolver';
 import FullSizeCanvas from '../Layout/FullSizeCanvas';
+import styled from "styled-components";
+import { Button } from "@material-ui/core";
 
-//TODO: Fixed the Client router problem with Gh-pages
+const ReturnHome = ({ handleClick }) => {
+  return (
+    <ReturnHomeBtn color="primary" onClick={handleClick}>
+      Return Home
+    </ReturnHomeBtn>
+  );
+};
+
+const ReturnHomeBtn = styled(Button)`
+  position:fixed;
+  top:10px;
+  left:40px;
+  z-index:20;
+`
+
 
 export default () => {
-return (
-  <Router>
-    <Switch>
-      <Route path="/sudokusolver" exact>
-        <FullSizeCanvas>
-          <SudokuSolver />
-        </FullSizeCanvas>
-      </Route>
-      <Route path="/" exact>
-        <FullSizeCanvas>
-          <Home />
-        </FullSizeCanvas>
-      </Route>
-    </Switch>
-  </Router>
-);}
+  const curUrl = useLocation();
+  let history = useHistory();
+  const handleClick = () => {
+    history.push("/");
+  }
+  return (
+    <React.Fragment>
+      {curUrl.pathname !== "/" ? <ReturnHome handleClick={handleClick} /> : null}
+      <Switch>
+        <Route path="/sudokusolver" exact>
+          <FullSizeCanvas>
+            <SudokuSolver />
+          </FullSizeCanvas>
+        </Route>
+        <Route path="/" exact>
+          <FullSizeCanvas>
+            <Home />
+          </FullSizeCanvas>
+        </Route>
+      </Switch>
+    </React.Fragment>
+  );}

@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Redirect} from 'react-router-dom';
-import { Button } from "@material-ui/core";
 import {Alert,AlertTitle} from '@material-ui/lab';
+import ProjectCard from './ProjectCard';
+
 
 const Layout = styled.section`
   display:flex;
@@ -12,34 +13,68 @@ const Layout = styled.section`
   height:300px; 
 `;
 
+const DisplayConatiner = styled.div`
+  width:100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap:wrap;
+  box-sizing:border-box;
+`
+
+const Filler = styled.div`
+  width:345px;
+`
 
 class Home extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      redirect:false
+      redirect:"/"
     }
     this.handleClick = this.handleClick.bind(this);
   }
 
 
-  handleClick(){
-
-    this.setState({ redirect: true },()=>{console.log("i got run")});
+  handleClick(url){
+    this.setState({ redirect: url });
   }
 
   render() {
     return (
-      <Layout>
-        <Alert severity="info">
-          <AlertTitle>Progress</AlertTitle>
-          I'm currently working on this home page...
-        </Alert>
-        <Button variant="outlined" color="primary" onClick={this.handleClick}>
-          Redirect to sudoku solver
-        </Button>
-        {this.state.redirect ? <Redirect to="/sudokusolver" /> : null}
-      </Layout>
+      <React.Fragment>
+        <Layout>
+          <Alert severity="info">
+            <AlertTitle>Progress</AlertTitle>
+            I'm currently working on this home page...
+          </Alert>
+        </Layout>
+        <DisplayConatiner>
+          <ProjectCard
+            title="SudoKu Solver"
+            description="Solving sudoku puzzle with input number provided, returning all possible solutions."
+            handleClick={() => {
+              this.handleClick("/sudokusolver");
+            }}
+          />
+          <ProjectCard
+            title="SudoKu Solver"
+            description="Solving sudoku puzzle with input number provided, returning all possible solutions."
+            handleClick={() => {
+              this.handleClick("/sudokusolver");
+            }}
+          />
+          <ProjectCard
+            title="SudoKu Solver"
+            description="Solving sudoku puzzle with input number provided, returning all possible solutions."
+            handleClick={() => {
+              this.handleClick("/sudokusolver");
+            }}
+          />
+          <Filler />
+          <Filler />
+        </DisplayConatiner>
+        <Redirect to={this.state.redirect} />
+      </React.Fragment>
     );
   }
 }

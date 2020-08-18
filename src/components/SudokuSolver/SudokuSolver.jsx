@@ -24,7 +24,7 @@ const Wrapper = styled(CenterWrapper)`
     flex-direction: column;
   }
   @media (max-width: 500px) {
-    margin-top:20px;
+    margin-top:40px;
     justify-content:flex-start;
   }
 `;
