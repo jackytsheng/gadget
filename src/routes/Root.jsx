@@ -10,6 +10,7 @@ import SudokuSolver from '../components/SudokuSolver';
 import FullSizeCanvas from '../Layout/FullSizeCanvas';
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
+import TwoZeroFourEight from '../components/TwoZeroFourEight';
 
 const ReturnHome = ({ handleClick }) => {
   return (
@@ -35,17 +36,22 @@ export default () => {
   }
   return (
     <React.Fragment>
-      {curUrl.pathname !== "/" ? <ReturnHome handleClick={handleClick} /> : null}
+      {curUrl.pathname !== "/" ? (
+        <ReturnHome handleClick={handleClick} />
+      ) : null}
       <Switch>
         <Route path="/sudokusolver" exact>
           <FullSizeCanvas>
             <SudokuSolver />
           </FullSizeCanvas>
         </Route>
-        <Route path="/" exact>
+        <Route path="/2048" exact>
           <FullSizeCanvas>
-            <Home />
+            <TwoZeroFourEight />
           </FullSizeCanvas>
+        </Route>
+        <Route path="/" exact>
+          <Home />
         </Route>
       </Switch>
     </React.Fragment>

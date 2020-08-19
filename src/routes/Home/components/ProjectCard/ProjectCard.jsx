@@ -9,16 +9,17 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 
 const CardWrapper = styled(Card)`
-  max-width: 345px;
+  max-width: ${props=>props.width};
   margin: 10px;
 `;
-export default ({ title, description, handleClick}) => (
-  <CardWrapper>
+
+const CardMediaWrapper = styled(CardMedia)`
+  height: ${(props) => props.height};
+`;
+export default ({ title, description, handleClick, width, img, height }) => (
+  <CardWrapper width={width}>
     <CardActionArea>
-      <CardMedia
-        image="/static/images/cards/contemplative-reptile.jpg"
-        title="Contemplative Reptile"
-      />
+      <CardMediaWrapper image={img} height={height}/>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
           {title}
