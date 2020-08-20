@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CenterWrapper from "../../Layout/CenterWrapper";
 import styled from 'styled-components';
 import Grid from './components/Grid';
+import updateGrid, {
+  randomGenerator,
+  generateAvailableCoor,
+} from "./updateGrid.js";
+
 
 const BG_COLOR = "#bbada0";
 const BORDER_COLOR = '#766d64';
@@ -135,39 +140,87 @@ const SquareBoard = styled.div`
 const FillerBlock = styled.div`
   flex:1;
 `
-export default () => (
-  <CenterWrapper>
-    <FlexVerticalWrapper>
-      <Title>2048 Clone</Title>
-      <SubTitle>By Jiajin Zheng</SubTitle>
-    </FlexVerticalWrapper>
-    <GameBoard>
-      <TopRow>
-        <Logo>
-          <CenterWrapper>
-            <LogoText>2048</LogoText>
-          </CenterWrapper>
-        </Logo>
-        <FillerBlock />
-        <Score>
-          <ScoreText>SCORE</ScoreText>
-          <ScoreNumber>
-            <CenterWrapper>0</CenterWrapper>
-          </ScoreNumber>
-        </Score>
-        <Score>
-          <ScoreText>BEST</ScoreText>
-          <ScoreNumber>
-            <CenterWrapper>0</CenterWrapper>
-          </ScoreNumber>
-        </Score>
-      </TopRow>
-      <Description>
-        <Text>Join the numbers and get to the 2048 tile! </Text>
-      </Description>
-      <SquareBoard>
-        <Grid />
-      </SquareBoard>
-    </GameBoard>
-  </CenterWrapper>
-);
+
+
+export default () => {
+  const [gameBoard,setGameBoard] = useState(Array(4)
+    .fill(0)
+    .map((row) => Array(4).fill(0)));
+  const [availableCoordinate,setAvailableCoordinate] = useState(generateAvailableCoor());
+  const [score,setScore] = useState(0);
+  const [bestScore,setBestScore] = useState(localStorage.getItem('best') ? localStorage.getItem('best'):0);
+  const [lost,setLost] = useState(false);
+
+  useEffect(() => {
+    // initial generation
+    const [newBoard, newAvailableCoor] = randomGenerator(
+      gameBoard,
+      availableCoordinate
+    );
+    setAvailableCoordinate(newAvailableCoor);
+    setGameBoard(newBoard);
+    window.addEventListener("keydown", handleKeypress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeypress);
+    };
+  }, []);
+  const handleKeypress = (evt) =>{
+    // Only for arrow key
+    if(evt.keyCode >36 && evt.keyCode < 41){
+      const keyPress = evt.key.replace("Arrow", "");
+      const [newGameBoard,newScore,newCoor,newLost] = updateGrid(
+        keyPress,
+        gameBoard,
+        score,
+        lost,
+      );
+      setScore(newScore);
+      setGameBoard(newGameBoard)
+      setAvailableCoordinate(newCoor);
+      setLost(newLost);
+    }
+  }
+
+
+  useEffect(() => {
+    console.log(gameBoard);
+    console.log(availableCoordinate);
+  }, [gameBoard,availableCoordinate]);
+
+  return (
+    <CenterWrapper>
+      <FlexVerticalWrapper>
+        <Title>2048 Clone</Title>
+        <SubTitle>By Jiajin Zheng</SubTitle>
+      </FlexVerticalWrapper>
+      <GameBoard>
+        <TopRow>
+          <Logo>
+            <CenterWrapper>
+              <LogoText>2048</LogoText>
+            </CenterWrapper>
+          </Logo>
+          <FillerBlock />
+          <Score>
+            <ScoreText>SCORE</ScoreText>
+            <ScoreNumber>
+              <CenterWrapper>{score}</CenterWrapper>
+            </ScoreNumber>
+          </Score>
+          <Score>
+            <ScoreText>BEST</ScoreText>
+            <ScoreNumber>
+              <CenterWrapper>{bestScore}</CenterWrapper>
+            </ScoreNumber>
+          </Score>
+        </TopRow>
+        <Description>
+          <Text>Join the numbers and get to the 2048 tile! </Text>
+        </Description>
+        <SquareBoard>
+          <Grid />
+        </SquareBoard>
+      </GameBoard>
+    </CenterWrapper>
+  );};
