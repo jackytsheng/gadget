@@ -1,21 +1,25 @@
 
 // merge the array from left to right.
 // update the score receiving a function that takes in previous score as input
- const merge = (array, score) => {
+ const merge = (InputArray, score) => {
+   let array = [...InputArray];
    let result = [];
+   let newScore = score;
    while (array.length > 1) {
      if (array[0] === array[1]) {
-       result.push(array.shift() + array.shift());
-       score += result[result.length - 1];
+       let firstNumber = array.shift();
+       let secondNumber = array.shift();
+       result.push(firstNumber + secondNumber);
+       newScore += firstNumber + secondNumber;
      } else {
        result.push(array.shift());
      }
    }
    if (array.length === 1) {
      result.push(array.shift());
-     return result;
+     return [result, newScore];
    }
-   return [result , score];
+   return [result, newScore];
  };
 
 //generate gameboard
@@ -34,8 +38,9 @@ export const generateAvailableCoor = () => {
 
 export const randomGenerator = (
          array,
-         availableCoordinate) => {
+         Coordinate) => {
          let gameBoard = JSON.parse(JSON.stringify(array));
+         let availableCoordinate = JSON.parse(JSON.stringify(Coordinate));
          let coorIndex = Math.floor(Math.random() * availableCoordinate.length);
          let coor = availableCoordinate[coorIndex];
          availableCoordinate.splice(coorIndex, 1);
@@ -50,22 +55,21 @@ export const randomGenerator = (
              }
              return row;
            }),
-           availableCoordinate,
+          availableCoordinate,
          ];
        };
 
 
 const updateAvailable = (gameBoard) => {
-  console.log(gameBoard);
     let availableCoordinate = [];
     for (let y = 0; y < 4; y++) {
         for (let x = 0; x < 4; x++) {
             if(gameBoard[y][x]===0){
-                availableCoordinate.push({y,x});
+              availableCoordinate.push({y,x});
             }
         }
     }
-    return availableCoordinate;
+    return JSON.stringify(availableCoordinate);
 }
 
 export default (keyPress, board, score = 0,lost = false) => {
@@ -76,95 +80,87 @@ export default (keyPress, board, score = 0,lost = false) => {
   let updateFlag = false;
   let result;
   let gameBoard = JSON.parse(JSON.stringify(board));
-  console.log(keyPress, gameBoard, board);
     switch (keyPress) {
       case "Up":
-        for (let i = 0; i < 4; i++) {
-          for (let j = 0; j < 4; j++) {
-            column.push(gameBoard[j][i]);
+        for (let y = 0; y < 4; y++) {
+          for (let x = 0; x < 4; x++) {
+            column.push(gameBoard[y][x]);
           }
           column = column.filter((number) => number !== 0);
           // if push up, don't need to reverse the column, it is in order
           [result,newScore] = merge(column, score);
+          console.log(newScore);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[k][i];
-            gameBoard[k][i] = result[k];
-            if (gameBoard[k][i] !== preValue) {
+            let preValue = gameBoard[y][k];
+            gameBoard[y][k] = result[k];
+            if (gameBoard[k][k] !== preValue) {
               updateFlag = true;
             }
           }
         }
-        if (updateFlag) {
-          availableCoordinate = updateAvailable(gameBoard);
-          [gameBoard, availableCoordinate] = randomGenerator(gameBoard, availableCoordinate);
-        }
-        return [gameBoard, newScore, availableCoordinate, lost];
+        break
       case "Down":
-        for (let i = 0; i < 4; i++) {
-          for (let j = 0; j < 4; j++) {
-            column.push(gameBoard[j][i]);
+        for (let y = 0; y < 4; y++) {
+          for (let x = 0; x < 4; x++) {
+            column.push(gameBoard[y][x]);
           }
           column = column.filter((number) => number !== 0);
           [result, newScore] = merge(column.reverse(), score);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[k][i];
-            gameBoard[k][i] = result[3 - k];
-            if (gameBoard[k][i] !== preValue) {
+            let preValue = gameBoard[y][k];
+            gameBoard[y][k] = result[3 - k];
+            if (gameBoard[y][k] !== preValue) {
               updateFlag = true;
             }
           }
         }
-        if (updateFlag) {
-          availableCoordinate = updateAvailable(gameBoard);
-          [gameBoard, availableCoordinate] = randomGenerator(gameBoard, availableCoordinate);
-        }
-        return [gameBoard, newScore, availableCoordinate, lost];
+        break
       case "Left":
-        for (let i = 0; i < 4; i++) {
-          row = gameBoard[i];
+        for (let y = 0; y < 4; y++) {
+          row = gameBoard[y];
           row = row.filter((number) => number !== 0);
 
-          [result, score] = merge(row, score);
+          [result, newScore] = merge(row, score);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[i][k];
-            gameBoard[i][k] = result[k];
-            if (gameBoard[i][k] !== preValue) {
+            let preValue = gameBoard[y][k];
+            gameBoard[y][k] = result[k];
+            if (gameBoard[y][k] !== preValue) {
               updateFlag = true;
             }
           }
         }
-        if (updateFlag) {
-          availableCoordinate = updateAvailable(gameBoard);
-          [gameBoard, availableCoordinate] = randomGenerator(gameBoard, availableCoordinate);
-        }
-        return [gameBoard, newScore, availableCoordinate, lost];
+        break
       case "Right":
-        for (let i = 0; i < 4; i++) {
-          row = gameBoard[i];
+        for (let y = 0; y < 4; y++) {
+          row = gameBoard[y];
           row = row.filter((number) => number !== 0);
-          [result, score] = merge(row.reverse(), score);
+          [result, newScore] = merge(row.reverse(), score);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[i][k];
-            gameBoard[i][k] = result[3 - k];
-            if (gameBoard[i][k] !== preValue) {
+            let preValue = gameBoard[y][k];
+            gameBoard[y][k] = result[3 - k];
+            if (gameBoard[y][k] !== preValue) {
               updateFlag = true;
             }
           }
         }
-        if (updateFlag) {
-          availableCoordinate = updateAvailable(gameBoard);
-          [gameBoard, availableCoordinate] = randomGenerator(gameBoard, availableCoordinate);
-        }
-        return [gameBoard, newScore, availableCoordinate, lost];
+        break
       default:
-        return [gameBoard,score, availableCoordinate,lost];
+        break
       }
+    availableCoordinate = JSON.parse(updateAvailable(gameBoard));
+    if (updateFlag) {
+      [gameBoard, availableCoordinate] = randomGenerator(
+        gameBoard,
+        availableCoordinate
+      );
+    }
+    return [gameBoard, newScore, availableCoordinate, lost];
     }

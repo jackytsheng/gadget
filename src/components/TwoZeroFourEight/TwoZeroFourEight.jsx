@@ -159,35 +159,39 @@ export default () => {
     );
     setAvailableCoordinate(newAvailableCoor);
     setGameBoard(newBoard);
+    
+    
+  }, []);
+
+  useEffect(() => {
+
+    const handleKeypress = (evt) => {
+      // Only for arrow key
+      if (evt.keyCode > 36 && evt.keyCode < 41) {
+        const keyPress = evt.key.replace("Arrow", "");
+        const [newGameBoard, newScore, newCoor, newLost] = updateGrid(
+          keyPress,
+          gameBoard,
+          score,
+          lost
+        );
+        setScore(newScore);
+        setGameBoard(newGameBoard);
+        setAvailableCoordinate(newCoor);
+        setLost(newLost);
+      }
+    };
     window.addEventListener("keydown", handleKeypress);
 
     return () => {
       window.removeEventListener("keydown", handleKeypress);
     };
-  }, []);
-  const handleKeypress = (evt) =>{
-    // Only for arrow key
-    if(evt.keyCode >36 && evt.keyCode < 41){
-      const keyPress = evt.key.replace("Arrow", "");
-      const [newGameBoard,newScore,newCoor,newLost] = updateGrid(
-        keyPress,
-        gameBoard,
-        score,
-        lost,
-      );
-      setScore(newScore);
-      setGameBoard(newGameBoard)
-      setAvailableCoordinate(newCoor);
-      setLost(newLost);
-    }
-  }
+    
+  }, [gameBoard]);
 
-
-  useEffect(() => {
     console.log(gameBoard);
     console.log(availableCoordinate);
-  }, [gameBoard,availableCoordinate]);
-
+    console.log(score);
   return (
     <CenterWrapper>
       <FlexVerticalWrapper>
