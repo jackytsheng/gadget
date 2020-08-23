@@ -1,30 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import CenterWrapper from "../../Layout/CenterWrapper";
 import styled from 'styled-components';
-import Grid from './components/Grid';
+import Grid, { NUMBER_COLOR } from "./components/Grid";
 import updateGrid, {
   randomGenerator,
   generateAvailableCoor,
 } from "./updateGrid.js";
-
+import Button from "@material-ui/core/Button";
+import { Alert } from "@material-ui/lab";
 
 const BG_COLOR = "#bbada0";
 const BORDER_COLOR = '#766d64';
 const WIDTH = '280px';
-const SCORE_COLOR = "#ffffed";
-const sixtyfourabove = " #f1d04a";
-const sixtyfour =' #e95937';
-const thirtytwo ='#f57c5e';
-const sixteen ='#ec8c53';
-const eight ='#f2b179';
-const four ='#ece0c9';
-const two ='#eee4da';
-
-const lightcolor ='white';
-const twoDigitFont ='30px';
-const threeDigitFont ='28px';
-const fourDigitFont ='23px';
-const fiveDigitFont ='18px';
+const SCORE_COLOR = NUMBER_COLOR;
 
 const GRID_WIDTH = "380px";
 const GRID_WIDTH_SM = "315px";
@@ -66,7 +54,7 @@ const RoundDiv = styled.div`
 `
 
 const GameBoard = styled(RoundDiv)`
-
+  position:relative;
   font-family: "Ubuntu", sans-serif;
   display: flex;
   flex-direction:column;
@@ -75,6 +63,7 @@ const GameBoard = styled(RoundDiv)`
   border: solid;
   border-color: ${BORDER_COLOR};
   overflow: hidden;
+  margin-bottom:30px;
 `;
 const TopRow = styled.div`
   display: flex;
@@ -87,7 +76,7 @@ const Logo = styled(RoundDiv)`
 `;
 
 const LogoText = styled.div`
-  color: #ffffed;
+  color:${NUMBER_COLOR};
   font-size: 22px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -117,10 +106,13 @@ const ScoreNumber = styled.div`
   flex: 1;
   color: ${SCORE_COLOR};
   font-weight:600;
-  font-size : 20px;
+  font-size : ${props => props.fontSize};
   letter-spacing: 0.5px;
   padding-bottom:5px;
 `;
+ScoreNumber.defaultProps = {
+  fontSize: "20px",
+};
 
 const Description = styled.div`
   margin:10px 0;
@@ -141,90 +133,194 @@ const FillerBlock = styled.div`
   flex:1;
 `
 
+const PopUpWrapper = styled(CenterWrapper)`
+  flex-direction: column;
+`;
+const FlexVertical = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 20px 0;
+  @media (max-width: 500px) {
+    margin: 5px 0;
+  }
+`; 
 
-export default () => {
-  const [gameBoard,setGameBoard] = useState(Array(4)
-    .fill(0)
-    .map((row) => Array(4).fill(0)));
-  const [availableCoordinate,setAvailableCoordinate] = useState(generateAvailableCoor());
-  const [score,setScore] = useState(0);
-  const [bestScore,setBestScore] = useState(localStorage.getItem('best') ? localStorage.getItem('best'):0);
-  const [lost,setLost] = useState(false);
+const LosePop = styled.div`
+  position: absolute;
+  z-index: 30;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #eee4da96;
+`;
+const LostText = styled.div`
+  font-size: 25px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: ${BORDER_COLOR};
+  letter-spacing: 0.3px;
+`;
 
-  useEffect(() => {
-    // initial generation
-    const [newBoard, newAvailableCoor] = randomGenerator(
-      gameBoard,
-      availableCoordinate
-    );
-    setAvailableCoordinate(newAvailableCoor);
-    setGameBoard(newBoard);
+const RestartBtn = styled(Button)`
+  margin-top: 15px !important;
+  width: 120px;
+  letter-spacing: 0.5px !important;
+  font-weight: 600 !important;
+  height: 40px;
+  background-color: ${BG_COLOR} !important;
+  font-size: 20px !important;
+  color: ${NUMBER_COLOR} !important;
+  border-radius: 5px;
+  border: 2px solid ${BORDER_COLOR} !important;
+  cursor: pointer;
+  &:hover {
+    color: ${BORDER_COLOR} !important;
+    background-color: #eee4da96 !important;
+  }
+`;
+
+// TODO: Added info about only supporting laptop
+
+class TwoZeroFourEight extends React.Component {
+  constructor(props){
+    super(props)
+    this.state={
+      gameBoard: JSON.stringify(Array(4).fill(0).map((row) => Array(4).fill(0))),
+      availableCoordinate : JSON.stringify(generateAvailableCoor()),
+      lost:false,
+      score: 0,
+      best: localStorage.getItem('best') ? localStorage.getItem('best') : 0 ,
+    }
+    this.handleKeypress = this.handleKeypress.bind(this);
+    this.restart = this.restart.bind(this);
+  }
+
+
+  handleKeypress(evt){
+    // Only for arrow key
+    if (evt.keyCode > 36 && evt.keyCode < 41) {
+      let {gameBoard,score,lost} = this.state;
+      gameBoard = JSON.parse(gameBoard);
+      const keyPress = evt.key.replace("Arrow", "");
+      const [newGameBoard, newScore, newCoor, newLost] = updateGrid(
+        keyPress,
+        gameBoard,
+        score,
+        lost
+      );
+      this.setState({
+        gameBoard: JSON.stringify(newGameBoard),
+        score: newScore,
+        availableCoordinate: JSON.stringify(newCoor),
+        lost:newLost,
+      });
+    }
+  };
+  restart(){
+    this.setState({
+      gameBoard: JSON.stringify(
+        Array(4)
+          .fill(0)
+          .map((row) => Array(4).fill(0))
+      ),
+      availableCoordinate: JSON.stringify(generateAvailableCoor()),
+      lost: false,
+      score: 0,
+    },this.gameStart);
+  }
+  gameStart(){
+    let {gameBoard,availableCoordinate} = this.state;
+    gameBoard = JSON.parse(gameBoard);
+    availableCoordinate = JSON.parse(availableCoordinate);
+    [gameBoard,availableCoordinate] = randomGenerator(gameBoard,availableCoordinate);
+    this.setState({gameBoard:JSON.stringify(gameBoard),availableCoordinate:JSON.stringify(availableCoordinate)});
+  }
+
+  componentDidMount(){
+    this.gameStart();
+
+    console.log("Added listener")
+    window.addEventListener("keydown", this.handleKeypress);
+  }
+  componentDidUpdate(){
+    console.log(JSON.parse(this.state.gameBoard))
+    const {score,best} = this.state;
+    if (score > best){
+      localStorage.setItem("best",score);
+      this.setState({best:score})
+    }
+  }
+  componentWillUnmount(){
     
-    
-  }, []);
+    window.removeEventListener("keydown", this.handleKeypress);
+    console.log("Removing listener")
+  }
+  
 
-  useEffect(() => {
+  render(){
+    return (
+      <CenterWrapper>
+        <FlexVerticalWrapper>
+          <Title>2048 Clone</Title>
+          <SubTitle>By Jiajin Zheng</SubTitle>
+        </FlexVerticalWrapper>
+        <FlexVertical>
+          <GameBoard>
+            {this.state.lost ? (
+              <LosePop>
+                <PopUpWrapper>
+                  <LostText>Your lost !</LostText>
+                  <LostText>Your score is {this.state.score}</LostText>
+                  <RestartBtn variant="outlined" onClick={this.restart}>
+                    Restart
+                  </RestartBtn>
+                </PopUpWrapper>
+              </LosePop>
+            ) : null}
+            <TopRow>
+              <Logo>
+                <CenterWrapper>
+                  <LogoText>2048</LogoText>
+                </CenterWrapper>
+              </Logo>
+              <FillerBlock />
+              <Score>
+                <ScoreText>SCORE</ScoreText>
+                <ScoreNumber
+                  fontSize={this.state.score > 99999 ? "15px" : "20px"}
+                >
+                  <CenterWrapper>{this.state.score}</CenterWrapper>
+                </ScoreNumber>
+              </Score>
+              <Score>
+                <ScoreText>BEST</ScoreText>
+                <ScoreNumber
+                  fontSize={this.state.best > 99999 ? "15px" : "20px"}
+                >
+                  <CenterWrapper>{this.state.best}</CenterWrapper>
+                </ScoreNumber>
+              </Score>
+            </TopRow>
+            <Description>
+              <Text>Join the numbers and get to the 2048 tile! </Text>
+            </Description>
+            <SquareBoard>
+              {this.state.gameBoard ? (
+                <Grid gameBoard={JSON.parse(this.state.gameBoard)} />
+              ) : null}
+            </SquareBoard>
+          </GameBoard>
+          <Alert severity="info">
+            Currently not support for <strong>Mobile user</strong>. I'm working
+            on it.
+          </Alert>
+        </FlexVertical>
+      </CenterWrapper>
+    );}
+}
 
-    const handleKeypress = (evt) => {
-      // Only for arrow key
-      if (evt.keyCode > 36 && evt.keyCode < 41) {
-        const keyPress = evt.key.replace("Arrow", "");
-        const [newGameBoard, newScore, newCoor, newLost] = updateGrid(
-          keyPress,
-          gameBoard,
-          score,
-          lost
-        );
-        setScore(newScore);
-        setGameBoard(newGameBoard);
-        setAvailableCoordinate(newCoor);
-        setLost(newLost);
-      }
-    };
-    window.addEventListener("keydown", handleKeypress);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeypress);
-    };
-    
-  }, [gameBoard]);
-
-    console.log(gameBoard);
-    console.log(availableCoordinate);
-    console.log(score);
-  return (
-    <CenterWrapper>
-      <FlexVerticalWrapper>
-        <Title>2048 Clone</Title>
-        <SubTitle>By Jiajin Zheng</SubTitle>
-      </FlexVerticalWrapper>
-      <GameBoard>
-        <TopRow>
-          <Logo>
-            <CenterWrapper>
-              <LogoText>2048</LogoText>
-            </CenterWrapper>
-          </Logo>
-          <FillerBlock />
-          <Score>
-            <ScoreText>SCORE</ScoreText>
-            <ScoreNumber>
-              <CenterWrapper>{score}</CenterWrapper>
-            </ScoreNumber>
-          </Score>
-          <Score>
-            <ScoreText>BEST</ScoreText>
-            <ScoreNumber>
-              <CenterWrapper>{bestScore}</CenterWrapper>
-            </ScoreNumber>
-          </Score>
-        </TopRow>
-        <Description>
-          <Text>Join the numbers and get to the 2048 tile! </Text>
-        </Description>
-        <SquareBoard>
-          <Grid />
-        </SquareBoard>
-      </GameBoard>
-    </CenterWrapper>
-  );};
+export default TwoZeroFourEight;

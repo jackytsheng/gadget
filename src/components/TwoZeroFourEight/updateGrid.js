@@ -1,4 +1,26 @@
 
+
+
+const checkLose = (gameBoard) => {
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (gameBoard[j][i] === gameBoard[j + 1][i]) {
+        return false;
+      }
+    }
+  }
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (gameBoard[i][j] === gameBoard[i][j + 1]) {
+        return false;
+      }
+    }
+  }
+  console.log("lose");
+  return true;
+};
+
+
 // merge the array from left to right.
 // update the score receiving a function that takes in previous score as input
  const merge = (InputArray, score) => {
@@ -17,7 +39,6 @@
    }
    if (array.length === 1) {
      result.push(array.shift());
-     return [result, newScore];
    }
    return [result, newScore];
  };
@@ -72,30 +93,30 @@ const updateAvailable = (gameBoard) => {
     return JSON.stringify(availableCoordinate);
 }
 
-export default (keyPress, board, score = 0,lost = false) => {
-  let column = [];
+export default (keyPress, gameBoard, score = 0,lost = false) => {
+  let column;
   let row = [];
-  let newScore;
+  let newScore = score;
   let availableCoordinate;
   let updateFlag = false;
   let result;
-  let gameBoard = JSON.parse(JSON.stringify(board));
+  let board = JSON.parse(JSON.stringify(gameBoard));
     switch (keyPress) {
       case "Up":
         for (let y = 0; y < 4; y++) {
+          column = []
           for (let x = 0; x < 4; x++) {
-            column.push(gameBoard[y][x]);
+            column.push(board[x][y]);
           }
           column = column.filter((number) => number !== 0);
           // if push up, don't need to reverse the column, it is in order
-          [result,newScore] = merge(column, score);
-          console.log(newScore);
+          [result, newScore] = merge(column, newScore);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[y][k];
-            gameBoard[y][k] = result[k];
-            if (gameBoard[k][k] !== preValue) {
+            let preValue = board[k][y];
+            board[k][y] = result[k];
+            if (board[k][y] !== preValue) {
               updateFlag = true;
             }
           }
@@ -103,17 +124,18 @@ export default (keyPress, board, score = 0,lost = false) => {
         break
       case "Down":
         for (let y = 0; y < 4; y++) {
+          column = [];
           for (let x = 0; x < 4; x++) {
-            column.push(gameBoard[y][x]);
+            column.push(board[x][y]);
           }
           column = column.filter((number) => number !== 0);
-          [result, newScore] = merge(column.reverse(), score);
+          [result, newScore] = merge(column.reverse(), newScore);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[y][k];
-            gameBoard[y][k] = result[3 - k];
-            if (gameBoard[y][k] !== preValue) {
+            let preValue = board[k][y];
+            board[k][y] = result[3-k];
+            if (board[k][y] !== preValue) {
               updateFlag = true;
             }
           }
@@ -121,16 +143,16 @@ export default (keyPress, board, score = 0,lost = false) => {
         break
       case "Left":
         for (let y = 0; y < 4; y++) {
-          row = gameBoard[y];
+          row = board[y];
           row = row.filter((number) => number !== 0);
 
-          [result, newScore] = merge(row, score);
+          [result, newScore] = merge(row, newScore);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[y][k];
-            gameBoard[y][k] = result[k];
-            if (gameBoard[y][k] !== preValue) {
+            let preValue = board[y][k];
+            board[y][k] = result[k];
+            if (board[y][k] !== preValue) {
               updateFlag = true;
             }
           }
@@ -138,15 +160,15 @@ export default (keyPress, board, score = 0,lost = false) => {
         break
       case "Right":
         for (let y = 0; y < 4; y++) {
-          row = gameBoard[y];
+          row = board[y];
           row = row.filter((number) => number !== 0);
-          [result, newScore] = merge(row.reverse(), score);
+          [result, newScore] = merge(row.reverse(), newScore);
           //pad 0 in front
           result = [...result, ...Array(4 - result.length).fill(0)];
           for (let k = 0; k < 4; k++) {
-            let preValue = gameBoard[y][k];
-            gameBoard[y][k] = result[3 - k];
-            if (gameBoard[y][k] !== preValue) {
+            let preValue = board[y][k];
+            board[y][k] = result[3 - k];
+            if (board[y][k] !== preValue) {
               updateFlag = true;
             }
           }
@@ -155,12 +177,13 @@ export default (keyPress, board, score = 0,lost = false) => {
       default:
         break
       }
-    availableCoordinate = JSON.parse(updateAvailable(gameBoard));
+    availableCoordinate = JSON.parse(updateAvailable(board));
     if (updateFlag) {
-      [gameBoard, availableCoordinate] = randomGenerator(
-        gameBoard,
+      [board, availableCoordinate] = randomGenerator(
+        board,
         availableCoordinate
       );
     }
-    return [gameBoard, newScore, availableCoordinate, lost];
-    }
+    if (availableCoordinate.length === 0)lost = checkLose(board);
+    return [board, newScore, availableCoordinate, lost];
+  }

@@ -82,7 +82,7 @@ class Home extends React.Component {
             width={WIDTH}
             img={sudoku}
             height={MEDIA_HEIGHT}
-            title="SudoKu Solver"
+            title="Sudoku Solver"
             description="Solving sudoku puzzle with input number provided, returning all possible solutions."
             handleClick={() => {
               this.handleClick("/sudokusolver");
