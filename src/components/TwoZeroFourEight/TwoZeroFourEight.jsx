@@ -17,6 +17,17 @@ const SCORE_COLOR = NUMBER_COLOR;
 const GRID_WIDTH = "380px";
 const GRID_WIDTH_SM = "315px";
 
+
+const Wrapper = styled(CenterWrapper)`
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
+  @media (max-width: 500px) {
+    margin-top: 40px;
+    justify-content: flex-start;
+  }
+`;
+
 const Title = styled.div`
   width: ${GRID_WIDTH};
   margin-bottom: 20px;
@@ -263,7 +274,7 @@ class TwoZeroFourEight extends React.Component {
 
   render(){
     return (
-      <CenterWrapper>
+      <Wrapper>
         <FlexVerticalWrapper>
           <Title>2048 Clone</Title>
           <SubTitle>By Jiajin Zheng</SubTitle>
@@ -319,7 +330,7 @@ class TwoZeroFourEight extends React.Component {
             on it.
           </Alert>
         </FlexVertical>
-      </CenterWrapper>
+      </Wrapper>
     );}
 }
 
