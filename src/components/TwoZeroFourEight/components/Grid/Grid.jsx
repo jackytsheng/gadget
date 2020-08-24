@@ -1,6 +1,22 @@
 import React from "react";
 import styled from 'styled-components';
 import CenterWrapper from '../../../../Layout/CenterWrapper';
+import { Transition } from "react-transition-group";
+
+const duration = 300;
+
+const defaultStyle = {
+  transition: `opacity ${duration}ms ease-in-out`,
+  opacity: 0,
+};
+
+const transitionStyles = {
+  entering: { opacity: 1 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 },
+};
+
 
 const EMPTY_CELL ='#ccc0b4';
 const BG_COLOR = "#bbada0";
@@ -30,16 +46,19 @@ const Cell = styled.div`
   overflow:hidden;
 `;
 
-const CellNumber = styled.div`
-  background-color: ${(props) => props.bg};
-  font-size: ${(props) => props.fontSize};
-  color: ${(props) => props.color};
+
+const CellNumberBase = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  font-weight:600;
+  font-weight: 600;
+`;
+const CellNumber = styled(CellNumberBase)`
+  background-color: ${(props) => props.bg};
+  font-size: ${(props) => props.fontSize};
+  color: ${(props) => props.color};
 `;
 CellNumber.defaultProps = {
   bg: EMPTY_CELL,
@@ -84,17 +103,30 @@ const gridGenerator = (gameBoard) =>{
     for (let x = 0; x < 4; x++) {
         row.push(
           <Cell key={`2048_Grid_ID_(${y},${x})`}>
-            {gameBoard[y][x] !== 0 ? (
-              <CellNumber
-                fontSize={determineSize(gameBoard[y][x])}
-                bg={determineGB(gameBoard[y][x])}
-                color={gameBoard[y][x] < 5 ? TEXT_COLOR[0] : TEXT_COLOR[1]}
-              >
-                <CenterWrapper key={`2048_Grid_Wrapper_(${y},${x})`}>
-                  {gameBoard[y][x]}
-                </CenterWrapper>
-              </CellNumber>
-            ) : null}
+            <Transition in={gameBoard[y][x] !== 0} timeout={duration}>
+              {(state) => (
+                <div
+                  style={{
+                    ...defaultStyle,
+                    ...transitionStyles[state],
+                  }}
+                >
+                  {gameBoard[y][x] !== 0 ? (
+                    <CellNumber
+                      fontSize={determineSize(gameBoard[y][x])}
+                      bg={determineGB(gameBoard[y][x])}
+                      color={
+                        gameBoard[y][x] < 5 ? TEXT_COLOR[0] : TEXT_COLOR[1]
+                      }
+                    >
+                      <CenterWrapper key={`2048_Grid_Wrapper_(${y},${x})`}>
+                        {gameBoard[y][x]}
+                      </CenterWrapper>
+                    </CellNumber>
+                  ) : null}
+                </div>
+              )}
+            </Transition>
           </Cell>
         );
         }
