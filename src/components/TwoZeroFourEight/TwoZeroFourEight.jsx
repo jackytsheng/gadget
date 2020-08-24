@@ -7,7 +7,8 @@ import updateGrid, {
   generateAvailableCoor,
 } from "./updateGrid.js";
 import Button from "@material-ui/core/Button";
-import { Alert } from "@material-ui/lab";
+
+
 
 const BG_COLOR = "#bbada0";
 const BORDER_COLOR = '#766d64';
@@ -197,24 +198,92 @@ const RestartBtn = styled(Button)`
 // TODO: Added info about only supporting laptop
 
 class TwoZeroFourEight extends React.Component {
-  constructor(props){
-    super(props)
-    this.state={
-      gameBoard: JSON.stringify(Array(4).fill(0).map((row) => Array(4).fill(0))),
-      availableCoordinate : JSON.stringify(generateAvailableCoor()),
-      lost:false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      gameBoard: JSON.stringify(
+        Array(4)
+          .fill(0)
+          .map((row) => Array(4).fill(0))
+      ),
+      availableCoordinate: JSON.stringify(generateAvailableCoor()),
+      lost: false,
       score: 0,
-      best: localStorage.getItem('best') ? localStorage.getItem('best') : 0 ,
-    }
+      best: localStorage.getItem("best") ? localStorage.getItem("best") : 0,
+      swipe: { xDown: null, yDown: null },
+    };
     this.handleKeypress = this.handleKeypress.bind(this);
     this.restart = this.restart.bind(this);
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+  }
+  // Copy code from: https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
+
+  handleTouchStart(evt) {
+    const xDown = evt.touches[0].clientX;
+    const yDown = evt.touches[0].clientY;
+    this.setState({ swipe: { xDown, yDown } });
   }
 
+  handleTouchMove(evt) {
+    const { xDown, yDown } = this.state.swipe;
+    if (!xDown || !yDown) {
+      return;
+    }
 
-  handleKeypress(evt){
+    let xUp = evt.touches[0].clientX;
+    let yUp = evt.touches[0].clientY;
+
+    let xDiff = xDown - xUp;
+    let yDiff = yDown - yUp;
+
+    let { gameBoard, score, lost } = this.state;
+    gameBoard = JSON.parse(gameBoard);
+
+    let keyPress;
+
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+      /*most significant*/
+      if (xDiff > 0) {
+        /* right swipe */
+        keyPress = "Left";
+        console.log("swipe left");
+      } else {
+        /* right swipe */
+        keyPress = "Right";
+        console.log("swipe right");
+      }
+    } else {
+      if (yDiff > 0) {
+        /* up swipe */
+        keyPress = "Up";
+        console.log("swipe up");
+      } else {
+        /* down swipe */
+        keyPress = "Down";
+        console.log("swipe down");
+      }
+    }
+    /* reset values */
+    this.setState({ swipe: { xDown: null, yDown: null } });
+    const [newGameBoard, newScore, newCoor, newLost] = updateGrid(
+      keyPress,
+      gameBoard,
+      score,
+      lost
+    );
+    this.setState({
+      gameBoard: JSON.stringify(newGameBoard),
+      score: newScore,
+      availableCoordinate: JSON.stringify(newCoor),
+      lost: newLost,
+    });
+  }
+
+  handleKeypress(evt) {
     // Only for arrow key
     if (evt.keyCode > 36 && evt.keyCode < 41) {
-      let {gameBoard,score,lost} = this.state;
+      let { gameBoard, score, lost } = this.state;
       gameBoard = JSON.parse(gameBoard);
       const keyPress = evt.key.replace("Arrow", "");
       const [newGameBoard, newScore, newCoor, newLost] = updateGrid(
@@ -227,52 +296,63 @@ class TwoZeroFourEight extends React.Component {
         gameBoard: JSON.stringify(newGameBoard),
         score: newScore,
         availableCoordinate: JSON.stringify(newCoor),
-        lost:newLost,
+        lost: newLost,
       });
     }
-  };
-  restart(){
-    this.setState({
-      gameBoard: JSON.stringify(
-        Array(4)
-          .fill(0)
-          .map((row) => Array(4).fill(0))
-      ),
-      availableCoordinate: JSON.stringify(generateAvailableCoor()),
-      lost: false,
-      score: 0,
-    },this.gameStart);
   }
-  gameStart(){
-    let {gameBoard,availableCoordinate} = this.state;
+  restart() {
+    this.setState(
+      {
+        gameBoard: JSON.stringify(
+          Array(4)
+            .fill(0)
+            .map((row) => Array(4).fill(0))
+        ),
+        availableCoordinate: JSON.stringify(generateAvailableCoor()),
+        lost: false,
+        score: 0,
+      },
+      this.gameStart
+    );
+  }
+  gameStart() {
+    let { gameBoard, availableCoordinate } = this.state;
     gameBoard = JSON.parse(gameBoard);
     availableCoordinate = JSON.parse(availableCoordinate);
-    [gameBoard,availableCoordinate] = randomGenerator(gameBoard,availableCoordinate);
-    this.setState({gameBoard:JSON.stringify(gameBoard),availableCoordinate:JSON.stringify(availableCoordinate)});
+    [gameBoard, availableCoordinate] = randomGenerator(
+      gameBoard,
+      availableCoordinate
+    );
+    this.setState({
+      gameBoard: JSON.stringify(gameBoard),
+      availableCoordinate: JSON.stringify(availableCoordinate),
+    });
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.gameStart();
 
-    console.log("Added listener")
+    console.log("Added listener");
     window.addEventListener("keydown", this.handleKeypress);
+    window.addEventListener("touchstart", this.handleTouchStart, false);
+    window.addEventListener("touchmove", this.handleTouchMove, false);
   }
-  componentDidUpdate(){
-    console.log(JSON.parse(this.state.gameBoard))
-    const {score,best} = this.state;
-    if (score > best){
-      localStorage.setItem("best",score);
-      this.setState({best:score})
+  componentDidUpdate() {
+    console.log(JSON.parse(this.state.gameBoard));
+    const { score, best } = this.state;
+    if (score > best) {
+      localStorage.setItem("best", score);
+      this.setState({ best: score });
     }
   }
-  componentWillUnmount(){
-    
+  componentWillUnmount() {
     window.removeEventListener("keydown", this.handleKeypress);
-    console.log("Removing listener")
+    window.removeEventListener("touchstart", this.handleTouchStart, false);
+    window.removeEventListener("touchmove", this.handleTouchMove, false);
+    console.log("Removing listener");
   }
-  
 
-  render(){
+  render() {
     return (
       <Wrapper>
         <FlexVerticalWrapper>
@@ -325,13 +405,10 @@ class TwoZeroFourEight extends React.Component {
               ) : null}
             </SquareBoard>
           </GameBoard>
-          <Alert severity="info">
-            Currently not support for <strong>Mobile user</strong>. I'm working
-            on it.
-          </Alert>
         </FlexVertical>
       </Wrapper>
-    );}
+    );
+  }
 }
 
 export default TwoZeroFourEight;
