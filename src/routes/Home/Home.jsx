@@ -88,6 +88,16 @@ class Home extends React.Component {
               this.handleClick("/sudokusolver");
             }}
           />
+          <ProjectCard
+            width={WIDTH}
+            img={sudoku}
+            height={MEDIA_HEIGHT}
+            title="Dobutsu Shogi"
+            description="Familarise yourself with Mini Shogi. Have fun with your friend!"
+            handleClick={() => {
+              this.handleClick("/dobutsushogi");
+            }}
+          />
           <Filler />
           <Filler />
           <Filler />

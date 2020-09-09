@@ -11,7 +11,7 @@ import FullSizeCanvas from '../Layout/FullSizeCanvas';
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import TwoZeroFourEight from '../components/TwoZeroFourEight';
-
+import DobutsuShogi from '../components/DobutsuShogi';
 const ReturnHome = ({ handleClick }) => {
   return (
     <ReturnHomeBtn color="primary" onClick={handleClick}>
@@ -40,6 +40,11 @@ export default () => {
         <ReturnHome handleClick={handleClick} />
       ) : null}
       <Switch>
+        <Route path="/dobutsushogi" exact>
+          <FullSizeCanvas>
+            <DobutsuShogi />
+          </FullSizeCanvas>
+        </Route>
         <Route path="/sudokusolver" exact>
           <FullSizeCanvas>
             <SudokuSolver />
