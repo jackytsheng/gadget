@@ -1,24 +1,24 @@
-import React from 'react';
-import styled from 'styled-components';
-import CenterWrapper from '../../../Layout/CenterWrapper';
+import React from "react";
+import styled from "styled-components";
+import CenterWrapper from "../../../Layout/CenterWrapper";
 import BackgroundImg from "./background.png";
-
-const BOARD_HEIGHT = '540px';
+import Chess from "../Chess";
+const BOARD_HEIGHT = "540px";
 const BOARD_WIDTH = "380px";
 const DASH_COLOR = "#b52838";
 const Board = styled.div`
   width: ${BOARD_WIDTH};
   height: ${BOARD_HEIGHT};
   border-radius: 5px;
-  border: 1px solid black;
-  overflow:hidden;
-  position:relative;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  overflow: hidden;
+  position: relative;
 `;
 
 const Img = styled.img`
   width: ${BOARD_WIDTH};
   height: ${BOARD_HEIGHT};
-  position:absolute;
+  position: absolute;
 `;
 const GridSquare = styled.div`
   width: ${(props) => (props.rightLast ? "100px" : "99px")};
@@ -43,18 +43,34 @@ export default () => (
     <Img src={BackgroundImg} alt={"background"} />
     <CenterWrapper>
       <Grid>
+        <GridSquare>
+          <Chess chessType={"GIRAF"} rotated={true} />
+        </GridSquare>
+        <GridSquare>
+          <Chess chessType={"LION"} rotated={true} />
+        </GridSquare>
+        <GridSquare rightLast={true}>
+          <Chess chessType={"ELPHT"} rotated={true} />
+        </GridSquare>
         <GridSquare />
-        <GridSquare />
+        <GridSquare>
+          <Chess chessType={"CHICK"} rotated={true} />
+        </GridSquare>
         <GridSquare rightLast={true} />
         <GridSquare />
-        <GridSquare />
+        <GridSquare>
+          <Chess chessType={"CHICK"} />
+        </GridSquare>
         <GridSquare rightLast={true} />
-        <GridSquare />
-        <GridSquare />
-        <GridSquare rightLast={true} />
-        <GridSquare bottomLast={true} />
-        <GridSquare bottomLast={true} />
-        <GridSquare bottomLast={true} rightLast={true} />
+        <GridSquare bottomLast={true}>
+          <Chess chessType={"ELPHT"} />
+        </GridSquare>
+        <GridSquare bottomLast={true}>
+          <Chess chessType={"LION"} />
+        </GridSquare>
+        <GridSquare bottomLast={true} rightLast={true}>
+          <Chess chessType={"GIRAF"} />
+        </GridSquare>
       </Grid>
     </CenterWrapper>
   </Board>

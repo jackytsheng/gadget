@@ -6,6 +6,7 @@ import ProjectCard from './components/ProjectCard';
 import sudoku from './img/sudoku-demo.png'; // Tell webpack this JS file uses this image
 import Ghost from './components/Ghost';
 import TwoZeroFourEightDemo from './img/2048.png';
+import DobutsuShogi from './img/dobutsu-shogi.png';
 
 
 const WIDTH = '325px';
@@ -90,10 +91,10 @@ class Home extends React.Component {
           />
           <ProjectCard
             width={WIDTH}
-            img={sudoku}
+            img={DobutsuShogi}
             height={MEDIA_HEIGHT}
             title="Dobutsu Shogi"
-            description="Familarise yourself with Mini Shogi. Have fun with your friend!"
+            description="[OnGoing Project!] Familarise yourself with Mini Shogi. Have fun with your friend!"
             handleClick={() => {
               this.handleClick("/dobutsushogi");
             }}
