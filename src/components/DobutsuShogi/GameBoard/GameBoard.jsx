@@ -3,6 +3,8 @@ import styled from "styled-components";
 import CenterWrapper from "../../../Layout/CenterWrapper";
 import BackgroundImg from "./background.png";
 import Chess from "../Chess";
+
+
 const BOARD_HEIGHT = "540px";
 const BOARD_WIDTH = "380px";
 const DASH_COLOR = "#b52838";
@@ -38,40 +40,78 @@ const Grid = styled.div`
   z-index: 2;
 `;
 
-export default () => (
-  <Board>
-    <Img src={BackgroundImg} alt={"background"} />
-    <CenterWrapper>
-      <Grid>
-        <GridSquare>
-          <Chess chessType={"GIRAF"} rotated={true} />
-        </GridSquare>
-        <GridSquare>
-          <Chess chessType={"LION"} rotated={true} />
-        </GridSquare>
-        <GridSquare rightLast={true}>
-          <Chess chessType={"ELPHT"} rotated={true} />
-        </GridSquare>
-        <GridSquare />
-        <GridSquare>
-          <Chess chessType={"CHICK"} rotated={true} />
-        </GridSquare>
-        <GridSquare rightLast={true} />
-        <GridSquare />
-        <GridSquare>
-          <Chess chessType={"CHICK"} />
-        </GridSquare>
-        <GridSquare rightLast={true} />
-        <GridSquare bottomLast={true}>
-          <Chess chessType={"ELPHT"} />
-        </GridSquare>
-        <GridSquare bottomLast={true}>
-          <Chess chessType={"LION"} />
-        </GridSquare>
-        <GridSquare bottomLast={true} rightLast={true}>
-          <Chess chessType={"GIRAF"} />
-        </GridSquare>
-      </Grid>
-    </CenterWrapper>
-  </Board>
-);
+
+const renderType=(chessCode)=>{
+  switch(chessCode){
+    case "E":
+    case "e":
+      return "ELPHT";
+    case "C":
+    case "c":
+      return "CHICK";
+    case "L":
+    case "l":
+      return "LION";
+    case "G":
+    case "g":
+      return "GIRAF";
+    default:
+      return null;
+  }
+
+}
+
+
+const gameBoard = [
+  ["g", "l", "e"],
+  [0, "c", 0],
+  [0, "C", 0],
+  ["E", "L", "G"],
+];
+
+class GameBoard extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.state = {
+      gameBoard: JSON.parse(JSON.stringify(gameBoard)),
+      selectedChess: null,
+    }
+    this.handleClickChess = this.handleClickChess.bind(this);
+  }
+  generateChess(board){
+    return board.map((row, i) =>
+    row.map((chessCode, j) => (
+      <GridSquare
+        key={"Square" + chessCode + i + j}
+        rightLast={j === 2}
+        bottomLast={i === 3}
+      >
+        {chessCode ? (
+          <Chess
+            selected = {this.state.selectedChess === chessCode}
+            onClick = {()=> this.handleClickChess(chessCode)}
+            key={"Chess" + chessCode + i + j}
+            chessType={renderType(chessCode)}
+            rotated={chessCode < "z" && chessCode > "a"}
+          />
+        ) : null}
+      </GridSquare>
+    ))
+  );
+}
+  handleClickChess(chessCode){
+    this.setState({selectedChess:chessCode});
+  }
+  render(){
+    return (<Board>
+      <Img src={BackgroundImg} alt={"background"} />
+      <CenterWrapper>
+        <Grid>{this.generateChess(this.state.gameBoard)}</Grid>
+      </CenterWrapper>
+    </Board>)
+  }
+  
+}
+
+export default GameBoard;
