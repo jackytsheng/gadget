@@ -158,6 +158,9 @@ const Text = styled.div`
 `;
 
 const RestartBtn = styled(Button)`
+  display:flex;
+  justify-content:center;
+  align-items:center;
   margin-top: 15px !important;
   width: 120px;
   letter-spacing: 0.5px !important;
@@ -245,13 +248,13 @@ class GameBoard extends React.Component {
     } = this.state;
     let array = player === 1 ? playerOneCapture : playerTwoCapture;
     return array.map((chessCode) => (
-      <CapturedChessWrapper key={"CaptureWrapper" + chessCode + Math.random()}>
+      <CapturedChessWrapper key={"CaptureWrapper" + chessCode}>
         <Chess
           onClick={() => this.handleClickCapture(chessCode)}
           disable={this.state.player !== player}
           player={player}
           selected={selectedCaptureID === chessCode}
-          key={"Capture" + chessCode + Math.random()}
+          key={"Capture" + chessCode}
           chessType={renderType(chessCode[0])}
           rotated={this.isPlayerTwo(chessCode[0])}
         />
@@ -559,8 +562,8 @@ class GameBoard extends React.Component {
     
     history.push({
       gameBoard: JSON.parse(JSON.stringify(newGameBoard)),
-      playerOneCapture:newPlayerOneCapture,
-      playerTwoCapture:newPlayerTwoCapture,
+      playerOneCapture: newPlayerOneCapture,
+      playerTwoCapture: newPlayerTwoCapture,
     });
     this.setState({
       history,
