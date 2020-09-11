@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6567a8d8f549f76f84f7fda0128325be",
+    "revision": "2bec1223ac130f530caf86eeb1b59e8c",
     "url": "/index.html"
   },
   {
-    "revision": "be7c460820cd88e374f2",
+    "revision": "3ed72c156f19659db2f8",
     "url": "/static/css/main.8df0db61.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/2.040fb8d2.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "be7c460820cd88e374f2",
-    "url": "/static/js/main.f7d577a5.chunk.js"
+    "revision": "3ed72c156f19659db2f8",
+    "url": "/static/js/main.d11aa1d7.chunk.js"
   },
   {
     "revision": "84ba7647077e88ec8a73",
@@ -52,8 +52,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/background.d6a3f052.png"
   },
   {
-    "revision": "a733cbe8f3570c6bfacc4d70e05c6d92",
-    "url": "/static/media/dobutsu-shogi.a733cbe8.png"
+    "revision": "3268f699cc36e968798801b52b805b89",
+    "url": "/static/media/dobutsu-shogi.3268f699.png"
   },
   {
     "revision": "792ff5643837f22b2545b45e1db8d977",
