@@ -6,7 +6,7 @@ import ChessLayout from './components/ChessLayout';
 const CHESS_BORDER = "#f5e379";
 const CHESS_BORDER_BLACK = "#272016";
 const SELECT_BORDER_BG_P1 = "#15cd3185";
-const SELECT_BORDER_BG_P2 = "#cd151585";
+const SELECT_BORDER_BG_P2 = "#1590cd85";
 const CHESS_SIZE = 80;
 const ChessWrapper = styled.div`
   &:hover {

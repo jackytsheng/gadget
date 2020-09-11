@@ -5,8 +5,10 @@ import ChickSvg from '../svg/animals-chick.svg';
 import ElphtSvg from "../svg/animals-elephant.svg";
 import LionSvg from "../svg/animals-lion.svg";
 import GirafSvg from '../svg/animals-giraffe.svg';
+import HenSvg from "../svg/animals-hen.svg";
 
 const BG_CHICK = "#ecf0a4";
+const BG_HEN = "#ecf0a4";
 const BG_LION = "#f7c1c1";
 const BG_GIRAF = "#d7b6d5"; 
 const BG_ELPHT = "#d7b6d5";
@@ -43,12 +45,18 @@ const ChessInnerWrapper = styled.div`
         return BG_GIRAF;
       case "ELPHT":
         return BG_ELPHT;
+      case "HEN":
+        return BG_HEN;
       default:
-        return null
+        return null;
     }
   }};
 `;
 
+const DummyHolder = styled.div`
+  height:36px;
+  width:36px;
+` 
 
 const ElephantImg = styled.img`
   width:70px;
@@ -67,92 +75,132 @@ const LionImg = styled.img`
 const generateChess=(chessType)=>{
   let renderArray = Array(9).fill(0);
   renderArray = renderArray.map((e,i) => <i key={chessType + Math.random() + i} />);
-  switch(chessType){
-      case "CHICK":
-        renderArray[1] = (
-          <CenterWrapper key={chessType + Math.random()}>
-            <Dot key={chessType + "Dot" + Math.random()} />
-          </CenterWrapper>
-        );
-        renderArray[4] = (
-          <CenterWrapper key={chessType + Math.random()}>
-              <img
-                key = {chessType + "img" + Math.random()}
-                width={SVG_CONTAINER}
-                height={SVG_CONTAINER}
-                src={ChickSvg}
-                alt={"Chick"}
-              />
-          </CenterWrapper>
-        );
-        return renderArray;
-      case "LION":
-        renderArray = renderArray.map((e,i) => (
-          <CenterWrapper key={chessType + Date.now() + i}>
-            <Dot key={chessType + "Dot" + Date.now() + i} />
-          </CenterWrapper>
-        ));
-        renderArray[4] = (
-          <CenterWrapper key={chessType + Math.random()}>
-            <LionImg
-              key={chessType + "img" + Math.random()}
-              width={SVG_CONTAINER}
-              height={SVG_CONTAINER}
-              src={LionSvg}
-              alt={"Lion"}
-            />
-          </CenterWrapper>
-        );
-        return renderArray;
-      case "GIRAF":
-        renderArray = renderArray.map((e, i) => {
-          switch(i){
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-              return (<CenterWrapper key={chessType + Date.now() + i}><Dot key={chessType + "Dot" + Date.now() + i} />
-              </CenterWrapper>)
-            default:
-              return e;
-        }})
-        renderArray[4] = (
-          <CenterWrapper key={chessType + Math.random()}>
-            <img
-              width={SVG_CONTAINER}
-              height={SVG_CONTAINER}
-              key={chessType + "img" + Math.random()}
-              src={GirafSvg}
-              alt={"Giraffe"}
-            />
-          </CenterWrapper>
-        );
-        return renderArray;
-      case "ELPHT":
-        renderArray = renderArray.map((e, i) => {
-          switch(i){
-            case 0:
-            case 2:
-            case 6:
-            case 8:
-              return (<CenterWrapper key={chessType + Date.now() + i}><Dot key={chessType + "Dot" + Date.now() + i} />
-              </CenterWrapper>)
-            default:
-              return e;
-        }})
-        renderArray[4] = (
-          <CenterWrapper key={chessType + Math.random()}>
-            <ElephantImg
-              key={chessType + "img" + Math.random()}
-              src={ElphtSvg}
-              alt={"Elephant"}
-            />
-          </CenterWrapper>
-        );
-        return renderArray;
-      default:
-        return null
-    }
+  switch (chessType) {
+    case "CHICK":
+      renderArray[1] = (
+        <CenterWrapper key={chessType + Math.random()}>
+          <Dot key={chessType + "Dot" + Math.random()} />
+        </CenterWrapper>
+      );
+      renderArray[4] = (
+        <CenterWrapper key={chessType + Math.random()}>
+          <img
+            key={chessType + "img" + Math.random()}
+            width={SVG_CONTAINER}
+            height={SVG_CONTAINER}
+            src={ChickSvg}
+            alt={"Chick"}
+          />
+        </CenterWrapper>
+      );
+      return renderArray;
+    case "LION":
+      renderArray = renderArray.map((e, i) => (
+        <CenterWrapper key={chessType + Date.now() + i}>
+          <Dot key={chessType + "Dot" + Date.now() + i} />
+        </CenterWrapper>
+      ));
+      renderArray[4] = (
+        <CenterWrapper key={chessType + Math.random()}>
+          <DummyHolder key={chessType + Math.random() + "Holder"}></DummyHolder>
+          <LionImg
+            key={chessType + "img" + Math.random()}
+            width={SVG_CONTAINER}
+            height={SVG_CONTAINER}
+            src={LionSvg}
+            alt={"Lion"}
+          />
+        </CenterWrapper>
+      );
+      return renderArray;
+    case "GIRAF":
+      renderArray = renderArray.map((e, i) => {
+        switch (i) {
+          case 1:
+          case 3:
+          case 5:
+          case 7:
+            return (
+              <CenterWrapper key={chessType + Date.now() + i}>
+                <Dot key={chessType + "Dot" + Date.now() + i} />
+              </CenterWrapper>
+            );
+          default:
+            return e;
+        }
+      });
+      renderArray[4] = (
+        <CenterWrapper key={chessType + Math.random()}>
+          <img
+            width={SVG_CONTAINER}
+            height={SVG_CONTAINER}
+            key={chessType + "img" + Math.random()}
+            src={GirafSvg}
+            alt={"Giraffe"}
+          />
+        </CenterWrapper>
+      );
+      return renderArray;
+    case "ELPHT":
+      renderArray = renderArray.map((e, i) => {
+        switch (i) {
+          case 0:
+          case 2:
+          case 6:
+          case 8:
+            return (
+              <CenterWrapper key={chessType + Date.now() + i}>
+                <Dot key={chessType + "Dot" + Date.now() + i} />
+              </CenterWrapper>
+            );
+          default:
+            return e;
+        }
+      });
+      renderArray[4] = (
+        <CenterWrapper key={chessType + Math.random()}>
+          <DummyHolder key={chessType + Math.random() + "Holder"}></DummyHolder>
+          <ElephantImg
+            key={chessType + "img" + Math.random()}
+            src={ElphtSvg}
+            alt={"Elephant"}
+          />
+        </CenterWrapper>
+      );
+      return renderArray;
+    case "HEN":
+      renderArray = renderArray.map((e, i) => {
+        switch (i) {
+          case 0:
+          case 1:
+          case 2:
+          case 3:
+          case 5:
+          case 7:
+            return (
+              <CenterWrapper key={chessType + Date.now() + i}>
+                <Dot key={chessType + "Dot" + Date.now() + i} />
+              </CenterWrapper>
+            );
+          default:
+            return e;
+        }
+      });
+      renderArray[4] = (
+        <CenterWrapper key={chessType + Math.random()}>
+          <img
+            width={SVG_CONTAINER}
+            height={SVG_CONTAINER}
+            key={chessType + "img" + Math.random()}
+            src={HenSvg}
+            alt={"Hen"}
+          />
+        </CenterWrapper>
+      );
+      return renderArray;
+    default:
+      return null;
+  }
   }
 
 

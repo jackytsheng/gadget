@@ -3,10 +3,63 @@ import styled from "styled-components";
 import CenterWrapper from "../../../Layout/CenterWrapper";
 import BackgroundImg from "./background.png";
 import Chess from "../Chess";
+import Button from "@material-ui/core/Button";
+
 
 const BOARD_HEIGHT = "540px";
 const BOARD_WIDTH = "380px";
+const POOL_WIDTH = "305px";
 const DASH_COLOR = "#b52838";
+const BORDER_COLOR = "#6d5532fa";
+const WIN_INFO_BG = "#fefee2a6";
+const WIN_TEXT_COLOR = "#6d5532fa";
+const WIN_BTN_COLOR = "#6d5532fa";
+
+const HorizontalFlexWrapper=styled.div`
+  width:${POOL_WIDTH};
+  display:flex;
+  padding-left:10px;
+`
+
+const FlexVerticalWrapper = styled.div`
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+`
+
+const Filler = styled.div`
+  width:20px;
+`
+
+const Title = styled.div`
+  width: ${POOL_WIDTH};
+  margin-bottom: 20px;
+  font-size: 40px;
+  font-weight: 700;
+  @media (max-width: 500px) {
+    font-size: 25px;
+    margin-bottom: 10px;
+  }
+`;
+const SubTitle = styled.div`
+  width: ${POOL_WIDTH};
+  font-size: 20px;
+  margin: 20px 0px;
+  @media (max-width: 500px) {
+    font-size: 18px;
+  }
+`;
+
+const TurnInfo = styled.div`
+  padding-left: 10px;
+  font-size: 30px;
+  font-weight:500;
+  margin:20px 0;
+  @media (max-width: 500px) {
+    font-size: 18px;
+  }
+`;
+
 const Board = styled.div`
   width: ${BOARD_WIDTH};
   height: ${BOARD_HEIGHT};
@@ -53,14 +106,15 @@ const EmptySpace = styled.div`
 
 const CapturedChessWrapper = styled.div`
   display:flex;
+  position:relative;
   justify-content:center;
   align-items:center;
   width:100px;
   height:100px;
 `;
 const CapturePool = styled.div`
-  width: 305px;
-  height: 305px;
+  width: ${POOL_WIDTH};
+  height: ${POOL_WIDTH};
   display: flex;
   flex-wrap: wrap;
 `;
@@ -76,11 +130,54 @@ const BaseStyleCapture = styled.div`
 const SecondPlayerCapture = styled(BaseStyleCapture)``;
 const FirstPlayerCapture = styled(BaseStyleCapture)`
   flex-direction: column-reverse;
+  justify-content:space-between;
+`;
+
+
+const WinnerPop = styled.div`
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${WIN_INFO_BG};
+`;
+
+
+const Text = styled.div`
+  font-size: 25px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: ${WIN_TEXT_COLOR};
+  letter-spacing: 0.3px;
+`;
+
+const RestartBtn = styled(Button)`
+  margin-top: 15px !important;
+  width: 120px;
+  letter-spacing: 0.5px !important;
+  font-weight: 600 !important;
+  height: 40px;
+  background-color: ${WIN_INFO_BG} !important;
+  font-size: 20px !important;
+  color: ${WIN_BTN_COLOR}!important;
+  border-radius: 5px;
+  border: 2px solid ${BORDER_COLOR} !important;
+  cursor: pointer;
+  &:hover {
+    color: ${BORDER_COLOR} !important;
+    background-color: #cbecf5 !important;
+  }
 `;
 
 
 const renderType=(chessCode)=>{
-  switch(chessCode){
+  switch (chessCode) {
     case "E":
     case "e":
       return "ELPHT";
@@ -93,6 +190,9 @@ const renderType=(chessCode)=>{
     case "G":
     case "g":
       return "GIRAF";
+    case "H":
+    case "h":
+      return "HEN";
     default:
       return null;
   }
@@ -117,9 +217,20 @@ class GameBoard extends React.Component {
       player: 1,
       playerOneCapture: [],
       playerTwoCapture: [],
-      selectedCaptureID:"",
-      selectedCoor: {row:null,column:null},
+      selectedCaptureID: "",
+      history: [
+        {
+          gameBoard: JSON.parse(JSON.stringify(gameBoard)),
+          playerOneCapture: [],
+          playerTwoCapture: [],
+        },
+      ],
+      winner: null,
+      selectedCoor: { row: null, column: null },
     };
+    this.redo = this.redo.bind(this);
+    this.surrender = this.surrender.bind(this);
+    this.replay = this.replay.bind(this);
     this.handleClickChess = this.handleClickChess.bind(this);
     this.handleClickCapture = this.handleClickCapture.bind(this);
   }
@@ -127,25 +238,66 @@ class GameBoard extends React.Component {
     return chessCode < "z" && chessCode > "a";
   }
   generateCapture(player) {
-    const {playerOneCapture,playerTwoCapture} = this.state;
-    let array = player === 1 ? playerOneCapture: playerTwoCapture;
+    const {
+      playerOneCapture,
+      playerTwoCapture,
+      selectedCaptureID,
+    } = this.state;
+    let array = player === 1 ? playerOneCapture : playerTwoCapture;
     return array.map((chessCode) => (
       <CapturedChessWrapper key={"CaptureWrapper" + chessCode + Math.random()}>
         <Chess
           onClick={() => this.handleClickCapture(chessCode)}
           disable={this.state.player !== player}
-          player={this.state.player}
-          selected={this.state.selectedCaptureID === chessCode}
+          player={player}
+          selected={selectedCaptureID === chessCode}
           key={"Capture" + chessCode + Math.random()}
           chessType={renderType(chessCode[0])}
           rotated={this.isPlayerTwo(chessCode[0])}
         />
       </CapturedChessWrapper>
     ));
-    
+  }
+  win() {
+    const { player } = this.state;
+    this.setState({
+      winner: player,
+    });
+  }
+  surrender() {
+    const { player } = this.state;
+    this.setState({
+      winner: player === 1 ? 2 : 1,
+    });
+  }
+  replay() {
+    this.setState({
+      gameBoard: JSON.parse(JSON.stringify(gameBoard)),
+      selectedChess: null,
+      player: 1,
+      playerOneCapture: [],
+      playerTwoCapture: [],
+      selectedCaptureID: "",
+      history: [
+        {
+          gameBoard: JSON.parse(JSON.stringify(gameBoard)),
+          playerOneCapture: [],
+          playerTwoCapture: [],
+        },
+      ],
+      winner: null,
+      selectedCoor: { row: null, column: null },
+    });
   }
   generateChess() {
-    return this.state.gameBoard.map((row, i) =>
+    const {
+      selectedChess,
+      selectedCoor,
+      player,
+      selectedCaptureID,
+      gameBoard
+    } = this.state;
+    return gameBoard.map((row, i) =>
       row.map((chessCode, j) => (
         <GridSquare
           key={"Square" + chessCode + i + j}
@@ -154,11 +306,15 @@ class GameBoard extends React.Component {
         >
           {chessCode ? (
             <Chess
-              disable = {!this.isPickable(chessCode) && !this.isMovable(
-                this.state.selectedChess,this.state.selectedCoor,{ row: i, column: j })}
-
-              player = {this.state.player}
-              selected={this.state.selectedChess === chessCode && !this.state.selectedCaptureID}
+              disable={
+                !this.isPickable(chessCode) &&
+                !this.isMovable(selectedChess, selectedCoor, {
+                  row: i,
+                  column: j,
+                })
+              }
+              player={player}
+              selected={i === selectedCoor.row && j === selectedCoor.column}
               onClick={() =>
                 this.handleClickChess(chessCode, { row: i, column: j })
               }
@@ -168,11 +324,12 @@ class GameBoard extends React.Component {
             />
           ) : (
             <EmptySpace
-              isMovable={this.isMovable(
-                this.state.selectedChess,
-                this.state.selectedCoor,
-                { row: i, column: j }
-              ) || this.state.selectedCaptureID}
+              isMovable={
+                this.isMovable(selectedChess, selectedCoor, {
+                  row: i,
+                  column: j,
+                }) || selectedCaptureID
+              }
               onClick={() =>
                 this.handleClickChess(chessCode, { row: i, column: j })
               }
@@ -183,43 +340,47 @@ class GameBoard extends React.Component {
     );
   }
 
-  captureChess(coor){
-    const {gameBoard} = this.state;
+  captureChess(coor) {
+    const { gameBoard } = this.state;
     let chessCode = gameBoard[coor.row][coor.column];
-    let { player, playerOneCapture,playerTwoCapture} = this.state;
-    playerOneCapture = JSON.parse(JSON.stringify(playerOneCapture));
-    playerTwoCapture = JSON.parse(JSON.stringify(playerTwoCapture));
-    // TODO: Account also for "HEN" chess
-    if(player === 1){
+    let { player, playerOneCapture, playerTwoCapture } = this.state;
+    playerOneCapture = [...playerOneCapture];
+    playerTwoCapture = [...playerTwoCapture];
+
+    if (chessCode === "H" || chessCode === "h") {
+      chessCode = "c";
+    }
+    if (player === 1) {
       playerOneCapture.push(
         playerOneCapture.includes(chessCode.toUpperCase())
           ? chessCode.toUpperCase() + 2
-          : chessCode.toUpperCase()
-      );
-      this.setState({ playerOneCapture }, () => console.log(playerOneCapture));
-    }else{
+          : chessCode.toUpperCase());
+      return playerOneCapture
+    } else {
       playerTwoCapture.push(
         playerTwoCapture.includes(chessCode.toLowerCase())
           ? chessCode.toLowerCase() + 2
           : chessCode.toLowerCase()
       );
-      this.setState({ playerTwoCapture },()=> console.log(playerTwoCapture));
+      return playerTwoCapture;
     }
   }
-  
-  swapPlayer(){
-    const {player} = this.state;
-    this.setState({player:player === 1? 2:1});
+
+  swapPlayer() {
+    const { player } = this.state;
+    this.setState({ player: player === 1 ? 2 : 1 });
   }
-  isPickable(chessCode){
+  isPickable(chessCode) {
     const { player } = this.state;
     return (
       (this.isPlayerTwo(chessCode) && player === 2) ||
       (!this.isPlayerTwo(chessCode) && player === 1)
     );
   }
-  isMovable(selectedChess, oldCoor, newCoor){
+  isMovable(selectedChess, oldCoor, newCoor) {
     let totalDistance;
+    let leftDistance;
+    let rightDistance;
     const { gameBoard } = this.state;
 
     // Check if it's alias's chess
@@ -249,57 +410,135 @@ class GameBoard extends React.Component {
           Math.abs(oldCoor.column - newCoor.column) +
           Math.abs(oldCoor.row - newCoor.row);
         return totalDistance === 2;
+
+      case "H":
+        // leftDiagonal
+        leftDistance =
+          oldCoor.column - newCoor.column + newCoor.row - oldCoor.row;
+        // rightDiagonal
+        rightDistance =
+          newCoor.column - oldCoor.column + newCoor.row - oldCoor.row;
+        return leftDistance !== 2 && rightDistance !== 2;
+      case "h":
+        // leftDiagonal
+        leftDistance =
+          oldCoor.column - newCoor.column + oldCoor.row - newCoor.row;
+        // rightDiagonal
+        rightDistance =
+          newCoor.column - oldCoor.column + oldCoor.row - newCoor.row;
+        return leftDistance !== 2 && rightDistance !== 2;
+
       case "c":
-        return newCoor.row - oldCoor.row === 1;
+        return (
+          newCoor.row - oldCoor.row === 1 && oldCoor.column === newCoor.column
+        );
       case "C":
-        return oldCoor.row - newCoor.row === 1;
+        return (
+          oldCoor.row - newCoor.row === 1 && oldCoor.column === newCoor.column
+        );
       default:
         return false;
     }
-    
   }
-  move(oldCoor, newCoor){
-    const {gameBoard} = this.state;
+  redo(){
+    let {history,player} = this.state;
+    history.pop();
+    this.setState({
+      player:player ===1?2:1,
+      gameBoard:history[history.length-1].gameBoard,
+      playerOneCapture:history[history.length-1].playerOneCapture,
+      playerTwoCapture:history[history.length-1].playerTwoCapture,
+      history});
+  }
+  move(oldCoor, newCoor) {
+    let { gameBoard, selectedChess, player,history,playerOneCapture,playerTwoCapture} = this.state;
     let newGameBoard = JSON.parse(JSON.stringify(gameBoard));
     console.log("Moving");
+
+    let oldChess = selectedChess;
+
     this.setState({
       selectedChess: null,
       selectedCoor: { row: null, column: null },
     });
 
-    if(newGameBoard[newCoor.row][newCoor.column] !== 0){
-      this.captureChess(newCoor);
+    if (newGameBoard[newCoor.row][newCoor.column] !== 0) {
+      if (player ===1){
+        playerOneCapture = this.captureChess(newCoor);
+      }else{
+        playerTwoCapture = this.captureChess(newCoor);
+      }
     }
-      newGameBoard[newCoor.row][newCoor.column] =
-        newGameBoard[oldCoor.row][oldCoor.column];
-      newGameBoard[oldCoor.row][oldCoor.column] = 0;
-      this.setState({gameBoard: JSON.parse(JSON.stringify(newGameBoard))},()=>console.log(this.state.gameBoard))
+
+    if (oldChess === "l" || oldChess === "L") {
+      if (
+        (player === 1 && newCoor.row === 0) ||
+        (player === 2 && newCoor.row === 3)
+      ) {
+        this.win();
+      }
+    }
+    if (
+      newGameBoard[newCoor.row][newCoor.column] === "l" ||
+      newGameBoard[newCoor.row][newCoor.column] === "L"
+    ) {
+      this.win();
+    }
+    if (oldChess === "c" || oldChess === "C") {
+      // For Promoting Chick to Hen
+      if (player === 1 && newCoor.row === 0) {
+        oldChess = "H";
+      } else if (player === 2 && newCoor.row === 3) {
+        oldChess = "h";
+      }
+    }
+
+    newGameBoard[newCoor.row][newCoor.column] = oldChess;
+    newGameBoard[oldCoor.row][oldCoor.column] = 0;
+    history.push({
+      gameBoard: JSON.parse(JSON.stringify(newGameBoard)),
+      playerOneCapture,
+      playerTwoCapture,
+    });
+    this.setState(
+      {
+        playerOneCapture,
+        playerTwoCapture,
+        gameBoard: JSON.parse(JSON.stringify(newGameBoard)),
+        history,
+      },
+      () => console.log(this.state.history)
+    );
   }
-  handleClickCapture(chessCode){
+
+  handleClickCapture(chessCode) {
     const { selectedCaptureID } = this.state;
     if (selectedCaptureID === chessCode) {
-      // Put it down
-      this.setState({ selectedCaptureID:"" });
-    } else if (this.isPickable(chessCode[0])){
-      
+      // selected it
+      this.setState({ selectedCaptureID: "" });
+    } else if (this.isPickable(chessCode[0])) {
       // Pick it up
-      this.setState(
-        {
-          selectedCaptureID: chessCode,
-          selectedChess: chessCode[0],
-          selectedCoor: { row: null, column: null },
-        },
-        () => console.log(this.state.selectedCaptureID)
-      );
+      this.setState({
+        selectedCaptureID: chessCode,
+        selectedChess: chessCode[0],
+        selectedCoor: { row: null, column: null },
+      });
     }
   }
-  isPlacable(coor){
+  isPlacable(coor) {
     const { gameBoard } = this.state;
     return !gameBoard[coor.row][coor.column];
   }
 
-  place(coor){
-    const {gameBoard,selectedCaptureID,selectedChess,playerOneCapture,playerTwoCapture} = this.state;
+  place(coor) {
+    const {
+      gameBoard,
+      selectedCaptureID,
+      selectedChess,
+      playerOneCapture,
+      playerTwoCapture,
+      history
+    } = this.state;
     let newGameBoard = JSON.parse(JSON.stringify(gameBoard));
     let newPlayerOneCapture = [...playerOneCapture];
     let newPlayerTwoCapture = [...playerTwoCapture];
@@ -317,61 +556,74 @@ class GameBoard extends React.Component {
     newPlayerTwoCapture = playerTwoCapture.filter(
       (chessCode) => chessCode !== selectedCaptureID
     );
-
+    
+    history.push({
+      gameBoard: JSON.parse(JSON.stringify(newGameBoard)),
+      newPlayerOneCapture,
+      newPlayerTwoCapture,
+    });
     this.setState({
+      history,
       selectedCaptureID: "",
       selectedChess: null,
       selectedCoor: { row: null, column: null },
-      playerOneCapture:newPlayerOneCapture,
-      playerTwoCapture:newPlayerTwoCapture,
-      gameBoard:JSON.parse(JSON.stringify(newGameBoard))
-    },()=> console.log(this.state.gameBoard));
-    
+      playerOneCapture: newPlayerOneCapture,
+      playerTwoCapture: newPlayerTwoCapture,
+      gameBoard: JSON.parse(JSON.stringify(newGameBoard)),
+    },()=>console.log(this.state.history));
   }
 
-  handleClickChess(chessCode,newCoordinate) {
-
-    const { selectedChess, selectedCoor,selectedCaptureID } = this.state;
+  handleClickChess(chessCode, newCoordinate) {
+    const { selectedChess, selectedCoor, selectedCaptureID } = this.state;
     if (selectedChess === chessCode && !selectedCaptureID) {
       // put it down
       this.setState({
         selectedChess: null,
         selectedCoor: { row: null, column: null },
       });
-
     } else if (chessCode === selectedCaptureID) {
       // put it down from capture and pick up from board
-      this.setState({selectedCaptureID:"", selectedChess: chessCode, selectedCoor: newCoordinate })
-
-    }else if (chessCode && this.isPickable(chessCode)) {
+      this.setState({
+        selectedCaptureID: "",
+        selectedChess: chessCode,
+        selectedCoor: newCoordinate,
+      });
+    } else if (chessCode && this.isPickable(chessCode)) {
       // pick it up
-      this.setState(
-        { selectedChess: chessCode, selectedCoor: newCoordinate },
-        () => console.log(this.state.selectedChess)
-      );
+      this.setState({ selectedChess: chessCode, selectedCoor: newCoordinate });
     } else if (selectedCaptureID && this.isPlacable(newCoordinate)) {
-      
       // place the chess
       this.place(newCoordinate);
 
       // swapPlayer
       this.swapPlayer();
-
     } else if (this.isMovable(selectedChess, selectedCoor, newCoordinate)) {
       // Move to a new place
       this.move(selectedCoor, newCoordinate);
 
       // swapPlayer
       this.swapPlayer();
-    } 
+    }
   }
   render() {
     return (
       <React.Fragment>
         <SecondPlayerCapture>
           <ReverseCapturePool>{this.generateCapture(2)}</ReverseCapturePool>
+          <FlexVerticalWrapper>
+            <Title>Dobutsu Shogi</Title>
+            <SubTitle>By Jiajin Zheng</SubTitle>
+          </FlexVerticalWrapper>
         </SecondPlayerCapture>
         <Board>
+          {this.state.winner ? (
+            <WinnerPop>
+              <Text>Player {this.state.winner} Wins !</Text>
+              <RestartBtn variant="outlined" onClick={this.replay}>
+                Replay
+              </RestartBtn>
+            </WinnerPop>
+          ) : null}
           <Img src={BackgroundImg} alt={"background"} />
           <CenterWrapper>
             <Grid>{this.generateChess()}</Grid>
@@ -379,6 +631,28 @@ class GameBoard extends React.Component {
         </Board>
         <FirstPlayerCapture>
           <CapturePool>{this.generateCapture(1)}</CapturePool>
+          <FlexVerticalWrapper>
+            <TurnInfo>Player {this.state.player}'s turn</TurnInfo>
+            <HorizontalFlexWrapper>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={this.redo}
+                disabled={this.state.history.length === 1 || !!this.state.winner}
+              >
+                Redo
+              </Button>
+              <Filler></Filler>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={this.surrender}
+                disabled={!!this.state.winner}
+              >
+                Surrender
+              </Button>
+            </HorizontalFlexWrapper>
+          </FlexVerticalWrapper>
         </FirstPlayerCapture>
       </React.Fragment>
     );
