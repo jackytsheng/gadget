@@ -559,8 +559,8 @@ class GameBoard extends React.Component {
     
     history.push({
       gameBoard: JSON.parse(JSON.stringify(newGameBoard)),
-      newPlayerOneCapture,
-      newPlayerTwoCapture,
+      playerOneCapture:newPlayerOneCapture,
+      playerTwoCapture:newPlayerTwoCapture,
     });
     this.setState({
       history,
