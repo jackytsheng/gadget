@@ -45,9 +45,6 @@ const PlayerTurnInfo = styled(FlexVerticalWrapper)`
   }
 `;
 
-const Filler = styled.div`
-  width: 20px;
-`;
 
 const Title = styled.div`
   width: ${POOL_WIDTH};
@@ -806,6 +803,7 @@ class GameBoard extends React.Component {
           <PlayerTurnInfo>
             <TurnInfo>Player {this.state.player}'s turn</TurnInfo>
             <HorizontalFlexWrapper>
+              <ButtonGroup aria-label="outlined button group">
               <Button
                 variant="outlined"
                 color="primary"
@@ -816,7 +814,6 @@ class GameBoard extends React.Component {
               >
                 Redo
               </Button>
-              <Filler></Filler>
               <Button
                 variant="outlined"
                 color="secondary"
@@ -825,6 +822,7 @@ class GameBoard extends React.Component {
               >
                 Surrender
               </Button>
+              </ButtonGroup>
             </HorizontalFlexWrapper>
           </PlayerTurnInfo>
         </FirstPlayerCapture>
