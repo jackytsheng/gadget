@@ -94,7 +94,7 @@ class Home extends React.Component {
             img={DobutsuShogi}
             height={MEDIA_HEIGHT}
             title="Dobutsu Shogi"
-            description="[OnGoing Project!] Familarise yourself with Mini Shogi. Have fun with your friend!"
+            description="Familarise yourself with Mini Shogi. Have fun with your friend!"
             handleClick={() => {
               this.handleClick("/dobutsushogi");
             }}
