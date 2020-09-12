@@ -31,7 +31,9 @@ const FlexVerticalWrapper = styled.div`
   
 `;
 const GagetInfo = styled(FlexVerticalWrapper)`
-  
+  @media (max-height: 760px){
+    display:none;
+  }
 `;
 
 const PlayerTurnInfo = styled(FlexVerticalWrapper)`
@@ -99,12 +101,20 @@ const Board = styled.div`
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   overflow: hidden;
   position: relative;
+  @media (max-width: 450px) {
+    width: 350px;
+    height: 440px;
+  }
 `;
 
 const Img = styled.img`
   width: ${BOARD_WIDTH};
   height: ${BOARD_HEIGHT};
   position: absolute;
+  @media (max-width: 450px) {
+    width: 350px;
+    height: 440px;
+  }
 `;
 const GridSquare = styled.div`
   width: ${(props) => (props.rightLast ? "100px" : "99px")};

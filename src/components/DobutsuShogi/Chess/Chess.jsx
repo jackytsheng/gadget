@@ -9,13 +9,6 @@ const SELECT_BORDER_BG_P1 = "#15cd3185";
 const SELECT_BORDER_BG_P2 = "#1590cd85";
 const CHESS_SIZE = 80;
 const ChessWrapper = styled.div`
-  &:hover {
-    cursor: ${(props) => (props.disable ? "auto" : "pointer")};
-    ${(props) =>
-      props.disable
-        ? ""
-        : "box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)"};
-  }
   width: ${CHESS_SIZE - 20}px;
   height: ${CHESS_SIZE - 20}px;
   border-radius: 10px;
@@ -25,10 +18,21 @@ const ChessWrapper = styled.div`
         ? SELECT_BORDER_BG_P1
         : SELECT_BORDER_BG_P2
       : CHESS_BORDER};
-  box-shadow: 5px 1px 10px 3px rgba(0, 0, 0, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
   padding: 10px;
+  @media (min-width: 1000px) {
+    box-shadow: 5px 1px 10px 3px rgba(0, 0, 0, 0.12),
+      0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    &:hover {
+      cursor: ${(props) => (props.disable ? "auto" : "pointer")};
+      ${(props) =>
+        props.disable
+          ? ""
+          : "box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)"};
+    }
+  }
+
 `;
 const InnerWrapper = styled.div`
   transform: ${(props) => (props.rotated ? "rotateZ(180deg)" : null)};
