@@ -31,7 +31,7 @@ const FlexVerticalWrapper = styled.div`
   
 `;
 const GagetInfo = styled(FlexVerticalWrapper)`
-  @media (max-height: 800px){
+  @media (max-height: 800px) and (max-width:600px){
     position:fixed;
     right:40px;
     top:10px;
@@ -98,7 +98,7 @@ const Board = styled.div`
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   overflow: hidden;
   position: relative;
-  @media (max-width: 450px) {
+  @media (max-width: 600px) {
     width: 350px;
     height: 440px;
   }
@@ -108,7 +108,7 @@ const Img = styled.img`
   width: ${BOARD_WIDTH};
   height: ${BOARD_HEIGHT};
   position: absolute;
-  @media (max-width: 450px) {
+  @media (max-width: 600px) {
     width: 350px;
     height: 440px;
   }
