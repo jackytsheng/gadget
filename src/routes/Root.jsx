@@ -21,11 +21,18 @@ const ReturnHome = ({ handleClick }) => {
 };
 
 const ReturnHomeBtn = styled(Button)`
-  position:fixed;
+  position:absolute;
   top:10px;
   left:40px;
-  z-index:20;
+  
 `
+const Wrapper = styled.div`
+  top:0;
+  width: 100%;
+  height: 20px;
+  position: fixed;
+  z-index: 50;
+`;
 
 
 export default () => {
@@ -37,7 +44,9 @@ export default () => {
   return (
     <React.Fragment>
       {curUrl.pathname !== "/" ? (
-        <ReturnHome handleClick={handleClick} />
+        <Wrapper>
+          <ReturnHome handleClick={handleClick} />
+        </Wrapper>
       ) : null}
       <Switch>
         <Route path="/dobutsushogi" exact>

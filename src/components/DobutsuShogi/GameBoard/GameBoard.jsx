@@ -31,8 +31,10 @@ const FlexVerticalWrapper = styled.div`
   
 `;
 const GagetInfo = styled(FlexVerticalWrapper)`
-  @media (max-height: 760px){
-    display:none;
+  @media (max-height: 800px){
+    position:fixed;
+    right:40px;
+    top:10px;
   }
 `;
 
@@ -53,7 +55,7 @@ const Title = styled.div`
   font-weight: 700;
   @media (max-width: 1000px) {
     width:auto;
-    font-size: 26px;
+    font-size: 25px;
     margin-bottom: 5px;
   }
   @media (max-width: 500px) {
@@ -66,14 +68,12 @@ const SubTitle = styled.div`
   font-size: 20px;
   margin: 20px 0px;
   @media (max-width: 1000px) {
-    width:auto;
+    width: auto;
     font-size: 18px;
-    margin: 5px 0;
+    margin: 0 0 2px 0;
   }
-  @media (max-width: 500px) {
-    position:fixed;
-    top:10px;
-    right:30px;
+  @media (max-height: 800px) {
+    padding-left:50px;
   }
 `;
 
