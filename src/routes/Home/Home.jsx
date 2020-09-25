@@ -7,7 +7,7 @@ import sudoku from './img/sudoku-demo.png'; // Tell webpack this JS file uses th
 import Ghost from './components/Ghost';
 import TwoZeroFourEightDemo from './img/2048.png';
 import DobutsuShogi from './img/dobutsu-shogi.png';
-
+import Siege from './img/siege.png';
 
 const WIDTH = '325px';
 const MEDIA_HEIGHT = "140px";
@@ -97,6 +97,16 @@ class Home extends React.Component {
             description="Familarise yourself with Mini Shogi. Have fun with your friend!"
             handleClick={() => {
               this.handleClick("/dobutsushogi");
+            }}
+          />
+          <ProjectCard
+            width={WIDTH}
+            img={Siege}
+            height={MEDIA_HEIGHT}
+            title="Siege"
+            description="Love to play game of Go but don't have much time? Try Siege"
+            handleClick={() => {
+              this.handleClick("/siege");
             }}
           />
           <Filler />

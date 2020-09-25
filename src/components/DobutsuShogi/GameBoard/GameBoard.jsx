@@ -104,6 +104,7 @@ const Board = styled.div`
   }
 `;
 
+
 const Img = styled.img`
   width: ${BOARD_WIDTH};
   height: ${BOARD_HEIGHT};

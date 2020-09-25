@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import TwoZeroFourEight from '../components/TwoZeroFourEight';
 import DobutsuShogi from '../components/DobutsuShogi';
+import Siege from '../components/Siege';
 const ReturnHome = ({ handleClick }) => {
   return (
     <ReturnHomeBtn color="primary" onClick={handleClick}>
@@ -49,6 +50,11 @@ export default () => {
         </Wrapper>
       ) : null}
       <Switch>
+        <Route path="/siege" exact>
+          <FullSizeCanvas>
+            <Siege />
+          </FullSizeCanvas>
+        </Route>
         <Route path="/dobutsushogi" exact>
           <FullSizeCanvas>
             <DobutsuShogi />
