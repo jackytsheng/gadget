@@ -8,6 +8,9 @@ const CHESS_COLOR_DARK = "#622f00";
 const CHESS_COLOR_LIGHT = "#f99d25";
 const BG_COLOR_LIGHT = "#ffc982";
 const BG_COLOR_DARK = "#ab7039";
+const PLAYER_ONE_HOVER_COLOR  = "#ffc98261";
+const PLAYER_TWO_HOVER_COLOR  = "#ab703961";
+
 // game board
 // [
 //   [0 ,"",0 ,"",0 ,"",0 ,"",0 ,"",0 ,"",0 ],
@@ -41,24 +44,62 @@ const grid = [
   [0 ,"",0 ,"",0 ,"",0 ,"",0 ,"",0 ,"",0 ],
 ]
 
-const GridLayout = styled.div`
+const hoverGrid = [
+  ["x", "o", "x", "x", "x", "x", "x"],
+  ["x", "o", "x", "x", "x", "x", "x"],
+  ["x", "o", "x", "x", "x", "x", "x"],
+  ["x", "o", "x", "x", "x", "x", "x"],
+  ["x", "o", "x", "x", "x", "x", "x"],
+  ["x", "o", "x", "x", "x", "x", "x"],
+];
+
+const MainWrapper = styled.div`
+  position:relative;
+`
+
+
+const GridBase = styled.div`
   width: 490px;
   height: 490px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   @media (max-width: 650px) {
     width: 385px;
     height: 385px;
   }
 `;
+const GridLayout = styled(GridBase)`
+ 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+ 
+`;
+
+const HoverLayout= styled(GridBase)`
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+`;
+
 
 const Slot = styled.div`
   width: 100%;
   height: 100%;
   background-color:${props => props.bgColor};
 `;
+
+const HoverSlot = styled(Slot)`
+
+  &:hover{
+    background-color:green;
+  }
+`
+const HoverSlotFiller = styled.div`
+  width: 100%;
+  height: 100%;
+`
 
 const Chess = styled.img`
   width: 60px;
@@ -72,6 +113,37 @@ const Chess = styled.img`
   }
 `;
 
+
+const generateHoverGrid = (grid, onClick,player) => {
+
+  return grid.map(row => row.map(column => {
+    
+    if(column === "o"){
+      return (
+        <HoverSlot
+          key={"Hover" + row + column}
+          onClick={() => onClick(row, column)}
+          bgColor={
+            player === 1 ? PLAYER_ONE_HOVER_COLOR : PLAYER_TWO_HOVER_COLOR
+          }
+        />
+      );
+    }else{
+      return <HoverSlotFiller key={("Hover" + row + column)}/>
+    }
+  }))
+
+  
+};
+
+const HoverCanvas = ({onClick,player,hoverGrid}) =>{
+
+return (
+  <HoverLayout>{generateHoverGrid(hoverGrid, onClick, player)}</HoverLayout>
+);
+
+
+}
 
 
 
@@ -135,10 +207,15 @@ class GameBoard extends React.Component {
   render() {
     const { P1Coor, P2Coor, selected } = this.state;
 
-    return <GridLayout>
-      {this.generateGrid(P1Coor, P2Coor)}
-      {selected? this.generateMovableGrid():null }
-      </GridLayout>;
+    return (
+      <MainWrapper>
+        <HoverCanvas hoverGrid={hoverGrid} player={1} onClick={()=>console.log("i'm click")}></HoverCanvas>
+        <GridLayout>
+          {this.generateGrid(P1Coor, P2Coor)}
+          {selected ? this.generateMovableGrid() : null}
+        </GridLayout>
+      </MainWrapper>
+    );
   }
 }
 
