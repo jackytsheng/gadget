@@ -9,7 +9,10 @@ const CHESS_COLOR_LIGHT = "#f99d25";
 const BG_COLOR_LIGHT = "#ffc982";
 const BG_COLOR_DARK = "#ab7039";
 const PLAYER_ONE_HOVER_COLOR = "#a4b894e0";
-const PLAYER_TWO_HOVER_COLOR  = "#ab703961";
+const PLAYER_TWO_HOVER_COLOR = "#95a5ddbf";
+
+const PLAYER_ONE_CONFIRM_COLOR = "#bae26a";
+const PLAYER_TWO_CONFIRM_COLOR = "#a86ae2";
 
 // game board
 // [
@@ -93,8 +96,11 @@ const Slot = styled.div`
 `;
 
 const HoverSlot = styled(Slot)`
+  background-color:${(props) =>
+    props.player === 1 ? PLAYER_ONE_HOVER_COLOR : PLAYER_TWO_HOVER_COLOR}}
   &:hover {
-    background-color: #bae26a;
+    background-color: ${(props) =>
+      props.player === 1 ? PLAYER_ONE_CONFIRM_COLOR : PLAYER_TWO_CONFIRM_COLOR};
     cursor: pointer;
   }
 `;
@@ -126,7 +132,8 @@ const generateHoverGrid = (grid, onClick,player) => {
         return (
           <HoverSlot
             key={"Hover" + row + column}
-            onClick={() => onClick(row, column)}
+            onClick={() => onClick(column,row,player)}
+            player ={player}
             bgColor={
               player === 1 ? PLAYER_ONE_HOVER_COLOR : PLAYER_TWO_HOVER_COLOR
             }
@@ -139,10 +146,12 @@ const generateHoverGrid = (grid, onClick,player) => {
   );
 };
 
-const HoverCanvas = ({onClick,player,hoverGrid}) =>{
+const HoverCanvas = ({onClick, player,hoverGrid}) =>{
 
 return (
-  <HoverLayout>{generateHoverGrid(hoverGrid, onClick, player)}</HoverLayout>
+  <HoverLayout>
+    {generateHoverGrid(hoverGrid, onClick, player)}
+  </HoverLayout>
 );
 
 
@@ -163,22 +172,33 @@ class GameBoard extends React.Component {
       selected: false,
       hoverGrid: copy(hoverGrid),
     };
+    this.handleMove = this.handleMove.bind(this);
     this.toggleSelected = this.toggleSelected.bind(this);
   }
 
   toggleSelected(player) {
     let hoverGrid = this.generateMovableSlot(player);
-    console.log(hoverGrid);
     this.setState({ selected: !this.state.selected, hoverGrid, player });
+  }
+
+  isOtherPlayerOnSpot(x, y) {
+    const { P1Coor, P2Coor ,player} = this.state;
+    if(player === 1){
+      return (
+        x === P2Coor.x && y === P2Coor.y
+      );
+    }else{
+      return x === P1Coor.x && y === P1Coor.y;
+    }
+    
   }
 
   checkMove(i, j) {
     let grid = copy(hoverGrid);
-    const { gameBoard } = this.state;
-    console.log(gameBoard);
+    const { gameBoard, P1Coor, P2Coor } = this.state;
     let stepLeft = 3;
 
-    const canMove = (i, j, stepLeft) => {
+    const canMove = (i, j, stepLeft, comeFrom) => {
       if (stepLeft === 0) {
         return;
       }
@@ -187,57 +207,76 @@ class GameBoard extends React.Component {
         // try to move up , if possible
         if (
           gameBoard[i * 2 - 1][j * 2] !== "w" &&
-          gameBoard[i * 2 - 1][j * 2] !== "W"
+          gameBoard[i * 2 - 1][j * 2] !== "W" &&
+          comeFrom !== "up" 
         ) {
           grid[i - 1][j] = "o";
-          canMove(i - 1, j, stepLeft - 1);
+          canMove(i - 1, j, stepLeft - 1, "down");
         }
       }
       if (i + 1 < 7) {
         // try to move down , if possible
         if (
           gameBoard[i * 2 + 1][j * 2] !== "w" &&
-          gameBoard[i * 2 + 1][j * 2] !== "W"
+          gameBoard[i * 2 + 1][j * 2] !== "W" &&
+          comeFrom !== "down" 
         ) {
-          console.log(i+1,j)
           grid[i + 1][j] = "o";
-          canMove(i + 1, j, stepLeft - 1);
+          canMove(i + 1, j, stepLeft - 1, "up");
         }
       }
       if (j + 1 < 7) {
         // try to move right , if possible
         if (
           gameBoard[i * 2][j * 2 + 1] !== "w" &&
-          gameBoard[i * 2][j * 2 + 1] !== "W"
+          gameBoard[i * 2][j * 2 + 1] !== "W" &&
+          comeFrom !== "right"
         ) {
           grid[i][j + 1] = "o";
-          canMove(i, j + 1, stepLeft - 1);
+          canMove(i, j + 1, stepLeft - 1, "left");
         }
       }
       if (j - 1 >= 0) {
         // try to move left , if possible
         if (
           gameBoard[i * 2][j * 2 - 1] !== "w" &&
-          gameBoard[i * 2][j * 2 - 1] !== "W"
+          gameBoard[i * 2][j * 2 - 1] !== "W" &&
+          comeFrom !== "left"
         ) {
           grid[i][j - 1] = "o";
-          canMove(i, j - 1, stepLeft - 1);
+          canMove(i, j - 1, stepLeft - 1, "right");
         }
       }
     };
-    canMove(i, j, stepLeft);
-    grid[i][j] = "x";
+    canMove(i, j, stepLeft, "");
+    grid[P1Coor.y][P1Coor.x]="x";
+    grid[P2Coor.y][P2Coor.x] = "x";
     return copy(grid);
   }
 
+  handleMove(x, y, player) {
+    if (player === 1) {
+      this.setState({
+        selected: false,
+        P1Coor: { x, y },
+      });
+    } else {
+      this.setState({
+        selected: false,
+        P2Coor: { x, y },
+      });
+    }
+  }
+
   generateMovableSlot(player) {
-    const { P1Coor, P2Coor} = this.state;
+    const { P1Coor, P2Coor } = this.state;
     if (player === 1) {
       const { x, y } = P1Coor;
-      return this.checkMove(x, y);
+      // x represent column, y represent row
+      return this.checkMove(y, x);
     } else {
       const { x, y } = P2Coor;
-      return this.checkMove(x, y);
+      return this.checkMove(y, x);
     }
   }
 
@@ -284,7 +323,7 @@ class GameBoard extends React.Component {
   }
 
   render() {
-    const { P1Coor, P2Coor, selected, hoverGrid } = this.state;
+    const { P1Coor, P2Coor, selected, hoverGrid, player } = this.state;
 
     return (
       <MainWrapper>
@@ -292,8 +331,8 @@ class GameBoard extends React.Component {
         {selected ? (
           <HoverCanvas
             hoverGrid={hoverGrid}
-            player={1}
-            onClick={() => console.log("i'm click")}
+            player={player}
+            onClick={this.handleMove}
           />
         ) : null}
       </MainWrapper>
