@@ -8,7 +8,7 @@ const CHESS_COLOR_DARK = "#622f00";
 const CHESS_COLOR_LIGHT = "#f99d25";
 const BG_COLOR_LIGHT = "#ffc982";
 const BG_COLOR_DARK = "#ab7039";
-const PLAYER_ONE_HOVER_COLOR  = "#ffc98261";
+const PLAYER_ONE_HOVER_COLOR = "#a4b894e0";
 const PLAYER_TWO_HOVER_COLOR  = "#ab703961";
 
 // game board
@@ -45,12 +45,13 @@ const grid = [
 ]
 
 const hoverGrid = [
-  ["x", "o", "x", "x", "x", "x", "x"],
-  ["x", "o", "x", "x", "x", "x", "x"],
-  ["x", "o", "x", "x", "x", "x", "x"],
-  ["x", "o", "x", "x", "x", "x", "x"],
-  ["x", "o", "x", "x", "x", "x", "x"],
-  ["x", "o", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
 ];
 
 const MainWrapper = styled.div`
@@ -88,14 +89,15 @@ const Slot = styled.div`
   width: 100%;
   height: 100%;
   background-color:${props => props.bgColor};
+  box-sizing:border-box;
 `;
 
 const HoverSlot = styled(Slot)`
-
-  &:hover{
-    background-color:green;
+  &:hover {
+    background-color: #bae26a;
+    cursor: pointer;
   }
-`
+`;
 const HoverSlotFiller = styled.div`
   width: 100%;
   height: 100%;
@@ -104,6 +106,7 @@ const HoverSlotFiller = styled.div`
 const Chess = styled.img`
   width: 60px;
   height: 60px;
+  z-index:10;
   &:hover{
     cursor:pointer;
   }
@@ -114,26 +117,26 @@ const Chess = styled.img`
 `;
 
 
+
 const generateHoverGrid = (grid, onClick,player) => {
 
-  return grid.map(row => row.map(column => {
-    
-    if(column === "o"){
-      return (
-        <HoverSlot
-          key={"Hover" + row + column}
-          onClick={() => onClick(row, column)}
-          bgColor={
-            player === 1 ? PLAYER_ONE_HOVER_COLOR : PLAYER_TWO_HOVER_COLOR
-          }
-        />
-      );
-    }else{
-      return <HoverSlotFiller key={("Hover" + row + column)}/>
-    }
-  }))
-
-  
+  return grid.map((GridRow, row) =>
+    GridRow.map((slot, column) => {
+      if (slot === "o") {
+        return (
+          <HoverSlot
+            key={"Hover" + row + column}
+            onClick={() => onClick(row, column)}
+            bgColor={
+              player === 1 ? PLAYER_ONE_HOVER_COLOR : PLAYER_TWO_HOVER_COLOR
+            }
+          />
+        );
+      } else {
+        return <HoverSlotFiller key={"Hover" + row + column} />;
+      }
+    })
+  );
 };
 
 const HoverCanvas = ({onClick,player,hoverGrid}) =>{
@@ -145,7 +148,7 @@ return (
 
 }
 
-
+const copy = (array) => JSON.parse(JSON.stringify(array));
 
 
 class GameBoard extends React.Component {
@@ -153,34 +156,112 @@ class GameBoard extends React.Component {
     super(props);
     this.state = {
       history: [],
+      gameBoard: copy(grid),
       P1Coor: { x: 0, y: 0 },
       P2Coor: { x: 6, y: 6 },
       player: 1,
       selected: false,
+      hoverGrid: copy(hoverGrid),
     };
     this.toggleSelected = this.toggleSelected.bind(this);
   }
 
-  toggleSelected(){
-    console.log("click")
-    this.setState({selected:!this.state.selected})
+  toggleSelected(player) {
+    let hoverGrid = this.generateMovableSlot(player);
+    console.log(hoverGrid);
+    this.setState({ selected: !this.state.selected, hoverGrid, player });
   }
 
-  playerSlot(P1Coor, P2Coor, row, column){
+  checkMove(i, j) {
+    let grid = copy(hoverGrid);
+    const { gameBoard } = this.state;
+    console.log(gameBoard);
+    let stepLeft = 3;
+
+    const canMove = (i, j, stepLeft) => {
+      if (stepLeft === 0) {
+        return;
+      }
+
+      if (i - 1 >= 0) {
+        // try to move up , if possible
+        if (
+          gameBoard[i * 2 - 1][j * 2] !== "w" &&
+          gameBoard[i * 2 - 1][j * 2] !== "W"
+        ) {
+          grid[i - 1][j] = "o";
+          canMove(i - 1, j, stepLeft - 1);
+        }
+      }
+      if (i + 1 < 7) {
+        // try to move down , if possible
+        if (
+          gameBoard[i * 2 + 1][j * 2] !== "w" &&
+          gameBoard[i * 2 + 1][j * 2] !== "W"
+        ) {
+          console.log(i+1,j)
+          grid[i + 1][j] = "o";
+          canMove(i + 1, j, stepLeft - 1);
+        }
+      }
+      if (j + 1 < 7) {
+        // try to move right , if possible
+        if (
+          gameBoard[i * 2][j * 2 + 1] !== "w" &&
+          gameBoard[i * 2][j * 2 + 1] !== "W"
+        ) {
+          grid[i][j + 1] = "o";
+          canMove(i, j + 1, stepLeft - 1);
+        }
+      }
+      if (j - 1 >= 0) {
+        // try to move left , if possible
+        if (
+          gameBoard[i * 2][j * 2 - 1] !== "w" &&
+          gameBoard[i * 2][j * 2 - 1] !== "W"
+        ) {
+          grid[i][j - 1] = "o";
+          canMove(i, j - 1, stepLeft - 1);
+        }
+      }
+    };
+    canMove(i, j, stepLeft);
+    grid[i][j] = "x";
+    return copy(grid);
+  }
+
+  generateMovableSlot(player) {
+    const { P1Coor, P2Coor} = this.state;
+    if (player === 1) {
+      const { x, y } = P1Coor;
+      return this.checkMove(x, y);
+    } else {
+      const { x, y } = P2Coor;
+      return this.checkMove(x, y);
+    }
+  }
+
+  playerSlot(P1Coor, P2Coor, row, column) {
     if (P1Coor.x === column && P1Coor.y === row) {
-      return <Chess src={DarkKnight} alt="Dark Knight" onClick={this.toggleSelected}></Chess>;
+      return (
+        <Chess
+          src={DarkKnight}
+          alt="Dark Knight"
+          onClick={() => this.toggleSelected(1)}
+        ></Chess>
+      );
     } else if (P2Coor.x === column && P2Coor.y === row) {
       return (
         <Chess
           src={WhiteKnight}
           alt="White Knight"
-          onClick={this.toggleSelected}
+          onClick={() => this.toggleSelected(2)}
         ></Chess>
       );
     }
-  };
+  }
 
-  generateGrid(P1Coor, P2Coor){
+  generateGrid(P1Coor, P2Coor) {
     let renderArray = grid.filter((row, i) => i % 2 === 0);
     renderArray = renderArray.map((row) =>
       row.filter((slot, i) => i % 2 === 0)
@@ -193,27 +274,28 @@ class GameBoard extends React.Component {
             key={"Slot" + i + j}
             bgColor={(i + j) % 2 === 0 ? BG_COLOR_DARK : BG_COLOR_LIGHT}
           >
-            <CenterWrapper>{this.playerSlot(P1Coor, P2Coor, i, j)}</CenterWrapper>
+            <CenterWrapper>
+              {this.playerSlot(P1Coor, P2Coor, i, j)}
+            </CenterWrapper>
           </Slot>
         );
       })
     );
-  };
-
-  generateMovableGrid(){
-    
-
   }
+
   render() {
-    const { P1Coor, P2Coor, selected } = this.state;
+    const { P1Coor, P2Coor, selected, hoverGrid } = this.state;
 
     return (
       <MainWrapper>
-        <HoverCanvas hoverGrid={hoverGrid} player={1} onClick={()=>console.log("i'm click")}></HoverCanvas>
-        <GridLayout>
-          {this.generateGrid(P1Coor, P2Coor)}
-          {selected ? this.generateMovableGrid() : null}
-        </GridLayout>
+        <GridLayout>{this.generateGrid(P1Coor, P2Coor)}</GridLayout>
+        {selected ? (
+          <HoverCanvas
+            hoverGrid={hoverGrid}
+            player={1}
+            onClick={() => console.log("i'm click")}
+          />
+        ) : null}
       </MainWrapper>
     );
   }
