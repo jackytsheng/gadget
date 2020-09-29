@@ -48,12 +48,14 @@ class GameBoard extends React.Component {
       P1Coor: { x: 0, y: 0 },
       P2Coor: { x: 6, y: 6 },
       player: 1,
+      fenceSelectionOn:false,
       selected: false,
       hoverGrid: copy(hoverGrid),
     };
     this.redo = this.redo.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.toggleSelected = this.toggleSelected.bind(this);
+    
   }
 
   toggleSelected(player) {

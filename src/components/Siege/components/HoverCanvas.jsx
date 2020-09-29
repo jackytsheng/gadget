@@ -20,6 +20,7 @@ export const Slot = styled.div`
   height: 100%;
   background-color: ${(props) => props.bgColor};
   box-sizing: border-box;
+  position:relative;
 `;
 
 const PLAYER_ONE_HOVER_COLOR = "#a4b894e0";
