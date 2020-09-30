@@ -6,6 +6,7 @@ import DarkKnight from "../svg/DarkKnight.svg";
 import Chess from './Chess';
 import HoverCanvas, { hoverGrid, GridBase, Slot } from "./HoverCanvas";
 import PlayerInfo from './PlayerInfo';
+import Fence from './Fence';
 
 const BG_COLOR_LIGHT = "#ffc982";
 const BG_COLOR_DARK = "#ab7039";
@@ -37,8 +38,7 @@ const GridLayout = styled(GridBase)`
 
 
 const copy = (array) => JSON.parse(JSON.stringify(array));
-
-
+   
 class GameBoard extends React.Component {
   constructor(props) {
     super(props);
@@ -202,6 +202,16 @@ class GameBoard extends React.Component {
 
     return renderArray.map((row, i) =>
       row.map((slot, j) => {
+        
+        if(i===0&&j===1){return (
+          <Slot
+            key={"Slot" + i + j}
+            bgColor={(i + j) % 2 === 0 ? BG_COLOR_DARK : BG_COLOR_LIGHT}
+          >
+            <Fence />
+          </Slot>
+        );}
+
         return (
           <Slot
             key={"Slot" + i + j}
