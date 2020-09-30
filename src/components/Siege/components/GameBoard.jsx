@@ -55,7 +55,6 @@ class GameBoard extends React.Component {
     this.redo = this.redo.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.toggleSelected = this.toggleSelected.bind(this);
-    
   }
 
   toggleSelected(player) {
