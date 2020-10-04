@@ -13,7 +13,6 @@ const FenceBase = styled.div`
   justify-content: center;
   align-items: center;
   height: 31%;
-  
 `;
 const FenceWrapper = styled.div`
   position: absolute;
