@@ -20,7 +20,10 @@ export const Slot = styled.div`
   height: 100%;
   background-color: ${(props) => props.bgColor};
   box-sizing: border-box;
-  position:relative;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const PLAYER_ONE_HOVER_COLOR = "#a4b894e0";
@@ -47,7 +50,7 @@ const HoverLayout = styled(GridBase)`
   bottom: 0;
   left: 0;
   right: 0;
-  
+  z-index:20;
 `;
 
 

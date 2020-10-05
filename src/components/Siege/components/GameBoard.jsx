@@ -208,6 +208,7 @@ class GameBoard extends React.Component {
             key={"Slot" + i + j}
             bgColor={(i + j) % 2 === 0 ? BG_COLOR_DARK : BG_COLOR_LIGHT}
           >
+            {this.playerSlot(P1Coor, P2Coor, i, j)}
             <Fence />
           </Slot>
         );}
