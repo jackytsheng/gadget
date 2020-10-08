@@ -46,6 +46,7 @@ const FenceWrapper = styled.div`
 `;
 const FenceImg = styled.img`
   width:100%;
+  
 `;
 
 // const LeftFence =
