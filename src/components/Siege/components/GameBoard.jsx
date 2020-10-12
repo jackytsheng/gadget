@@ -478,11 +478,11 @@ class GameBoard extends React.Component {
         history,
         gameBoard: newGameBoard,
       },
-      () => console.log(this.checkWin())
+      // () => console.log(this.checkWin())
     );
   }
 
-  //TODO : this is not a working logic. Needed to be refine with better algorithm, currently no checking algorithm is implemented.
+  //TODO : this is not a working logic. Needed to be refine with better algorithm, currently no checking algorithm is implemented
   checkWin(){
     let MoveObjectGrid = Array(7).fill(
       Array(7).fill(0)

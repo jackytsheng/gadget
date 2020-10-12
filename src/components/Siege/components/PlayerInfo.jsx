@@ -75,7 +75,7 @@ const PlayerInfo = ({
 );
 
 PlayerInfo.propTypes = {
-  HorizontalWidth: PropTypes.number.isRequired,
+  HorizontalWidth: PropTypes.number,
   player: PropTypes.number.isRequired,
   surrender: PropTypes.func.isRequired,
   redo: PropTypes.func.isRequired,
