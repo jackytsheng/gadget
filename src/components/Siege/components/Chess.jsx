@@ -7,9 +7,9 @@ const CHESS_COLOR_LIGHT = "#f99d25";
 const Chess = styled.img`
   width: 60px;
   height: 60px;
-  z-index: 10;
+  z-index: ${(props) => (props.disabled ? 0 : 30)};
   &:hover {
-    cursor: ${ props => props.disabled ? 'auto': 'pointer'};
+    cursor: ${(props) => (props.disabled ? "auto" : "pointer")};
   }
   @media (max-width: 650px) {
     width: 47px;

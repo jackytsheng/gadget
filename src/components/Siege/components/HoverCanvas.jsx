@@ -56,13 +56,13 @@ const HoverLayout = styled(GridBase)`
 
 const HoverSlot = styled(Slot)`
   background-color:${(props) =>
-    props.player === 1 ? PLAYER_ONE_HOVER_COLOR : PLAYER_TWO_HOVER_COLOR}}
+    props.player === 1 ? PLAYER_ONE_HOVER_COLOR : PLAYER_TWO_HOVER_COLOR};
   &:hover {
     background-color: ${(props) =>
       props.player === 1 ? PLAYER_ONE_CONFIRM_COLOR : PLAYER_TWO_CONFIRM_COLOR};
     cursor: pointer;
   }
-`;
+`
 const HoverSlotFiller = styled.div`
   width: 100%;
   height: 100%;

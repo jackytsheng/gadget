@@ -5,12 +5,17 @@ import PlayerTwoFence from "../svg/PlayerTwoFence.svg";
 
 const FenceBase = styled.div`
   position: absolute;
-  width: 100%;
+  width: 85%;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 31%;
-  z-index:15;
+  z-index: 15;
+  opacity: ${(props) => (props.hoverable ? 0.4 : 1)};
+  &:hover {
+    cursor: ${(props) => (props.hoverable ? 'pointer' : 'auto')};
+    opacity: 1;
+  }
 `;
 
 
@@ -24,12 +29,12 @@ const BottomFence = styled(FenceBase)`
 `;
 const RightFence = styled(FenceBase)`
   transform: rotateZ(-90deg);
-  right:-50%;
+  right:-42%;
 `;
 
 const LeftFence = styled(FenceBase)`
   transform: rotateZ(90deg);
-  left: -50%;
+  left: -42%;
 `;
 
 
@@ -52,17 +57,141 @@ const FenceImg = styled.img`
 // const LeftFence =
 // const LeftFence =
 
-const Fence = ({ onClick, player, fenceOption, confirmed }) => (
+const renderFence = (FenceCodeArray,row,column) => {
+
+  return FenceCodeArray.map(fenceCode => {
+
+    let player = parseInt(fenceCode[0]);
+
+    let dirCode = fenceCode[1];
+    switch (dirCode) {
+      case "U":
+        return (
+          <TopFence key={"U" + row + column}>
+            <FenceImg
+              key={"U_IMG" + row + column}
+              src={player === 1 ? PlayerOneFence : PlayerTwoFence}
+              alt={"Player fence"}
+            ></FenceImg>
+          </TopFence>
+        );
+        
+      case "L":
+        return (
+          <LeftFence key={"L" + row + column}>
+            <FenceImg
+              key={"L_IMG" + row + column}
+              src={player === 1 ? PlayerOneFence:PlayerTwoFence}
+              alt={"Player fence"}
+            ></FenceImg>
+          </LeftFence>
+        );
+      case "R":
+          return (
+            <RightFence key={"R" + row + column}>
+              <FenceImg
+                key={"R_IMG" + row + column}
+                src={player === 1 ? PlayerOneFence : PlayerTwoFence}
+                alt={"Player fence"}
+              ></FenceImg>
+            </RightFence>
+          );
+      case "D":
+          return (
+            <BottomFence key={"D" + row + column}>
+              <FenceImg
+                key={"D_IMG" + row + column}
+                src={player === 1 ? PlayerOneFence : PlayerTwoFence}
+                alt={"Player fence"}
+              ></FenceImg>
+            </BottomFence>
+          );
+      default:
+        return null;
+    }
+
+  })
+}
+
+
+const renderHoverableFence = (selectableFence,onClick,player,row,column)=>
+  selectableFence.map(fenceDir => {
+    switch (fenceDir) {
+      case "U":
+        return (
+          <TopFence
+            key={"U" + row + column}
+            hoverable={true}
+            onClick={(e) => onClick("U", player, row, column)}
+          >
+            <FenceImg
+              key={"U_IMG" + row + column}
+              src={player === 1 ? PlayerOneFence : PlayerTwoFence}
+              alt={"Player fence"}
+            ></FenceImg>
+          </TopFence>
+        );
+
+      case "L":
+        return (
+          <LeftFence
+            key={"L" + row + column}
+            hoverable={true}
+            onClick={(e) => onClick("L", player, row, column)}
+          >
+            <FenceImg
+              key={"L_IMG" + row + column}
+              src={player === 1 ? PlayerOneFence : PlayerTwoFence}
+              alt={"Player fence"}
+            ></FenceImg>
+          </LeftFence>
+        );
+      case "R":
+        return (
+          <RightFence
+            key={"R" + row + column}
+            hoverable={true}
+            onClick={(e) => onClick("R", player, row, column)}
+          >
+            <FenceImg
+              key={"R_IMG" + row + column}
+              src={player === 1 ? PlayerOneFence : PlayerTwoFence}
+              alt={"Player fence"}
+            ></FenceImg>
+          </RightFence>
+        );
+      case "D":
+        return (
+          <BottomFence
+            key={"D" + row + column}
+            hoverable={true}
+            onClick={(e) => onClick("D", player, row, column)}
+          >
+            <FenceImg
+              key={"D_IMG" + row + column}
+              src={player === 1 ? PlayerOneFence : PlayerTwoFence}
+              alt={"Player fence"}
+            ></FenceImg>
+          </BottomFence>
+        );
+      default:
+        return null;
+    }
+  })
+
+;
+
+const Fence = ({
+  onClick,
+  player,
+  selectableFence,
+  confirmedFence,
+  row,
+  column,
+}) => (
   <FenceWrapper>
-    <LeftFence>
-      <FenceImg src={PlayerTwoFence} alt={"Player one fence"}></FenceImg>
-    </LeftFence>
-    <BottomFence>
-      <FenceImg src={PlayerOneFence} alt={"Player one fence"}></FenceImg>
-    </BottomFence>
-    <TopFence>
-      <FenceImg src={PlayerOneFence} alt={"Player one fence"}></FenceImg>
-    </TopFence>
+    {renderFence(confirmedFence, row, column)}
+    {renderHoverableFence(selectableFence,onClick,player,row,column)}
   </FenceWrapper>
 );
 
