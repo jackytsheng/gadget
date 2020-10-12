@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ccbdd1dee1dc749c833c0e5dcef1cd2a",
+    "revision": "fd7c3e052c71fb9fffad6c374bdf7697",
     "url": "/index.html"
   },
   {
-    "revision": "cc2e208fe7f622fd1306",
-    "url": "/static/css/main.8df0db61.chunk.css"
+    "revision": "dc5fcc5a02564d24fed9",
+    "url": "/static/css/main.e57bcf37.chunk.css"
   },
   {
-    "revision": "e2700109432ba46c488c",
-    "url": "/static/js/2.2252ca0b.chunk.js"
+    "revision": "7d64d015c6e8c572a1ed",
+    "url": "/static/js/2.ed7671fe.chunk.js"
   },
   {
     "revision": "0749163b59fbee32225059cb60c18af6",
-    "url": "/static/js/2.2252ca0b.chunk.js.LICENSE.txt"
+    "url": "/static/js/2.ed7671fe.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "cc2e208fe7f622fd1306",
-    "url": "/static/js/main.7407453c.chunk.js"
+    "revision": "dc5fcc5a02564d24fed9",
+    "url": "/static/js/main.6c571ad5.chunk.js"
   },
   {
     "revision": "84ba7647077e88ec8a73",
@@ -26,6 +26,22 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "4a1e885bb53467964fc1c2042c98d35c",
     "url": "/static/media/2048.4a1e885b.png"
+  },
+  {
+    "revision": "04f94a09de3848258638e528f886a4a9",
+    "url": "/static/media/DarkKnight.04f94a09.svg"
+  },
+  {
+    "revision": "28b9a08c337ac21c2bebede39af190cb",
+    "url": "/static/media/PlayerOneFence.28b9a08c.svg"
+  },
+  {
+    "revision": "efad8198bbb22a1918fd85359e68da4b",
+    "url": "/static/media/PlayerTwoFence.efad8198.svg"
+  },
+  {
+    "revision": "6dcce4d68392dcd8503651dca62f870f",
+    "url": "/static/media/WhiteKnight.6dcce4d6.svg"
   },
   {
     "revision": "b949fc2e6dcc123df8d5da7681064cfd",
@@ -54,6 +70,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "3268f699cc36e968798801b52b805b89",
     "url": "/static/media/dobutsu-shogi.3268f699.png"
+  },
+  {
+    "revision": "3755bbd5e8f91a562fdf9c7ccc21d0a6",
+    "url": "/static/media/siege.3755bbd5.png"
   },
   {
     "revision": "792ff5643837f22b2545b45e1db8d977",

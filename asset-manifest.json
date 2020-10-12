@@ -1,18 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.8df0db61.chunk.css",
-    "main.js": "/static/js/main.7407453c.chunk.js",
-    "main.js.map": "/static/js/main.7407453c.chunk.js.map",
+    "main.css": "/static/css/main.e57bcf37.chunk.css",
+    "main.js": "/static/js/main.6c571ad5.chunk.js",
+    "main.js.map": "/static/js/main.6c571ad5.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.416f55d6.js",
     "runtime-main.js.map": "/static/js/runtime-main.416f55d6.js.map",
-    "static/js/2.2252ca0b.chunk.js": "/static/js/2.2252ca0b.chunk.js",
-    "static/js/2.2252ca0b.chunk.js.map": "/static/js/2.2252ca0b.chunk.js.map",
+    "static/js/2.ed7671fe.chunk.js": "/static/js/2.ed7671fe.chunk.js",
+    "static/js/2.ed7671fe.chunk.js.map": "/static/js/2.ed7671fe.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.5be30fb3611e93f0bdf6e720b586fba8.js": "/precache-manifest.5be30fb3611e93f0bdf6e720b586fba8.js",
+    "precache-manifest.7f708db8f66fa4335e555c362d76fff7.js": "/precache-manifest.7f708db8f66fa4335e555c362d76fff7.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.8df0db61.chunk.css.map": "/static/css/main.8df0db61.chunk.css.map",
-    "static/js/2.2252ca0b.chunk.js.LICENSE.txt": "/static/js/2.2252ca0b.chunk.js.LICENSE.txt",
+    "static/css/main.e57bcf37.chunk.css.map": "/static/css/main.e57bcf37.chunk.css.map",
+    "static/js/2.ed7671fe.chunk.js.LICENSE.txt": "/static/js/2.ed7671fe.chunk.js.LICENSE.txt",
     "static/media/2048.png": "/static/media/2048.4a1e885b.png",
+    "static/media/DarkKnight.svg": "/static/media/DarkKnight.04f94a09.svg",
+    "static/media/PlayerOneFence.svg": "/static/media/PlayerOneFence.28b9a08c.svg",
+    "static/media/PlayerTwoFence.svg": "/static/media/PlayerTwoFence.efad8198.svg",
+    "static/media/WhiteKnight.svg": "/static/media/WhiteKnight.6dcce4d6.svg",
     "static/media/animals-chick.svg": "/static/media/animals-chick.b949fc2e.svg",
     "static/media/animals-elephant.svg": "/static/media/animals-elephant.dc6a1175.svg",
     "static/media/animals-giraffe.svg": "/static/media/animals-giraffe.dcbace69.svg",
@@ -20,12 +24,13 @@
     "static/media/animals-lion.svg": "/static/media/animals-lion.211724e9.svg",
     "static/media/background.png": "/static/media/background.d6a3f052.png",
     "static/media/dobutsu-shogi.png": "/static/media/dobutsu-shogi.3268f699.png",
+    "static/media/siege.png": "/static/media/siege.3755bbd5.png",
     "static/media/sudoku-demo.png": "/static/media/sudoku-demo.792ff564.png"
   },
   "entrypoints": [
     "static/js/runtime-main.416f55d6.js",
-    "static/js/2.2252ca0b.chunk.js",
-    "static/css/main.8df0db61.chunk.css",
-    "static/js/main.7407453c.chunk.js"
+    "static/js/2.ed7671fe.chunk.js",
+    "static/css/main.e57bcf37.chunk.css",
+    "static/js/main.6c571ad5.chunk.js"
   ]
 }
