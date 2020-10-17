@@ -478,74 +478,144 @@ class GameBoard extends React.Component {
         history,
         gameBoard: newGameBoard,
       },
-      // () => console.log(this.checkWin())
+     this.checkWin
     );
   }
-
-  //TODO : this is not a working logic. Needed to be refine with better algorithm, currently no checking algorithm is implemented
-  checkWin(){
+  checkWin(){;
+    const {P1Coor,P2Coor,gameBoard} = this.state;
     let MoveObjectGrid = Array(7).fill(
       Array(7).fill(0)
     );
+    MoveObjectGrid = MoveObjectGrid.map(row=>row.map(()=> false))
 
-    MoveObjectGrid = MoveObjectGrid.map(row=>row.map(obj => 
-      ({ checkedDown: false, checkedUp: false, checkedLeft:false,checkedRight:false})
-      ));
-    let foundP2 = false;
-    const { gameBoard, P1Coor, P2Coor } = this.state;
+    const isVisited=(row,column)=>{
+      return MoveObjectGrid[row][column];
+    }
+    
+    const dfsGrid=(row,column)=>{
+      MoveObjectGrid[row][column] = true;
+      // move up
+        if(row-1 >=0 && !isVisited(row-1,column) && !gameBoard[row*2-1][column*2]){
 
-    // Always try to start from where P1 and find P2
-
-    const tryMove = (i, j) => {
-      console.log(copy(MoveObjectGrid));
-      // Found P2 
-      if ( i === P2Coor.y && j === P2Coor.x) {
-        console.log("P1 can reach P2")
-        foundP2 = true;
-        return true;
-
-      }else if (
-        MoveObjectGrid[i][j].checkedDown &&
-        MoveObjectGrid[i][j].checkedRight &&
-        MoveObjectGrid[i][j].checkedLeft &&
-        MoveObjectGrid[i][j].checkedUp
-      ) {
-        // this cell has tried every possibly direction
-        return false;
-      }
-
-      if (i - 1 >= 0) {
-          // try to move up , if possible and have not yet head towards up yet.
-          if (!gameBoard[i * 2 - 1][j * 2] && !MoveObjectGrid[i][j].checkedUp) {
-            MoveObjectGrid[i][j].checkedUp = true;
-            return foundP2 || tryMove(i - 1, j);
-          }
+          dfsGrid(row-1,column);
         }
-      if (i + 1 < 7) {
-        // try to move down , if possible and have not yet head towards down yet.
-          if (!gameBoard[i * 2 + 1][j * 2] && !MoveObjectGrid[i][j].checkedDown) {
-            MoveObjectGrid[i][j].checkedDown = true;
-            return foundP2 || tryMove(i + 1, j);
-          }
+        // move down
+        if (
+          row + 1 < 7 &&
+          !isVisited(row + 1, column) &&
+          !gameBoard[row * 2 + 1][column * 2]
+        ) {
+         
+          dfsGrid(row + 1, column);
         }
-      if (j + 1 < 7) {
-        // try to move right , if possible and have not yet head towards right yet.
-          if (!gameBoard[i * 2][j * 2 + 1] && !MoveObjectGrid[i][j].checkedRight) {
-            MoveObjectGrid[i][j].checkedRight = true;
-            return foundP2 || tryMove(i, j + 1);
-          }
+        // move right
+        if (
+          column + 1 < 7 &&
+          !isVisited(row, column + 1) &&
+          !gameBoard[row * 2][column * 2 + 1]
+        ) {
+   
+          dfsGrid(row, column + 1);
         }
-      if (j - 1 >= 0) {
-         // try to move left , if possible and have not yet head towards left yet.
-          if (!gameBoard[i * 2][j * 2 - 1] && !MoveObjectGrid[i][j].checkedLeft) {
-            MoveObjectGrid[i][j].checkedLeft = true;
-            return foundP2 || tryMove(i, j - 1);
-          }
+        // move left
+        if (
+          column - 1 >= 0 &&
+          !isVisited(row, column - 1) &&
+          !gameBoard[row * 2][column * 2 - 1]
+        ) {
+
+          dfsGrid(row, column - 1);
+        }      
+    }
+    const CountSquare = () => {
+      let count = 0;
+      MoveObjectGrid.forEach(row=>row.forEach(visited => {
+        if(visited){
+          count ++;
         }
+      }))
+      return count;
     };
-    tryMove(P1Coor.y,P1Coor.x);
-    return copy(MoveObjectGrid);
+
+
+    dfsGrid(P1Coor.y,P1Coor.x);
+    //reset Grid
+    const P1Square = CountSquare()
+    MoveObjectGrid = MoveObjectGrid.map(row=>row.map(()=> false))
+    dfsGrid(P2Coor.y,P2Coor.x,2);
+    const P2Square = CountSquare()
+    if(P2Square !== P1Square){
+      if(P1Square>P2Square){
+        this.setState({ winner :1 });
+      }else{
+        this.setState({ winner: 2}); 
+      }
+    }
   }
+  //TODO : this is not a working logic. Needed to be refine with better algorithm, currently no checking algorithm is implemented
+  // checkWin(){
+    // let MoveObjectGrid = Array(7).fill(
+    //   Array(7).fill(0)
+    // );
+
+  //   MoveObjectGrid = MoveObjectGrid.map(row=>row.map(obj => 
+  //     ({ checkedDown: false, checkedUp: false, checkedLeft:false,checkedRight:false})
+  //     ));
+  //   let foundP2 = false;
+  //   const { gameBoard, P1Coor, P2Coor } = this.state;
+
+  //   // Always try to start from where P1 and find P2
+
+  //   const tryMove = (i, j) => {
+  //     console.log(copy(MoveObjectGrid));
+  //     // Found P2 
+  //     if ( i === P2Coor.y && j === P2Coor.x) {
+  //       console.log("P1 can reach P2")
+  //       foundP2 = true;
+  //       return true;
+
+  //     }else if (
+  //       MoveObjectGrid[i][j].checkedDown &&
+  //       MoveObjectGrid[i][j].checkedRight &&
+  //       MoveObjectGrid[i][j].checkedLeft &&
+  //       MoveObjectGrid[i][j].checkedUp
+  //     ) {
+  //       // this cell has tried every possibly direction
+  //       return false;
+  //     }
+
+  //     if (i - 1 >= 0) {
+  //         // try to move up , if possible and have not yet head towards up yet.
+  //         if (!gameBoard[i * 2 - 1][j * 2] && !MoveObjectGrid[i][j].checkedUp) {
+  //           MoveObjectGrid[i][j].checkedUp = true;
+  //           return foundP2 || tryMove(i - 1, j);
+  //         }
+  //       }
+  //     if (i + 1 < 7) {
+  //       // try to move down , if possible and have not yet head towards down yet.
+  //         if (!gameBoard[i * 2 + 1][j * 2] && !MoveObjectGrid[i][j].checkedDown) {
+  //           MoveObjectGrid[i][j].checkedDown = true;
+  //           return foundP2 || tryMove(i + 1, j);
+  //         }
+  //       }
+  //     if (j + 1 < 7) {
+  //       // try to move right , if possible and have not yet head towards right yet.
+  //         if (!gameBoard[i * 2][j * 2 + 1] && !MoveObjectGrid[i][j].checkedRight) {
+  //           MoveObjectGrid[i][j].checkedRight = true;
+  //           return foundP2 || tryMove(i, j + 1);
+  //         }
+  //       }
+  //     if (j - 1 >= 0) {
+  //       //  try to move left , if possible and have not yet head towards left yet.
+  //         if (!gameBoard[i * 2][j * 2 - 1] && !MoveObjectGrid[i][j].checkedLeft) {
+  //           MoveObjectGrid[i][j].checkedLeft = true;
+  //           return foundP2 || tryMove(i, j - 1);
+  //         }
+  //       }
+  //   };
+  //   tryMove(P1Coor.y,P1Coor.x);
+  //   return copy(MoveObjectGrid);
+  // }
   generateGrid(P1Coor, P2Coor) {
     let renderArray = grid.filter((row, i) => i % 2 === 0);
     renderArray = renderArray.map((row) =>

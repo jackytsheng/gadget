@@ -1,8 +1,8 @@
 
 import styled from "styled-components";
 
-const CHESS_COLOR_DARK = "#622f00";
-const CHESS_COLOR_LIGHT = "#f99d25";
+// const CHESS_COLOR_DARK = "#622f00";
+// const CHESS_COLOR_LIGHT = "#f99d25";
 
 const Chess = styled.img`
   width: 60px;
