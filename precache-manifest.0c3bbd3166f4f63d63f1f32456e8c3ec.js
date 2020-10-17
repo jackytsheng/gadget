@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "fd7c3e052c71fb9fffad6c374bdf7697",
+    "revision": "37d80b9e50bc1a16d160de75efad46ed",
     "url": "/index.html"
   },
   {
-    "revision": "dc5fcc5a02564d24fed9",
+    "revision": "2baea8902745a893f128",
     "url": "/static/css/main.e57bcf37.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/2.ed7671fe.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "dc5fcc5a02564d24fed9",
-    "url": "/static/js/main.6c571ad5.chunk.js"
+    "revision": "2baea8902745a893f128",
+    "url": "/static/js/main.25353f3e.chunk.js"
   },
   {
     "revision": "84ba7647077e88ec8a73",
@@ -72,8 +72,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/dobutsu-shogi.3268f699.png"
   },
   {
-    "revision": "3755bbd5e8f91a562fdf9c7ccc21d0a6",
-    "url": "/static/media/siege.3755bbd5.png"
+    "revision": "d3fc5cbf155b3833311c69d2be80424f",
+    "url": "/static/media/siege.d3fc5cbf.png"
   },
   {
     "revision": "792ff5643837f22b2545b45e1db8d977",
