@@ -9,6 +9,9 @@ const theme = {
   },
   height: {
     large: "500px",
+  },
+  font: {
+    large:'48px',
   }
 };
 
