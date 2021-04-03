@@ -13,6 +13,7 @@ import { Button } from "@material-ui/core";
 import TwoZeroFourEight from '../components/TwoZeroFourEight';
 import DobutsuShogi from '../components/DobutsuShogi';
 import Siege from '../components/Siege';
+import LogicSimulator from '../components/LogicSimulator';
 const ReturnHome = ({ handleClick }) => {
   return (
     <ReturnHomeBtn color="primary" onClick={handleClick}>
@@ -68,6 +69,11 @@ export default () => {
         <Route path="/2048" exact>
           <FullSizeCanvas>
             <TwoZeroFourEight />
+          </FullSizeCanvas>
+        </Route>
+        <Route path="/logicsimulator" exact>
+          <FullSizeCanvas>
+            <LogicSimulator />
           </FullSizeCanvas>
         </Route>
         <Route path="/" exact>

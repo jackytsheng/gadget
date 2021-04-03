@@ -109,6 +109,16 @@ class Home extends React.Component {
               this.handleClick("/siege");
             }}
           />
+          <ProjectCard
+            width={WIDTH}
+            img={Siege}
+            height={MEDIA_HEIGHT}
+            title="Logic Simulator"
+            description="Want to build your own abstructive logic gates ? Put your hands on it"
+            handleClick={() => {
+              this.handleClick("/logicsimulator");
+            }}
+          />
           <Filler />
           <Filler />
           <Filler />
