@@ -6,13 +6,14 @@ const theme = {
     AshGray: "#b7b7a4",
     Artichoke: "#a5a58d",
     Ebony: "#6b705c",
+    DarkEdge: "#53564ad1",
   },
   height: {
     large: "500px",
   },
   font: {
-    large:'48px',
-  }
+    large: "48px",
+  },
 };
 
-export default theme
+export default theme;
