@@ -9,7 +9,10 @@ const theme = {
     DarkEdge: "#53564ad1",
   },
   height: {
-    large: "500px",
+    large: 500,
+  },
+  width: {
+    large: 700,
   },
   font: {
     large: "48px",
