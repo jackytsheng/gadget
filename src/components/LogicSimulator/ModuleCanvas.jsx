@@ -32,6 +32,14 @@ const BaseCircleProps = {
   fill: theme.color.AshGray,
 };
 
+const BaseLineProps = {
+  stroke: theme.color.DarkEdge,
+  strokeWidth: 2,
+  shadowBlur: 3,
+  lineCap: "round",
+  lineJoin: "round",
+};
+
 const ModuleNameField = styled.input({
   height: "50px",
   textAlign: "center",
@@ -99,6 +107,12 @@ export default () => {
           fill={theme.color.Artichoke}
         >
           <Layer>
+            <Line
+              x={100}
+              y={100}
+              {...BaseLineProps}
+              points={[0, 0, 150, 30, 100, 100, 120, 120]}
+            />
             <InputSpace
               x={0}
               y={0}
@@ -123,7 +137,7 @@ export default () => {
             <Rect
               {...BaseRectProps}
               x={300}
-              draggable
+              draggable={true}
               y={100}
               fill={theme.color.AshGray}
               width={componentHeight}
@@ -133,7 +147,6 @@ export default () => {
               x={650}
               y={0}
               width={50}
-              zIndex={0}
               height={500}
               fill={theme.color.Ebony}
             />
