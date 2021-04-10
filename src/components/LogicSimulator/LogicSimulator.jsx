@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import ModuleCanvas from "./ModuleCanvas";
 import ModulePool from "./ModulePool";
-import LogicTable from "./LogicTable";
 import theme from "./Theme";
 const Wrapper = styled.div`
   display: flex;
