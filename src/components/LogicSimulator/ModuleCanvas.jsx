@@ -23,7 +23,7 @@ const BaseRectProps = {
   shadowBlur: 3,
   stroke: theme.color.DarkEdge,
   strokeWidth: 2,
-  cornerRadius: 10,
+  cornerRadius: 2,
 };
 
 const BaseCircleProps = {
@@ -70,9 +70,11 @@ export default () => {
   const [canvasHeight, setCanvasHeight] = useState(400);
   const [inputY, setInputY] = useState();
   const [lines, setLines] = useState([]);
+  const stageRef = useRef();
   const startPoint = useRef({});
+  const currentPos = useRef({});
   const registeringLine = useRef(false);
-
+  const [connectingLine, setConnectingLine] = useState();
   const componentWidth = 100;
   const componentHeight = 100;
   const canvasWidth = theme.width.large;
@@ -104,13 +106,40 @@ export default () => {
 
   const clickOnCanvas = ({ evt }) => {
     registeringLine.current = !registeringLine.current;
-    console.log(evt);
     if (!registeringLine.current) {
       console.log("finish registering");
       registerLine(evt.layerX, evt.layerY);
-    } else {
+      setConnectingLine();
+    } else if (registeringLine) {
       console.log("registering for line");
       startPoint.current = { x: evt.layerX, y: evt.layerY };
+      console.log(stageRef.current);
+    }
+  };
+
+  const registerCurrentPos = ({ evt }) => {
+    if (evt && registeringLine.current) {
+      currentPos.current = { x: evt.layerX, y: evt.layerY };
+      const { x: currentX, y: currentY } = currentPos.current;
+      const { x: startX, y: startY } = startPoint.current;
+      setConnectingLine(
+        <Line
+          {...BaseLineProps}
+          opacity={0.3}
+          x={startX}
+          y={startY}
+          points={[
+            0,
+            0,
+            (currentX - startX) / 2,
+            0,
+            (currentX - startX) / 2,
+            currentY - startY,
+            currentX - startX,
+            currentY - startY,
+          ]}
+        />
+      );
     }
   };
   const registerLine = (x, y) => {
@@ -120,6 +149,17 @@ export default () => {
         key={x + y}
         {...startPoint.current}
         {...BaseLineProps}
+        onMouseEnter={() => {
+          stageRef.current.container().style.cursor = "pointer";
+        }}
+        onMouseLeave={() => {
+          stageRef.current.container().style.cursor = "default";
+        }}
+        onMouseDown={() => {
+          let newLines = lines.filter((line) => line.key != x + y);
+          setLines(newLines);
+          stageRef.current.container().style.cursor = "default";
+        }}
         points={[
           0,
           0,
@@ -136,14 +176,7 @@ export default () => {
     const newLines = [...lines, line];
     setLines(newLines);
   };
-  useEffect(() => {
-    console.log(lines);
-  }, [lines]);
-  const generateLine = ({ evt }) => {
-    if (registeringLine.current) {
-      console.log(evt);
-    }
-  };
+
   return (
     <Wrapper>
       <ModuleNameField placeholder="Enter Module Name" />
@@ -152,15 +185,12 @@ export default () => {
           width={theme.width.large}
           height={canvasHeight}
           onMouseDown={clickOnCanvas}
+          ref={stageRef}
+          onMouseMove={registerCurrentPos}
         >
           <Layer>
+            {connectingLine}
             {[lines]}
-            <Line
-              x={100}
-              y={100}
-              {...BaseLineProps}
-              points={[0, 0, 150, 30, 100, 100, 120, 120]}
-            />
             <InputSpace
               x={0}
               y={0}
@@ -175,7 +205,6 @@ export default () => {
             <Rect
               {...BaseRectProps}
               x={70}
-              draggable={true}
               dragBoundFunc={dragBoundFuc}
               y={110}
               fill={theme.color.AntiqueBrass}
@@ -185,7 +214,6 @@ export default () => {
             <Rect
               {...BaseRectProps}
               x={300}
-              draggable={true}
               y={100}
               fill={theme.color.AshGray}
               width={componentHeight}
