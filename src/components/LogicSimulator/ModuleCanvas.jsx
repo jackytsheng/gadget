@@ -69,12 +69,16 @@ const Row = styled.div({
 export default () => {
   const [canvasHeight, setCanvasHeight] = useState(400);
   const [inputY, setInputY] = useState();
+  const [lines, setLines] = useState([]);
+  const startPoint = useRef({});
+  const registeringLine = useRef(false);
 
   const componentWidth = 100;
   const componentHeight = 100;
   const canvasWidth = theme.width.large;
   const InputWidth = 50;
   const OutputWidth = 50;
+
   const dragBoundFuc = ({ x, y }) => {
     let newY;
     let newX;
@@ -97,6 +101,49 @@ export default () => {
       y: newY,
     };
   };
+
+  const clickOnCanvas = ({ evt }) => {
+    registeringLine.current = !registeringLine.current;
+    console.log(evt);
+    if (!registeringLine.current) {
+      console.log("finish registering");
+      registerLine(evt.layerX, evt.layerY);
+    } else {
+      console.log("registering for line");
+      startPoint.current = { x: evt.layerX, y: evt.layerY };
+    }
+  };
+  const registerLine = (x, y) => {
+    const { x: startX, y: startY } = startPoint.current;
+    const line = (
+      <Line
+        key={x + y}
+        {...startPoint.current}
+        {...BaseLineProps}
+        points={[
+          0,
+          0,
+          (x - startX) / 2,
+          0,
+          (x - startX) / 2,
+          y - startY,
+          x - startX,
+          y - startY,
+        ]}
+      />
+    );
+    console.log(x, y);
+    const newLines = [...lines, line];
+    setLines(newLines);
+  };
+  useEffect(() => {
+    console.log(lines);
+  }, [lines]);
+  const generateLine = ({ evt }) => {
+    if (registeringLine.current) {
+      console.log(evt);
+    }
+  };
   return (
     <Wrapper>
       <ModuleNameField placeholder="Enter Module Name" />
@@ -104,9 +151,10 @@ export default () => {
         <Canvas
           width={theme.width.large}
           height={canvasHeight}
-          fill={theme.color.Artichoke}
+          onMouseDown={clickOnCanvas}
         >
           <Layer>
+            {[lines]}
             <Line
               x={100}
               y={100}
@@ -127,7 +175,7 @@ export default () => {
             <Rect
               {...BaseRectProps}
               x={70}
-              draggable
+              draggable={true}
               dragBoundFunc={dragBoundFuc}
               y={110}
               fill={theme.color.AntiqueBrass}
