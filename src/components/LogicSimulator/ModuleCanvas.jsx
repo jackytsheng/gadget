@@ -68,19 +68,20 @@ const Row = styled.div({
 // TODO: connect dot to
 export default () => {
   const [canvasHeight, setCanvasHeight] = useState(400);
-  const [inputY, setInputY] = useState();
+  const [inputPlaceHolder, setInputPlaceholder] = useState();
+  const [inputs, setInputs] = useState([]);
   const [lines, setLines] = useState([]);
+  const [connectingLine, setConnectingLine] = useState();
   const stageRef = useRef();
   const startPoint = useRef({});
   const currentPos = useRef({});
   const registeringLine = useRef(false);
-  const [connectingLine, setConnectingLine] = useState();
   const componentWidth = 100;
   const componentHeight = 100;
   const canvasWidth = theme.width.large;
   const InputWidth = 50;
   const OutputWidth = 50;
-
+  const OpacityForPlaceHolder = 0.5;
   const dragBoundFuc = ({ x, y }) => {
     let newY;
     let newX;
@@ -117,6 +118,34 @@ export default () => {
     }
   };
 
+  const mouseOnInputSpace = ({ evt }) => {
+    stageRef.current.container().style.cursor = "pointer";
+    setInputPlaceholder(
+      <Circle
+        {...BaseCircleProps}
+        x={InputWidth}
+        y={evt.layerY}
+        opacity={OpacityForPlaceHolder}
+      />
+    );
+  };
+  const mouseLeaveInputSpace = () => {
+    setInputPlaceholder(undefined);
+    stageRef.current.container().style.cursor = "default";
+  };
+  const registerInputs = ({ evt }) => {
+    const newInput = (
+      <Circle
+        key={evt.layerY}
+        {...BaseCircleProps}
+        x={InputWidth}
+        y={evt.layerY}
+      />
+    );
+
+    setInputs([...inputs, newInput]);
+  };
+
   const registerCurrentPos = ({ evt }) => {
     if (evt && registeringLine.current) {
       currentPos.current = { x: evt.layerX, y: evt.layerY };
@@ -125,7 +154,7 @@ export default () => {
       setConnectingLine(
         <Line
           {...BaseLineProps}
-          opacity={0.3}
+          opacity={OpacityForPlaceHolder}
           x={startX}
           y={startY}
           points={[
@@ -142,6 +171,7 @@ export default () => {
       );
     }
   };
+
   const registerLine = (x, y) => {
     const { x: startX, y: startY } = startPoint.current;
     const line = (
@@ -176,7 +206,6 @@ export default () => {
     const newLines = [...lines, line];
     setLines(newLines);
   };
-
   return (
     <Wrapper>
       <ModuleNameField placeholder="Enter Module Name" />
@@ -190,18 +219,20 @@ export default () => {
         >
           <Layer>
             {connectingLine}
-            {[lines]}
+            {lines}
+
             <InputSpace
               x={0}
               y={0}
               width={InputWidth}
               height={canvasHeight}
               fill={theme.color.Ebony}
-              onMouseMove={({ evt }) => {
-                setInputY(evt.layerY);
-              }}
+              onMouseMove={mouseOnInputSpace}
+              onMouseLeave={mouseLeaveInputSpace}
+              onMouseDown={registerInputs}
             />
-            <Circle {...BaseCircleProps} x={50} y={inputY} />
+            {inputPlaceHolder}
+            {inputs}
             <Rect
               {...BaseRectProps}
               x={70}
