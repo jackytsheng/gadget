@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ModuleCanvas from "./ModuleCanvas";
 import ModulePool from "./ModulePool";
-import theme from "./Theme";
+import { theme } from "./Theme";
 const Wrapper = styled.div`
   display: flex;
   height: 100vh;

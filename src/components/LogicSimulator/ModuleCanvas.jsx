@@ -1,7 +1,9 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import theme from "./Theme";
-import { Stage, Layer, Rect, Text, Circle, Line } from "react-konva";
+import { theme, BasicShapeProps, BaseLineProps } from "./Theme";
+import { Stage, Layer, Rect, Line } from "react-konva";
+import InputSpace from "./InputSpace";
+import OutputSpace from "./OutputSpace";
 
 const Wrapper = styled.div({
   width: `${theme.width.large}px`,
@@ -19,26 +21,7 @@ const Canvas = styled(Stage)({
   backgroundColor: theme.color.Artichoke,
 });
 
-const BaseRectProps = {
-  shadowBlur: 3,
-  stroke: theme.color.DarkEdge,
-  strokeWidth: 2,
-  cornerRadius: 2,
-};
-
-const BaseCircleProps = {
-  ...BaseRectProps,
-  radius: 10,
-  fill: theme.color.AshGray,
-};
-
-const BaseLineProps = {
-  stroke: theme.color.DarkEdge,
-  strokeWidth: 2,
-  shadowBlur: 3,
-  lineCap: "round",
-  lineJoin: "round",
-};
+const BaseRectProps = { ...BasicShapeProps };
 
 const ModuleNameField = styled.input({
   height: "50px",
@@ -54,8 +37,6 @@ const ModuleNameField = styled.input({
     opacity: 0.5,
   },
 });
-const InputSpace = (props) => <Rect {...props} />;
-const OutputSpace = (props) => <Rect {...props} />;
 
 const Row = styled.div({
   width: "100%",
@@ -68,8 +49,7 @@ const Row = styled.div({
 // TODO: connect dot to
 export default () => {
   const [canvasHeight, setCanvasHeight] = useState(400);
-  const [inputPlaceHolder, setInputPlaceholder] = useState();
-  const [inputs, setInputs] = useState([]);
+
   const [lines, setLines] = useState([]);
   const [connectingLine, setConnectingLine] = useState();
   const stageRef = useRef();
@@ -79,9 +59,9 @@ export default () => {
   const componentWidth = 100;
   const componentHeight = 100;
   const canvasWidth = theme.width.large;
-  const InputWidth = 50;
-  const OutputWidth = 50;
-  const OpacityForPlaceHolder = 0.5;
+  const InputWidth = theme.dimension.inputWidth;
+  const OutputWidth = theme.dimension.outputWidth;
+
   const dragBoundFuc = ({ x, y }) => {
     let newY;
     let newX;
@@ -105,7 +85,7 @@ export default () => {
     };
   };
 
-  const clickOnCanvas = ({ evt }) => {
+  const clickOnCircle = ({ evt }) => {
     registeringLine.current = !registeringLine.current;
     if (!registeringLine.current) {
       console.log("finish registering");
@@ -118,34 +98,6 @@ export default () => {
     }
   };
 
-  const mouseOnInputSpace = ({ evt }) => {
-    stageRef.current.container().style.cursor = "pointer";
-    setInputPlaceholder(
-      <Circle
-        {...BaseCircleProps}
-        x={InputWidth}
-        y={evt.layerY}
-        opacity={OpacityForPlaceHolder}
-      />
-    );
-  };
-  const mouseLeaveInputSpace = () => {
-    setInputPlaceholder(undefined);
-    stageRef.current.container().style.cursor = "default";
-  };
-  const registerInputs = ({ evt }) => {
-    const newInput = (
-      <Circle
-        key={evt.layerY}
-        {...BaseCircleProps}
-        x={InputWidth}
-        y={evt.layerY}
-      />
-    );
-
-    setInputs([...inputs, newInput]);
-  };
-
   const registerCurrentPos = ({ evt }) => {
     if (evt && registeringLine.current) {
       currentPos.current = { x: evt.layerX, y: evt.layerY };
@@ -154,7 +106,7 @@ export default () => {
       setConnectingLine(
         <Line
           {...BaseLineProps}
-          opacity={OpacityForPlaceHolder}
+          opacity={theme.opacity.placeholder}
           x={startX}
           y={startY}
           points={[
@@ -186,7 +138,7 @@ export default () => {
           stageRef.current.container().style.cursor = "default";
         }}
         onMouseDown={() => {
-          let newLines = lines.filter((line) => line.key != x + y);
+          let newLines = lines.filter((line) => line.key !== x + y);
           setLines(newLines);
           stageRef.current.container().style.cursor = "default";
         }}
@@ -213,26 +165,13 @@ export default () => {
         <Canvas
           width={theme.width.large}
           height={canvasHeight}
-          onMouseDown={clickOnCanvas}
           ref={stageRef}
           onMouseMove={registerCurrentPos}
         >
           <Layer>
             {connectingLine}
             {lines}
-
-            <InputSpace
-              x={0}
-              y={0}
-              width={InputWidth}
-              height={canvasHeight}
-              fill={theme.color.Ebony}
-              onMouseMove={mouseOnInputSpace}
-              onMouseLeave={mouseLeaveInputSpace}
-              onMouseDown={registerInputs}
-            />
-            {inputPlaceHolder}
-            {inputs}
+            <InputSpace stageRef={stageRef} onClick={clickOnCircle} />
             <Rect
               {...BaseRectProps}
               x={70}
@@ -250,13 +189,7 @@ export default () => {
               width={componentHeight}
               height={componentHeight}
             />
-            <OutputSpace
-              x={650}
-              y={0}
-              width={50}
-              height={500}
-              fill={theme.color.Ebony}
-            />
+            <OutputSpace stageRef={stageRef} onClick={clickOnCircle} />
           </Layer>
         </Canvas>
       </Row>

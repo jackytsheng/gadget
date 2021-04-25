@@ -1,4 +1,4 @@
-const theme = {
+export const theme = {
   color: {
     AntiqueBrass: "#cb997e",
     DesertSand: "#ddbea9",
@@ -17,6 +17,28 @@ const theme = {
   font: {
     large: "48px",
   },
+  dimension: {
+    circleRaidus: 10,
+    inputWidth: 50,
+    outputWidth: 50,
+    canvasWidth: 600,
+  },
+  opacity: {
+    placeholder: 0.5,
+  },
 };
 
-export default theme;
+export const BasicShapeProps = {
+  shadowBlur: 3,
+  stroke: theme.color.DarkEdge,
+  strokeWidth: 2,
+  cornerRadius: 2,
+};
+
+export const BaseLineProps = {
+  stroke: theme.color.DarkEdge,
+  strokeWidth: 2,
+  shadowBlur: 3,
+  lineCap: "round",
+  lineJoin: "round",
+};
