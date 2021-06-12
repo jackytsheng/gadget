@@ -11,12 +11,14 @@ const GRID_WIDTH = '415px';
 const GRID_HEIGHT = "400px";
 const GRID_WIDTH_SM = "315px";
 const GRID_HEIGHT_SM = "300px";
-const API_KEY = "ZY7dfBSnxU4izbMYFNHED9so3dxiVcC12Fza7MXb";
+const API_KEY  = "hREOApr4kx1nhEfcMOGFF40Gdcm0alI78Gch7eWB"; // Bad Practice, lol i know.
 const config = {
   headers: {
     "X-Api-Key": API_KEY,
   },
 };
+const SOLVER_URL =
+  "https://drclylahgh.execute-api.ap-southeast-2.amazonaws.com/test/sodukuSolver";
 
 
 const Wrapper = styled(CenterWrapper)`
@@ -28,8 +30,6 @@ const Wrapper = styled(CenterWrapper)`
     justify-content:flex-start;
   }
 `;
-const SOLVER_URL =
-  "https://umvovqu86c.execute-api.ap-southeast-2.amazonaws.com/test/sudokusolver";
 const SudokuGridWrapper = styled.div`
   width: ${GRID_WIDTH};
   height: ${GRID_HEIGHT};
@@ -198,14 +198,14 @@ class SudokuSolver extends React.Component {
     });
     await axios
       .post(SOLVER_URL, {
-        grid: JSON.stringify(this.state.grid),
+        grid: this.state.grid,
       },config)
       .then((res) => {
         this.setState(
           {
             loading: false,
-            result: res.data,
-            noAns: res.data.length === 0,
+            result: JSON.parse(res.data.body),
+            noAns: JSON.parse(res.data.body).length === 0,
           },
           () => {
             setTimeout(() => this.setState({ noAns: false }), 3000);
