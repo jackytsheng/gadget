@@ -1,84 +1,90 @@
 import React from 'react';
-import {
-  Switch,
-  Route,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import Home from './Home';
 import SudokuSolver from '../components/SudokuSolver';
 import FullSizeCanvas from '../Layout/FullSizeCanvas';
-import styled from "styled-components";
-import { Button } from "@material-ui/core";
+import styled from 'styled-components';
+import { Button } from '@material-ui/core';
 import TwoZeroFourEight from '../components/TwoZeroFourEight';
 import DobutsuShogi from '../components/DobutsuShogi';
 import Siege from '../components/Siege';
+import Snake from '../components/Snake';
 import LogicSimulator from '../components/LogicSimulator';
 const ReturnHome = ({ handleClick }) => {
   return (
-    <ReturnHomeBtn color="primary" onClick={handleClick}>
+    <ReturnHomeBtn color='primary' onClick={handleClick}>
       Return Home
     </ReturnHomeBtn>
   );
 };
 
 const ReturnHomeBtn = styled(Button)`
-  position:absolute;
-  top:10px;
-  left:40px;
-  
-`
+  position: absolute;
+  top: 10px;
+  left: 40px;
+`;
 const Wrapper = styled.div`
-  top:0;
+  top: 0;
   width: 100%;
   height: 20px;
   position: fixed;
   z-index: 50;
 `;
 
-
 export default () => {
   const curUrl = useLocation();
   let history = useHistory();
   const handleClick = () => {
-    history.push("/");
-  }
+    history.push('/');
+  };
   return (
     <React.Fragment>
-      {curUrl.pathname !== "/" ? (
+      {curUrl.pathname !== '/' ? (
         <Wrapper>
           <ReturnHome handleClick={handleClick} />
         </Wrapper>
       ) : null}
       <Switch>
-        <Route path="/siege" exact>
+        <Route path='/tetrix' exact>
           <FullSizeCanvas>
             <Siege />
           </FullSizeCanvas>
         </Route>
-        <Route path="/dobutsushogi" exact>
+        <Route path='/snake' exact>
+          <FullSizeCanvas>
+            <Snake />
+          </FullSizeCanvas>
+        </Route>
+        <Route path='/siege' exact>
+          <FullSizeCanvas>
+            <Siege />
+          </FullSizeCanvas>
+        </Route>
+        <Route path='/dobutsushogi' exact>
           <FullSizeCanvas>
             <DobutsuShogi />
           </FullSizeCanvas>
         </Route>
-        <Route path="/sudokusolver" exact>
+        <Route path='/sudokusolver' exact>
           <FullSizeCanvas>
             <SudokuSolver />
           </FullSizeCanvas>
         </Route>
-        <Route path="/2048" exact>
+        <Route path='/2048' exact>
           <FullSizeCanvas>
             <TwoZeroFourEight />
           </FullSizeCanvas>
         </Route>
-        <Route path="/logicsimulator" exact>
+        {/*Come back when I feel like*/}
+        {/* <Route path="/logicsimulator" exact>
           <FullSizeCanvas>
             <LogicSimulator />
           </FullSizeCanvas>
-        </Route>
-        <Route path="/" exact>
+        </Route> */}
+        <Route path='/' exact>
           <Home />
         </Route>
       </Switch>
     </React.Fragment>
-  );}
+  );
+};

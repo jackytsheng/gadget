@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <canvas
+      id="canvas"
+      height="300"
+      width="300"
+      style="background-color: #3e3e3e"
+    >
+    </canvas>
+  </body>
+
+  <script>
+    //Drawing
+    const cvs = document.getElementById('canvas');
+    const ctx = cvs.getContext('2d');
+    // 10 pixel as a unit
+    const scale = 10;
+    const rows = cvs.height / scale;
+    const columns = cvs.width / scale;
+
+    function Snake() {
+      this.x = Math.floor(Math.random() * rows) * scale;
+      this.y = Math.floor(Math.random() * columns) * scale;
+      this.heading = 'Right';
+      this.xspeed = scale;
+      this.yspeed = 0;
+      this.tail = [{ x: this.x, y: this.y }];
+      this.eatten = false;
+      this.id = ['00'];
+
+      this.draw = () => {
+        ctx.fillStyle = 'white';
+        this.tail.forEach((coordinate) => {
+          ctx.fillRect(coordinate.x, coordinate.y, scale, scale);
+        });
+      };
+
+      this.update = () => {
+        this.x += this.xspeed;
+        this.y += this.yspeed;
+        if (this.x == cvs.width) {
+          this.x = 0;
+        } else if (this.x == -scale) {
+          this.x = cvs.width - scale;
+        }
+        if (this.y == cvs.height) {
+          this.y = 0;
+        } else if (this.y == -scale) {
+          this.y = cvs.height - scale;
+        }
+
+        this.tail.unshift({ x: this.x, y: this.y });
+        if (this.checkLose(this.x.toString(10).concat(this.y))) {
+          alert('You lose!');
+          location.reload();
+        }
+        this.id.unshift(this.x.toString(10).concat(this.y));
+
+        if (this.eatten == false) {
+          this.tail.pop();
+          this.id.pop();
+        } else {
+          this.eatten == false;
+        }
+      };
+      this.chageDirection = (direction) => {
+        if (direction == 'Up' && this.heading != 'Down') {
+          this.heading = 'Up';
+          this.xspeed = 0;
+          this.yspeed = -scale;
+        } else if (direction == 'Down' && this.heading != 'Up') {
+          this.heading = 'Down';
+          this.xspeed = 0;
+          this.yspeed = scale;
+        } else if (direction == 'Left' && this.heading != 'Right') {
+          this.heading = 'Left';
+          this.xspeed = -scale;
+          this.yspeed = 0;
+        } else if (direction == 'Right' && this.heading != 'Left') {
+          this.heading = 'Right';
+          this.xspeed = scale;
+          this.yspeed = 0;
+        }
+      };
+
+      this.eat = (x, y) => {
+        if (x == this.x && y == this.y) {
+          console.log('Fruit eatten');
+          this.eatten = true;
+          return true;
+        } else {
+          this.eatten = false;
+          return false;
+        }
+      };
+      this.checkLose = (id) => {
+        if (this.id.indexOf(id) == -1) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+    }
+
+    function Fruit() {
+      this.x;
+      this.y;
+      this.pickLocation = () => {
+        this.x = Math.floor(Math.random() * rows) * scale;
+        this.y = Math.floor(Math.random() * columns) * scale;
+      };
+
+      this.draw = () => {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(this.x, this.y, scale, scale);
+      };
+    }
+
+    let snake;
+    let fruit;
+    (setup = () => {
+      snake = new Snake();
+      fruit = new Fruit();
+      fruit.pickLocation();
+      snake.draw();
+      console.log('initialised complete');
+      window.setInterval(() => {
+        console.log(snake.heading);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        fruit.draw();
+        snake.update();
+        snake.draw();
+        if (snake.eat(fruit.x, fruit.y)) {
+          fruit.pickLocation();
+        }
+      }, 100);
+    })();
+
+    document.addEventListener('keydown', (evt) => {
+      console.log(evt);
+      const direction = evt.key.replace('Arrow', '');
+      console.log(direction);
+      snake.chageDirection(direction);
+    });
+  </script>
+</html>
