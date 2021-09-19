@@ -9,6 +9,10 @@ const Layout = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
 `;
 
 export default () => {
@@ -56,6 +60,7 @@ export default () => {
         <Ghost />
         <Clock />
       </div>
+      <h1 className={styles.greeting}>Welcome to my idea gallery</h1>
     </Layout>
   );
 };

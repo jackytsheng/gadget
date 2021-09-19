@@ -1,4 +1,5 @@
 @import '../Background/color.scss';
+@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap');
 
 @mixin circle($size, $color) {
   position: absolute;
@@ -348,4 +349,14 @@
   top: 10%;
   left: 54%;
   transform: rotate(290deg);
+}
+.greeting {
+  font-weight: 300;
+  color: #3b3e40;
+  font-family: 'Gochi Hand', cursive;
+}
+@media (max-width: 850px) {
+  .greeting {
+    margin-top: -100px;
+  }
 }
