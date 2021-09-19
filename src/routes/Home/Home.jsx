@@ -8,6 +8,7 @@ import Ghost from './components/Ghost';
 import TwoZeroFourEightDemo from './img/2048.png';
 import DobutsuShogi from './img/dobutsu-shogi.png';
 import Siege from './img/siege.png';
+import Snake from './img/snake.png';
 
 const WIDTH = '325px';
 const MEDIA_HEIGHT = '140px';
@@ -71,7 +72,7 @@ class Home extends React.Component {
           <ProjectCard
             width={WIDTH}
             height={MEDIA_HEIGHT}
-            img={TwoZeroFourEightDemo}
+            img={Snake}
             title='Snake'
             subTitle='developed in 2019'
             description='A simple retro snake that brings back memory'
