@@ -1,26 +1,26 @@
-import React from "react";
-import styled from "styled-components";
-import CenterWrapper from "../../../Layout/CenterWrapper";
-import BackgroundImg from "./background.png";
-import Chess from "../Chess";
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import React from 'react';
+import styled from 'styled-components';
+import CenterWrapper from '../../../Layout/CenterWrapper';
+import BackgroundImg from './background.png';
+import Chess from '../Chess';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-const BOARD_HEIGHT = "540px";
-const BOARD_WIDTH = "380px";
-const POOL_WIDTH = "305px";
-const DASH_COLOR = "#b52838";
-const BORDER_COLOR = "#6d5532fa";
-const WIN_INFO_BG = "#fefee2a6";
-const WIN_TEXT_COLOR = "#6d5532fa";
-const WIN_BTN_COLOR = "#6d5532fa";
+const BOARD_HEIGHT = '540px';
+const BOARD_WIDTH = '380px';
+const POOL_WIDTH = '305px';
+const DASH_COLOR = '#b52838';
+const BORDER_COLOR = '#6d5532fa';
+const WIN_INFO_BG = '#fefee2a6';
+const WIN_TEXT_COLOR = '#6d5532fa';
+const WIN_BTN_COLOR = '#6d5532fa';
 
 const HorizontalFlexWrapper = styled.div`
   width: ${POOL_WIDTH};
   display: flex;
   padding-left: 10px;
   @media (max-width: 1000px) {
-    width:auto;
+    width: auto;
   }
 `;
 
@@ -28,25 +28,23 @@ const FlexVerticalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
 `;
-const GagetInfo = styled(FlexVerticalWrapper)`
-  @media (max-height: 800px) and (max-width:600px){
-    position:fixed;
-    right:40px;
-    top:10px;
+const GadgetInfo = styled(FlexVerticalWrapper)`
+  @media (max-height: 800px) and (max-width: 600px) {
+    position: fixed;
+    right: 40px;
+    top: 10px;
   }
 `;
 
 const PlayerTurnInfo = styled(FlexVerticalWrapper)`
   @media (max-width: 1000px) {
-    margin-top:10px;
+    margin-top: 10px;
     flex-direction: row;
     justify-content: center;
     align-items: center;
   }
 `;
-
 
 const Title = styled.div`
   width: ${POOL_WIDTH};
@@ -54,12 +52,12 @@ const Title = styled.div`
   font-size: 40px;
   font-weight: 700;
   @media (max-width: 1000px) {
-    width:auto;
+    width: auto;
     font-size: 25px;
     margin-bottom: 5px;
   }
   @media (max-width: 500px) {
-    display:flex;
+    display: flex;
     justify: center;
   }
 `;
@@ -73,7 +71,7 @@ const SubTitle = styled.div`
     margin: 0 0 2px 0;
   }
   @media (max-height: 800px) {
-    padding-left:50px;
+    padding-left: 50px;
   }
 `;
 
@@ -86,7 +84,7 @@ const TurnInfo = styled.div`
     font-size: 18px;
   }
   @media (max-width: 1000px) {
-    margin:0 10px;
+    margin: 0 10px;
     font-size: 20px;
   }
 `;
@@ -104,7 +102,6 @@ const Board = styled.div`
   }
 `;
 
-
 const Img = styled.img`
   width: ${BOARD_WIDTH};
   height: ${BOARD_HEIGHT};
@@ -115,13 +112,13 @@ const Img = styled.img`
   }
 `;
 const GridSquare = styled.div`
-  width: ${(props) => (props.rightLast ? "100px" : "99px")};
-  height: ${(props) => (props.bottomLast ? "100px" : "99px")};
+  width: ${(props) => (props.rightLast ? '100px' : '99px')};
+  height: ${(props) => (props.bottomLast ? '100px' : '99px')};
   position: relative;
   border-bottom: ${(props) =>
-    props.bottomLast ? null : "1px dashed " + DASH_COLOR};
+    props.bottomLast ? null : '1px dashed ' + DASH_COLOR};
   border-right: ${(props) =>
-    props.rightLast ? null : "1px dashed" + DASH_COLOR};
+    props.rightLast ? null : '1px dashed' + DASH_COLOR};
 `;
 const Grid = styled.div`
   width: 300px;
@@ -135,7 +132,7 @@ const Grid = styled.div`
 
 const EmptySpace = styled.div`
   :hover {
-    cursor: ${(props) => (props.isMovable ? "pointer" : "auto")};
+    cursor: ${(props) => (props.isMovable ? 'pointer' : 'auto')};
   }
   position: absolute;
   top: 0;
@@ -161,7 +158,7 @@ const PopUp = styled.div`
   height: 350px;
   border-radius: 20px;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: fixed;
@@ -248,9 +245,9 @@ const Text = styled.div`
   margin-bottom: 10px;
   color: ${WIN_TEXT_COLOR};
   letter-spacing: 0.3px;
-  @media (max-width:1000px){
+  @media (max-width: 1000px) {
     margin-bottom: 0;
-    font-size:20px;
+    font-size: 20px;
   }
 `;
 
@@ -277,31 +274,31 @@ const RestartBtn = styled(Button)`
 
 const renderType = (chessCode) => {
   switch (chessCode) {
-    case "E":
-    case "e":
-      return "ELPHT";
-    case "C":
-    case "c":
-      return "CHICK";
-    case "L":
-    case "l":
-      return "LION";
-    case "G":
-    case "g":
-      return "GIRAF";
-    case "H":
-    case "h":
-      return "HEN";
+    case 'E':
+    case 'e':
+      return 'ELPHT';
+    case 'C':
+    case 'c':
+      return 'CHICK';
+    case 'L':
+    case 'l':
+      return 'LION';
+    case 'G':
+    case 'g':
+      return 'GIRAF';
+    case 'H':
+    case 'h':
+      return 'HEN';
     default:
       return null;
   }
 };
 
 const gameBoard = [
-  ["g", "l", "e"],
-  [0, "c", 0],
-  [0, "C", 0],
-  ["E", "L", "G"],
+  ['g', 'l', 'e'],
+  [0, 'c', 0],
+  [0, 'C', 0],
+  ['E', 'L', 'G'],
 ];
 
 class GameBoard extends React.Component {
@@ -316,7 +313,7 @@ class GameBoard extends React.Component {
       player: 1,
       playerOneCapture: [],
       playerTwoCapture: [],
-      selectedCaptureID: "",
+      selectedCaptureID: '',
       history: [
         {
           gameBoard: JSON.parse(JSON.stringify(gameBoard)),
@@ -344,23 +341,20 @@ class GameBoard extends React.Component {
   }
 
   isPlayerTwo(chessCode) {
-    return chessCode < "z" && chessCode > "a";
+    return chessCode < 'z' && chessCode > 'a';
   }
   generateCapture(player) {
-    const {
-      playerOneCapture,
-      playerTwoCapture,
-      selectedCaptureID,
-    } = this.state;
+    const { playerOneCapture, playerTwoCapture, selectedCaptureID } =
+      this.state;
     let array = player === 1 ? playerOneCapture : playerTwoCapture;
     return array.map((chessCode) => (
-      <CapturedChessWrapper key={"CaptureWrapper" + chessCode}>
+      <CapturedChessWrapper key={'CaptureWrapper' + chessCode}>
         <Chess
           onClick={() => this.handleClickCapture(chessCode)}
           disable={this.state.player !== player}
           player={player}
           selected={selectedCaptureID === chessCode}
-          key={"Capture" + chessCode}
+          key={'Capture' + chessCode}
           chessType={renderType(chessCode[0])}
           rotated={this.isPlayerTwo(chessCode[0])}
         />
@@ -386,7 +380,7 @@ class GameBoard extends React.Component {
       player: 1,
       playerOneCapture: [],
       playerTwoCapture: [],
-      selectedCaptureID: "",
+      selectedCaptureID: '',
       history: [
         {
           gameBoard: JSON.parse(JSON.stringify(gameBoard)),
@@ -409,7 +403,7 @@ class GameBoard extends React.Component {
     return gameBoard.map((row, i) =>
       row.map((chessCode, j) => (
         <GridSquare
-          key={"Square" + chessCode + i + j}
+          key={'Square' + chessCode + i + j}
           rightLast={j === 2}
           bottomLast={i === 3}
         >
@@ -427,7 +421,7 @@ class GameBoard extends React.Component {
               onClick={() =>
                 this.handleClickChess(chessCode, { row: i, column: j })
               }
-              key={"Chess" + chessCode + i + j}
+              key={'Chess' + chessCode + i + j}
               chessType={renderType(chessCode)}
               rotated={this.isPlayerTwo(chessCode)}
             />
@@ -456,8 +450,8 @@ class GameBoard extends React.Component {
     playerOneCapture = [...playerOneCapture];
     playerTwoCapture = [...playerTwoCapture];
 
-    if (chessCode === "H" || chessCode === "h") {
-      chessCode = "c";
+    if (chessCode === 'H' || chessCode === 'h') {
+      chessCode = 'c';
     }
     if (player === 1) {
       playerOneCapture.push(
@@ -502,26 +496,26 @@ class GameBoard extends React.Component {
     }
 
     switch (selectedChess) {
-      case "L":
-      case "l":
+      case 'L':
+      case 'l':
         return (
           Math.abs(oldCoor.row - newCoor.row) <= 1 &&
           Math.abs(oldCoor.column - newCoor.column) <= 1
         );
-      case "g":
-      case "G":
+      case 'g':
+      case 'G':
         totalDistance =
           Math.abs(oldCoor.column - newCoor.column) +
           Math.abs(oldCoor.row - newCoor.row);
         return totalDistance === 1;
-      case "e":
-      case "E":
+      case 'e':
+      case 'E':
         totalDistance =
           Math.abs(oldCoor.column - newCoor.column) +
           Math.abs(oldCoor.row - newCoor.row);
         return totalDistance === 2;
 
-      case "H":
+      case 'H':
         // leftDiagonal
         leftDistance =
           oldCoor.column - newCoor.column + newCoor.row - oldCoor.row;
@@ -529,7 +523,7 @@ class GameBoard extends React.Component {
         rightDistance =
           newCoor.column - oldCoor.column + newCoor.row - oldCoor.row;
         return leftDistance !== 2 && rightDistance !== 2;
-      case "h":
+      case 'h':
         // leftDiagonal
         leftDistance =
           oldCoor.column - newCoor.column + oldCoor.row - newCoor.row;
@@ -538,11 +532,11 @@ class GameBoard extends React.Component {
           newCoor.column - oldCoor.column + oldCoor.row - newCoor.row;
         return leftDistance !== 2 && rightDistance !== 2;
 
-      case "c":
+      case 'c':
         return (
           newCoor.row - oldCoor.row === 1 && oldCoor.column === newCoor.column
         );
-      case "C":
+      case 'C':
         return (
           oldCoor.row - newCoor.row === 1 && oldCoor.column === newCoor.column
         );
@@ -571,7 +565,7 @@ class GameBoard extends React.Component {
       playerTwoCapture,
     } = this.state;
     let newGameBoard = JSON.parse(JSON.stringify(gameBoard));
-    console.log("Moving");
+    console.log('Moving');
 
     let oldChess = selectedChess;
 
@@ -588,7 +582,7 @@ class GameBoard extends React.Component {
       }
     }
 
-    if (oldChess === "l" || oldChess === "L") {
+    if (oldChess === 'l' || oldChess === 'L') {
       if (
         (player === 1 && newCoor.row === 0) ||
         (player === 2 && newCoor.row === 3)
@@ -597,17 +591,17 @@ class GameBoard extends React.Component {
       }
     }
     if (
-      newGameBoard[newCoor.row][newCoor.column] === "l" ||
-      newGameBoard[newCoor.row][newCoor.column] === "L"
+      newGameBoard[newCoor.row][newCoor.column] === 'l' ||
+      newGameBoard[newCoor.row][newCoor.column] === 'L'
     ) {
       this.win();
     }
-    if (oldChess === "c" || oldChess === "C") {
+    if (oldChess === 'c' || oldChess === 'C') {
       // For Promoting Chick to Hen
       if (player === 1 && newCoor.row === 0) {
-        oldChess = "H";
+        oldChess = 'H';
       } else if (player === 2 && newCoor.row === 3) {
-        oldChess = "h";
+        oldChess = 'h';
       }
     }
 
@@ -633,7 +627,7 @@ class GameBoard extends React.Component {
     const { selectedCaptureID } = this.state;
     if (selectedCaptureID === chessCode) {
       // selected it
-      this.setState({ selectedCaptureID: "" });
+      this.setState({ selectedCaptureID: '' });
     } else if (this.isPickable(chessCode[0])) {
       // Pick it up
       this.setState({
@@ -662,7 +656,7 @@ class GameBoard extends React.Component {
     let newPlayerOneCapture = [...playerOneCapture];
     let newPlayerTwoCapture = [...playerTwoCapture];
 
-    console.log("Placing");
+    console.log('Placing');
 
     // place the chess on the board
     newGameBoard[coor.row][coor.column] = selectedChess;
@@ -684,7 +678,7 @@ class GameBoard extends React.Component {
     this.setState(
       {
         history,
-        selectedCaptureID: "",
+        selectedCaptureID: '',
         selectedChess: null,
         selectedCoor: { row: null, column: null },
         playerOneCapture: newPlayerOneCapture,
@@ -697,7 +691,11 @@ class GameBoard extends React.Component {
 
   handleClickChess(chessCode, newCoordinate) {
     const { selectedChess, selectedCoor, selectedCaptureID } = this.state;
-    if (selectedCoor.row === newCoordinate.row && selectedCoor.column === newCoordinate.column && !selectedCaptureID) {
+    if (
+      selectedCoor.row === newCoordinate.row &&
+      selectedCoor.column === newCoordinate.column &&
+      !selectedCaptureID
+    ) {
       // put it down
       this.setState({
         selectedChess: null,
@@ -706,14 +704,14 @@ class GameBoard extends React.Component {
     } else if (chessCode === selectedCaptureID) {
       // put it down from capture and pick up from board
       this.setState({
-        selectedCaptureID: "",
+        selectedCaptureID: '',
         selectedChess: chessCode,
         selectedCoor: newCoordinate,
       });
     } else if (chessCode && selectedCaptureID && this.isPickable(chessCode)) {
       // pick chess from board instead
       this.setState({
-        selectedCaptureID: "",
+        selectedCaptureID: '',
         selectedChess: chessCode,
         selectedCoor: newCoordinate,
       });
@@ -742,22 +740,22 @@ class GameBoard extends React.Component {
       <React.Fragment>
         <SecondPlayerCapture>
           <ReverseCapturePool>{this.generateCapture(2)}</ReverseCapturePool>
-          <GagetInfo>
+          <GadgetInfo>
             <Title>Dobutsu Shogi</Title>
             <SubTitle>By Jiajin Zheng</SubTitle>
-          </GagetInfo>
+          </GadgetInfo>
           <ResponsiveCaptureBtn>
-            <ButtonGroup aria-label="outlined button group">
+            <ButtonGroup aria-label='outlined button group'>
               <Button
                 disabled={this.state.playerTwoCapture.length === 0}
-                variant="outlined"
+                variant='outlined'
                 onClick={() => this.openCapture(2)}
               >
                 P2 Capture
               </Button>
               <Button
                 disabled={this.state.playerOneCapture.length === 0}
-                variant="outlined"
+                variant='outlined'
                 onClick={() => this.openCapture(1)}
               >
                 P1 Capture
@@ -769,12 +767,12 @@ class GameBoard extends React.Component {
           {this.state.winner ? (
             <WinnerPop>
               <Text>Player {this.state.winner} Wins !</Text>
-              <RestartBtn variant="outlined" onClick={this.replay}>
+              <RestartBtn variant='outlined' onClick={this.replay}>
                 Replay
               </RestartBtn>
             </WinnerPop>
           ) : null}
-          <Img src={BackgroundImg} alt={"background"} />
+          <Img src={BackgroundImg} alt={'background'} />
           <CenterWrapper>
             <Grid>{this.generateChess()}</Grid>
           </CenterWrapper>
@@ -789,9 +787,9 @@ class GameBoard extends React.Component {
                 </ResponsiveCapturePool>
                 <Button
                   onClick={this.closeCapture}
-                  variant="outlined"
-                  color="secondary"
-                  size = "small"
+                  variant='outlined'
+                  color='secondary'
+                  size='small'
                 >
                   Close
                 </Button>
@@ -804,25 +802,25 @@ class GameBoard extends React.Component {
           <PlayerTurnInfo>
             <TurnInfo>Player {this.state.player}'s turn</TurnInfo>
             <HorizontalFlexWrapper>
-              <ButtonGroup aria-label="outlined button group">
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={this.redo}
-                disabled={
-                  this.state.history.length === 1 || !!this.state.winner
-                }
-              >
-                Redo
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={this.surrender}
-                disabled={!!this.state.winner}
-              >
-                Surrender
-              </Button>
+              <ButtonGroup aria-label='outlined button group'>
+                <Button
+                  variant='outlined'
+                  color='primary'
+                  onClick={this.redo}
+                  disabled={
+                    this.state.history.length === 1 || !!this.state.winner
+                  }
+                >
+                  Redo
+                </Button>
+                <Button
+                  variant='outlined'
+                  color='secondary'
+                  onClick={this.surrender}
+                  disabled={!!this.state.winner}
+                >
+                  Surrender
+                </Button>
               </ButtonGroup>
             </HorizontalFlexWrapper>
           </PlayerTurnInfo>

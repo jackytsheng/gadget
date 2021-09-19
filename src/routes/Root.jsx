@@ -45,11 +45,11 @@ export default () => {
         </Wrapper>
       ) : null}
       <Switch>
-        {/* <Route path='/tetrix' exact>
+        <Route path='/tetrix' exact>
           <FullSizeCanvas>
             <Siege />
           </FullSizeCanvas>
-        </Route> */}
+        </Route>
         <Route path='/snake' exact>
           <FullSizeCanvas>
             <Snake />
@@ -76,11 +76,11 @@ export default () => {
           </FullSizeCanvas>
         </Route>
         {/*Come back when I feel like*/}
-        {/* <Route path="/logicsimulator" exact>
+        <Route path='/logicsimulator' exact>
           <FullSizeCanvas>
             <LogicSimulator />
           </FullSizeCanvas>
-        </Route> */}
+        </Route>
         <Route path='/' exact>
           <Home />
         </Route>
