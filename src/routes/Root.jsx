@@ -45,11 +45,11 @@ export default () => {
         </Wrapper>
       ) : null}
       <Switch>
-        <Route path='/tetrix' exact>
+        {/* <Route path='/tetrix' exact>
           <FullSizeCanvas>
             <Siege />
           </FullSizeCanvas>
-        </Route>
+        </Route> */}
         <Route path='/snake' exact>
           <FullSizeCanvas>
             <Snake />

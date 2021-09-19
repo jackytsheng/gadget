@@ -1,8 +1,4 @@
-
-.container {
-  margin-left: -64.5px;
-  margin-top:60px;
-}
+@import '../Background/color.scss';
 
 .ghost {
   animation: float 3s ease-out infinite;
@@ -10,13 +6,10 @@
 
 @keyframes float {
   50% {
-     transform: translate(0, 20px);
+    transform: translate(0, 20px);
   }
 }
-.shadowFrame {
-  width: 130px;
-  margin-top: 15px;
-}
+
 .shadow {
   animation: shrink 3s ease-out infinite;
   transform-origin: center center;

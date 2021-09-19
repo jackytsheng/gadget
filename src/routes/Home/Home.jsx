@@ -5,6 +5,7 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import ProjectCard from './components/ProjectCard';
 import sudoku from './img/sudoku-demo.png'; // Tell webpack this JS file uses this image
 import Ghost from './components/Ghost';
+import Background from './components/Background';
 import TwoZeroFourEightDemo from './img/2048.png';
 import DobutsuShogi from './img/dobutsu-shogi.png';
 import Siege from './img/siege.png';
@@ -12,21 +13,6 @@ import Snake from './img/snake.png';
 
 const WIDTH = '325px';
 const MEDIA_HEIGHT = '140px';
-
-const SHADOW_COLOR = '#b1b6d8';
-const FILL_COLOR = '#e8f4fd';
-const STROKE_COLOR = '#315c7d';
-
-const Layout = styled.section`
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  height: 300px;
-  @media (max-width: 500px) {
-    flex-direction: column;
-    height: 400px;
-  }
-`;
 
 const DisplayContainer = styled.div`
   width: 100%;
@@ -57,17 +43,7 @@ class Home extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Layout>
-          <Ghost
-            shadow={SHADOW_COLOR}
-            fill={FILL_COLOR}
-            stroke={STROKE_COLOR}
-          />
-          <Alert severity='info'>
-            <AlertTitle>Progress</AlertTitle>
-            I'm <strong>improving UI </strong> on this home page...
-          </Alert>
-        </Layout>
+        <Background />
         <DisplayContainer>
           <ProjectCard
             width={WIDTH}
@@ -80,7 +56,7 @@ class Home extends React.Component {
               this.handleClick('/snake');
             }}
           />
-          <ProjectCard
+          {/* <ProjectCard
             width={WIDTH}
             height={MEDIA_HEIGHT}
             img={TwoZeroFourEightDemo}
@@ -90,7 +66,7 @@ class Home extends React.Component {
             handleClick={() => {
               this.handleClick('/tetrix');
             }}
-          />{' '}
+          /> */}
           <ProjectCard
             width={WIDTH}
             height={MEDIA_HEIGHT}
