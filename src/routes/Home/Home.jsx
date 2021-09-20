@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import ProjectCard from './components/ProjectCard';
 import sudoku from './img/sudoku-demo.png'; // Tell webpack this JS file uses this image
-import Ghost from './components/Ghost';
 import Background from './components/Background';
 import TwoZeroFourEightDemo from './img/2048.png';
 import DobutsuShogi from './img/dobutsu-shogi.png';
 import Siege from './img/siege.png';
 import Snake from './img/snake.png';
+import Typography from '@material-ui/core/Typography';
 
 const WIDTH = '325px';
 const MEDIA_HEIGHT = '140px';
@@ -25,6 +24,12 @@ const DisplayContainer = styled.div`
 const Filler = styled.div`
   width: ${WIDTH};
   margin: 10px;
+`;
+const Copyright = styled.div`
+  width: 100%;
+  margin: 30px;
+  display: flex;
+  justify-content: center;
 `;
 
 class Home extends React.Component {
@@ -51,10 +56,11 @@ class Home extends React.Component {
             img={Snake}
             title='Snake'
             subTitle='developed in 2019'
-            description='A simple retro snake that brings back memory'
+            description='A simple retro pixel snake game that brings back memory'
             handleClick={() => {
               this.handleClick('/snake');
             }}
+            stacks={['React']}
           />
           {/* <ProjectCard
             width={WIDTH}
@@ -77,6 +83,7 @@ class Home extends React.Component {
             handleClick={() => {
               this.handleClick('/2048');
             }}
+            stacks={['React']}
           />
           <ProjectCard
             width={WIDTH}
@@ -88,6 +95,7 @@ class Home extends React.Component {
             handleClick={() => {
               this.handleClick('/sudokusolver');
             }}
+            stacks={['React', 'Lambda']}
           />
           <ProjectCard
             width={WIDTH}
@@ -99,6 +107,7 @@ class Home extends React.Component {
             handleClick={() => {
               this.handleClick('/dobutsushogi');
             }}
+            stacks={['React']}
           />
           <ProjectCard
             width={WIDTH}
@@ -110,6 +119,7 @@ class Home extends React.Component {
             handleClick={() => {
               this.handleClick('/siege');
             }}
+            stacks={['React']}
           />
           {/* <ProjectCard
             width={WIDTH}
@@ -129,6 +139,11 @@ class Home extends React.Component {
           <Filler />
         </DisplayContainer>
         <Redirect to={this.state.redirect} />
+        <Copyright>
+          <Typography variant='p' component='p' color='#3b3e40'>
+            Copyright &copy; 2021 Jiajin Zheng. All rights reserved.
+          </Typography>
+        </Copyright>
       </React.Fragment>
     );
   }

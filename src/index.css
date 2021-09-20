@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;600&display=swap');
 
 body {
   box-sizing: border-box;
@@ -6,6 +6,8 @@ body {
   font-family: 'Recursive', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #eacfbf;
+  color: #3b3e40;
 }
 
 code {
