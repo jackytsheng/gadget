@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
+import { withStyles } from '@material-ui/styles';
 import ProjectCard from './components/ProjectCard';
 import sudoku from './img/sudoku-demo.png'; // Tell webpack this JS file uses this image
 import Background from './components/Background';
@@ -25,12 +26,14 @@ const Filler = styled.div`
   width: ${WIDTH};
   margin: 10px;
 `;
-const Copyright = styled.div`
-  width: 100%;
-  margin: 30px;
-  display: flex;
-  justify-content: center;
-`;
+const Copyright = withStyles({
+  root: {
+    margin: '0 0 30px',
+    display: 'flex',
+    justifyContent: 'center',
+    fontSize: '0.8rem',
+  },
+})(Typography);
 
 class Home extends React.Component {
   constructor(props) {
@@ -139,10 +142,8 @@ class Home extends React.Component {
           <Filler />
         </DisplayContainer>
         <Redirect to={this.state.redirect} />
-        <Copyright>
-          <Typography variant='p' component='p' color='#3b3e40'>
-            Copyright &copy; 2021 Jiajin Zheng. All rights reserved.
-          </Typography>
+        <Copyright component='div' color='#3b3e40'>
+          Copyright &copy; 2021 Jiajin Zheng. All rights reserved.
         </Copyright>
       </React.Fragment>
     );
