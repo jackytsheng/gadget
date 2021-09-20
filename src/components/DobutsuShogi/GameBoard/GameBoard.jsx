@@ -32,7 +32,7 @@ const FlexVerticalWrapper = styled.div`
 const GadgetInfo = styled(FlexVerticalWrapper)`
   @media (max-height: 800px) and (max-width: 600px) {
     position: fixed;
-    right: 40px;
+    right: 20px;
     top: 10px;
   }
 `;
@@ -69,9 +69,6 @@ const SubTitle = styled.div`
     width: auto;
     font-size: 18px;
     margin: 0 0 2px 0;
-  }
-  @media (max-height: 800px) {
-    padding-left: 50px;
   }
 `;
 
