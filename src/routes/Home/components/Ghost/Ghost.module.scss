@@ -32,3 +32,23 @@
     margin: 0 5%;
   }
 }
+
+.clsOne {
+  fill: #c5e9fb;
+}
+.clsTwo,
+.clsFour {
+  fill: #3b3e40;
+}
+.clsThree {
+  fill: #b2e5fa;
+  stroke: #b2e5fa;
+}
+.clsThree,
+.clsFour {
+  stroke-miterlimit: 10;
+}
+.clsFour {
+  stroke: #3b3e40;
+  stroke-width: 8px;
+}
