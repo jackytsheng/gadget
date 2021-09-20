@@ -74,8 +74,8 @@ export default () => {
   const [lose, useLose] = useState(false);
   const [record, useRecord] = useState({ score: 0, level: 1 });
   const [best, useBestRecord] = useState(
-    localStorage.getItem('best')
-      ? JSON.parse(localStorage.getItem('best'))
+    localStorage.getItem('Snake-Best')
+      ? JSON.parse(localStorage.getItem('Snake-Best'))
       : { score: 0, level: 1 }
   );
   const [clickRestart, useClickRestart] = useState(false);

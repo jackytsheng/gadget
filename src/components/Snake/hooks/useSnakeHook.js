@@ -78,7 +78,7 @@ export default (
       if (lost) {
         if (scoreRef.current > previousRecord.score) {
           localStorage.setItem(
-            'best',
+            'Snake-Best',
             JSON.stringify({ score: scoreRef.current, level: levelRef.current })
           );
         }

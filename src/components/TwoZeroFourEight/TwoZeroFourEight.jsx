@@ -1,23 +1,20 @@
-import React from "react";
-import CenterWrapper from "../../Layout/CenterWrapper";
+import React from 'react';
+import CenterWrapper from '../../Layout/CenterWrapper';
 import styled from 'styled-components';
-import Grid, { NUMBER_COLOR } from "./components/Grid";
+import Grid, { NUMBER_COLOR } from './components/Grid';
 import updateGrid, {
   randomGenerator,
   generateAvailableCoor,
-} from "./updateGrid.js";
-import Button from "@material-ui/core/Button";
+} from './updateGrid.js';
+import Button from '@material-ui/core/Button';
 
-
-
-const BG_COLOR = "#bbada0";
+const BG_COLOR = '#bbada0';
 const BORDER_COLOR = '#766d64';
 const WIDTH = '280px';
 const SCORE_COLOR = NUMBER_COLOR;
 
-const GRID_WIDTH = "380px";
-const GRID_WIDTH_SM = "315px";
-
+const GRID_WIDTH = '380px';
+const GRID_WIDTH_SM = '315px';
 
 const Wrapper = styled(CenterWrapper)`
   @media (max-width: 850px) {
@@ -59,23 +56,23 @@ const FlexVerticalWrapper = styled.div`
   @media (max-width: 500px) {
     margin: 5px 0;
   }
-`; 
+`;
 
 const RoundDiv = styled.div`
-  border-radius:5px;
-`
+  border-radius: 5px;
+`;
 
 const GameBoard = styled(RoundDiv)`
-  position:relative;
-  font-family: "Ubuntu", sans-serif;
+  position: relative;
+  font-family: 'Ubuntu', sans-serif;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   background-color: #fbf8ef;
-  padding:10px;
+  padding: 10px;
   border: solid;
   border-color: ${BORDER_COLOR};
   overflow: hidden;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 `;
 const TopRow = styled.div`
   display: flex;
@@ -88,12 +85,11 @@ const Logo = styled(RoundDiv)`
 `;
 
 const LogoText = styled.div`
-  color:${NUMBER_COLOR};
+  color: ${NUMBER_COLOR};
   font-size: 22px;
   font-weight: 600;
   letter-spacing: 1px;
 `;
-
 
 const Score = styled(RoundDiv)`
   background-color: ${BG_COLOR};
@@ -101,7 +97,7 @@ const Score = styled(RoundDiv)`
   width: 70px;
   margin-left: 10px;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 `;
 
 const ScoreText = styled.div`
@@ -117,19 +113,19 @@ const ScoreText = styled.div`
 const ScoreNumber = styled.div`
   flex: 1;
   color: ${SCORE_COLOR};
-  font-weight:600;
-  font-size : ${props => props.fontSize};
+  font-weight: 600;
+  font-size: ${(props) => props.fontSize};
   letter-spacing: 0.5px;
-  padding-bottom:5px;
+  padding-bottom: 5px;
 `;
 ScoreNumber.defaultProps = {
-  fontSize: "20px",
+  fontSize: '20px',
 };
 
 const Description = styled.div`
-  margin:10px 0;
-  display:flex;
-`
+  margin: 10px 0;
+  display: flex;
+`;
 
 const Text = styled.div`
   font-size: 12px;
@@ -142,8 +138,8 @@ const SquareBoard = styled.div`
 `;
 
 const FillerBlock = styled.div`
-  flex:1;
-`
+  flex: 1;
+`;
 
 const PopUpWrapper = styled(CenterWrapper)`
   flex-direction: column;
@@ -158,7 +154,7 @@ const FlexVertical = styled.div`
   @media (max-width: 500px) {
     margin: 5px 0;
   }
-`; 
+`;
 
 const LosePop = styled.div`
   position: absolute;
@@ -209,7 +205,9 @@ class TwoZeroFourEight extends React.Component {
       availableCoordinate: JSON.stringify(generateAvailableCoor()),
       lost: false,
       score: 0,
-      best: localStorage.getItem("best") ? localStorage.getItem("best") : 0,
+      best: localStorage.getItem('2048-Best')
+        ? localStorage.getItem('2048-Best')
+        : 0,
       swipe: { xDown: null, yDown: null },
     };
     this.handleKeypress = this.handleKeypress.bind(this);
@@ -246,22 +244,22 @@ class TwoZeroFourEight extends React.Component {
       /*most significant*/
       if (xDiff > 0) {
         /* right swipe */
-        keyPress = "Left";
-        console.log("swipe left");
+        keyPress = 'Left';
+        console.log('swipe left');
       } else {
         /* right swipe */
-        keyPress = "Right";
-        console.log("swipe right");
+        keyPress = 'Right';
+        console.log('swipe right');
       }
     } else {
       if (yDiff > 0) {
         /* up swipe */
-        keyPress = "Up";
-        console.log("swipe up");
+        keyPress = 'Up';
+        console.log('swipe up');
       } else {
         /* down swipe */
-        keyPress = "Down";
-        console.log("swipe down");
+        keyPress = 'Down';
+        console.log('swipe down');
       }
     }
     /* reset values */
@@ -285,7 +283,7 @@ class TwoZeroFourEight extends React.Component {
     if (evt.keyCode > 36 && evt.keyCode < 41) {
       let { gameBoard, score, lost } = this.state;
       gameBoard = JSON.parse(gameBoard);
-      const keyPress = evt.key.replace("Arrow", "");
+      const keyPress = evt.key.replace('Arrow', '');
       const [newGameBoard, newScore, newCoor, newLost] = updateGrid(
         keyPress,
         gameBoard,
@@ -332,24 +330,24 @@ class TwoZeroFourEight extends React.Component {
   componentDidMount() {
     this.gameStart();
 
-    console.log("Added listener");
-    window.addEventListener("keydown", this.handleKeypress);
-    window.addEventListener("touchstart", this.handleTouchStart, false);
-    window.addEventListener("touchmove", this.handleTouchMove, false);
+    console.log('Added listener');
+    window.addEventListener('keydown', this.handleKeypress);
+    window.addEventListener('touchstart', this.handleTouchStart, false);
+    window.addEventListener('touchmove', this.handleTouchMove, false);
   }
   componentDidUpdate() {
     console.log(JSON.parse(this.state.gameBoard));
     const { score, best } = this.state;
     if (score > best) {
-      localStorage.setItem("best", score);
+      localStorage.setItem('best', score);
       this.setState({ best: score });
     }
   }
   componentWillUnmount() {
-    window.removeEventListener("keydown", this.handleKeypress);
-    window.removeEventListener("touchstart", this.handleTouchStart, false);
-    window.removeEventListener("touchmove", this.handleTouchMove, false);
-    console.log("Removing listener");
+    window.removeEventListener('keydown', this.handleKeypress);
+    window.removeEventListener('touchstart', this.handleTouchStart, false);
+    window.removeEventListener('touchmove', this.handleTouchMove, false);
+    console.log('Removing listener');
   }
 
   render() {
@@ -366,7 +364,7 @@ class TwoZeroFourEight extends React.Component {
                 <PopUpWrapper>
                   <LostText>Your lost !</LostText>
                   <LostText>Your score is {this.state.score}</LostText>
-                  <RestartBtn variant="outlined" onClick={this.restart}>
+                  <RestartBtn variant='outlined' onClick={this.restart}>
                     Restart
                   </RestartBtn>
                 </PopUpWrapper>
@@ -382,7 +380,7 @@ class TwoZeroFourEight extends React.Component {
               <Score>
                 <ScoreText>SCORE</ScoreText>
                 <ScoreNumber
-                  fontSize={this.state.score > 99999 ? "15px" : "20px"}
+                  fontSize={this.state.score > 99999 ? '15px' : '20px'}
                 >
                   <CenterWrapper>{this.state.score}</CenterWrapper>
                 </ScoreNumber>
@@ -390,7 +388,7 @@ class TwoZeroFourEight extends React.Component {
               <Score>
                 <ScoreText>BEST</ScoreText>
                 <ScoreNumber
-                  fontSize={this.state.best > 99999 ? "15px" : "20px"}
+                  fontSize={this.state.best > 99999 ? '15px' : '20px'}
                 >
                   <CenterWrapper>{this.state.best}</CenterWrapper>
                 </ScoreNumber>
