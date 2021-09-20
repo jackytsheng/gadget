@@ -30,7 +30,7 @@ const GhostSvg = () => (
     width='127.433px'
     height='132.743px'
     viewBox='0 -3 127.433 132.743'
-    enableBackground='new 0 0 127.433 132.743'
+    enableBackgrougnd='new 0 0 127.433 132.743'
   >
     <path
       className={styles.clsOne}
