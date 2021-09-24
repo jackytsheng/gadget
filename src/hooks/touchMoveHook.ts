@@ -14,12 +14,12 @@ type Slide = {
 }
 type DirectionProps = Direction | null;
 
-export default (callback: (arg: DirectionProps) => {}) => {
+export default (callback?: (arg: DirectionProps) => {}) => {
   const directionRef = useRef<DirectionProps>(null);
   const swipeRef = useRef<Slide>({ xDown: 0, yDown: 0 });
 
   const changeDirection = (dir: Direction) => {
-    callback(dir);
+    callback && callback(dir);
     directionRef.current = dir;
   }
 

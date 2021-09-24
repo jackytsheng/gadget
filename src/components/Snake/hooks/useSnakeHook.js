@@ -2,11 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import useTouchMoveHook from '../../../hooks/touchMoveHook';
 import useArrowPad from '../../../hooks/arrowPad';
 
-// TODO :
-// 1. Level
-// 2. Score
-// 3. Lose Retry
-// 4. Screenshot
 export default (
   width,
   height,

@@ -9,11 +9,11 @@ enum Direction {
 
 type ArrowPadPros = Direction | null;
 
-export default (callback: (arg: ArrowPadPros) => {}) => {
+export default (callback?: (arg: ArrowPadPros) => {}) => {
   const directionRef = useRef<ArrowPadPros>(null);
 
   const changeDirection = (dir: Direction) => {
-    callback(dir);
+    callback && callback(dir);
     directionRef.current = dir;
   }
 
