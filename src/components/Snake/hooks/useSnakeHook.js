@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import touchMoveHook from '../../../hooks/touchMoveHook';
+import useTouchMoveHook from '../../../hooks/touchMoveHook';
 import useArrowPad from '../../../hooks/arrowPad';
 
 // TODO :
@@ -31,29 +31,29 @@ export default (
   });
   const snakeTailPosRef = useRef([{ x: 0, y: 0, id: '00' }]);
   const headingRef = useRef('Right');
+  const nextHeadingRef = useRef(null);
   const speedRef = useRef({ xSpeed: scale, ySpeed: 0 });
   const levelRef = useRef(1);
   const scoreRef = useRef(0);
 
   const changeDirection = (direction) => {
     if (direction === 'Up' && headingRef.current !== 'Down') {
-      headingRef.current = direction;
+      nextHeadingRef.current = direction;
       speedRef.current = { xSpeed: 0, ySpeed: -scale };
     } else if (direction === 'Down' && headingRef.current !== 'Up') {
-      headingRef.current = direction;
+      nextHeadingRef.current = direction;
       speedRef.current = { xSpeed: 0, ySpeed: scale };
     } else if (direction === 'Left' && headingRef.current !== 'Right') {
-      headingRef.current = direction;
+      nextHeadingRef.current = direction;
       speedRef.current = { xSpeed: -scale, ySpeed: 0 };
     } else if (direction === 'Right' && headingRef.current !== 'Left') {
-      headingRef.current = direction;
+      nextHeadingRef.current = direction;
       speedRef.current = { xSpeed: scale, ySpeed: 0 };
     }
   };
 
-  const { touchDirection } = touchMoveHook(changeDirection);
-  const { arrowDirection, changeDirection: setDir } =
-    useArrowPad(changeDirection);
+  useTouchMoveHook(changeDirection);
+  useArrowPad(changeDirection);
 
   // Scoring system
   useEffect(() => {
@@ -163,6 +163,9 @@ export default (
 
     // Set head position
     snakePosRef.current = { x, y };
+
+    // Set head direction, so that it won't react to keyboard too sensitively
+    headingRef.current = nextHeadingRef.current;
 
     // If eaten then not need to pop
     !eatenFruit() && snakeTailPosRef.current.pop();
