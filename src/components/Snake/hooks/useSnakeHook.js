@@ -35,20 +35,26 @@ export default (
   const levelRef = useRef(1);
   const scoreRef = useRef(0);
 
-  const { direction } = touchMoveHook();
-  const { direction: arrowDir, changeDirection: setDir } = useArrowPad();
-
-  // when using swipe gesture
-  useEffect(() => {
-    if (!(['Up', 'Right', 'Left', 'Down'].indexOf(direction) === -1)) {
-      changeDirection(direction);
+  const changeDirection = (direction) => {
+    if (direction === 'Up' && headingRef.current !== 'Down') {
+      headingRef.current = direction;
+      speedRef.current = { xSpeed: 0, ySpeed: -scale };
+    } else if (direction === 'Down' && headingRef.current !== 'Up') {
+      headingRef.current = direction;
+      speedRef.current = { xSpeed: 0, ySpeed: scale };
+    } else if (direction === 'Left' && headingRef.current !== 'Right') {
+      headingRef.current = direction;
+      speedRef.current = { xSpeed: -scale, ySpeed: 0 };
+    } else if (direction === 'Right' && headingRef.current !== 'Left') {
+      headingRef.current = direction;
+      speedRef.current = { xSpeed: scale, ySpeed: 0 };
     }
-  }, [direction]);
+  };
 
-  // when using arrow pad or keyboard
-  useEffect(() => {
-    console.log(arrowDir);
-  }, [arrowDir]);
+  const { touchDirection } = touchMoveHook(changeDirection);
+  const { arrowDirection, changeDirection: setDir } =
+    useArrowPad(changeDirection);
+
   // Scoring system
   useEffect(() => {
     const scoreInterval = setInterval(() => {
@@ -95,6 +101,7 @@ export default (
         draw(ctx);
       }
     }, timeInterval);
+
     // Add a listening
 
     return () => {
@@ -201,22 +208,6 @@ export default (
       };
     }
     return eaten;
-  };
-
-  const changeDirection = (direction) => {
-    if (direction === 'Up' && headingRef.current !== 'Down') {
-      headingRef.current = direction;
-      speedRef.current = { xSpeed: 0, ySpeed: -scale };
-    } else if (direction === 'Down' && headingRef.current !== 'Up') {
-      headingRef.current = direction;
-      speedRef.current = { xSpeed: 0, ySpeed: scale };
-    } else if (direction === 'Left' && headingRef.current !== 'Right') {
-      headingRef.current = direction;
-      speedRef.current = { xSpeed: -scale, ySpeed: 0 };
-    } else if (direction === 'Right' && headingRef.current !== 'Left') {
-      headingRef.current = direction;
-      speedRef.current = { xSpeed: scale, ySpeed: 0 };
-    }
   };
 
   return { useCtx, resetGame: resetAll };
