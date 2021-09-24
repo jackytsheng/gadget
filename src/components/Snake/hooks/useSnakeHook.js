@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import touchMoveHook from './touchMoveHook';
+import touchMoveHook from '../../../hooks/touchMoveHook';
+import useArrowPad from '../../../hooks/arrowPad';
 
 // TODO :
 // 1. Level
@@ -35,13 +36,19 @@ export default (
   const scoreRef = useRef(0);
 
   const { direction } = touchMoveHook();
+  const { direction: arrowDir, changeDirection: setDir } = useArrowPad();
 
+  // when using swipe gesture
   useEffect(() => {
     if (!(['Up', 'Right', 'Left', 'Down'].indexOf(direction) === -1)) {
       changeDirection(direction);
     }
   }, [direction]);
 
+  // when using arrow pad or keyboard
+  useEffect(() => {
+    console.log(arrowDir);
+  }, [arrowDir]);
   // Scoring system
   useEffect(() => {
     const scoreInterval = setInterval(() => {
@@ -90,17 +97,8 @@ export default (
     }, timeInterval);
     // Add a listening
 
-    const handleKeydownEvent = (evt) => {
-      const direction = evt.key.replace('Arrow', '');
-      if (!(['Up', 'Right', 'Left', 'Down'].indexOf(direction) === -1)) {
-        changeDirection(direction);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeydownEvent);
     return () => {
       clearInterval(gameInterval);
-      document.removeEventListener('keydown', handleKeydownEvent);
     };
   }, [ctx, levelRef.current]);
 
