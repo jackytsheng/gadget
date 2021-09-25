@@ -9,7 +9,7 @@ enum Direction {
 
 type ArrowPadPros = Direction | null;
 
-export default (callback?: (arg: ArrowPadPros) => {}) => {
+export default <T>(callback?: (arg: any) => any, moreEvent?: T[]) => {
   const directionRef = useRef<ArrowPadPros>(null);
 
   const changeDirection = (dir: Direction) => {
@@ -22,8 +22,9 @@ export default (callback?: (arg: ArrowPadPros) => {}) => {
     console.log('Using Arrow Pad');
     const handleKeydownEvent = (evt: KeyboardEvent) => {
       const direction: any = evt.key.replace('Arrow', '');
-      if (!([Direction.Up, Direction.Down, Direction.Left, Direction.Right].indexOf(direction) === -1)) {
-        console.log("Change Direction To", direction);
+      const directionArray: Array<Direction | T> = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
+      if (!(directionArray.concat(moreEvent || []).indexOf(direction) === -1)) {
+        console.log("Key Pressed: ", direction);
         changeDirection(direction);
       }
     }

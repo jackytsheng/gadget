@@ -6,6 +6,7 @@ import FullSizeCanvas from '../Layout/FullSizeCanvas';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import TwoZeroFourEight from '../components/TwoZeroFourEight';
+import Tetris from '../components/Tetris';
 import DobutsuShogi from '../components/DobutsuShogi';
 import Siege from '../components/Siege';
 import Snake from '../components/Snake';
@@ -45,9 +46,9 @@ export default () => {
         </Wrapper>
       ) : null}
       <Switch>
-        <Route path='/tetrix' exact>
+        <Route path='/tetris' exact>
           <FullSizeCanvas>
-            <Siege />
+            <Tetris />
           </FullSizeCanvas>
         </Route>
         <Route path='/snake' exact>

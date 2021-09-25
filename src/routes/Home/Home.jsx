@@ -65,17 +65,18 @@ class Home extends React.Component {
             }}
             stacks={['React']}
           />
-          {/* <ProjectCard
+          <ProjectCard
             width={WIDTH}
             height={MEDIA_HEIGHT}
             img={TwoZeroFourEightDemo}
-            title='Tetrix'
+            title='Tetris'
             subTitle='developed in 2019'
-            description="Who doesn't love tetrix ? Another epic childhood memory."
+            stacks={['React']}
+            description="Who doesn't love tetris? Another epic childhood memory"
             handleClick={() => {
-              this.handleClick('/tetrix');
+              this.handleClick('/tetris');
             }}
-          /> */}
+          />
           <ProjectCard
             width={WIDTH}
             height={MEDIA_HEIGHT}
