@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/styles';
 import ProjectCard from './components/ProjectCard';
 import sudoku from './img/sudoku-demo.png'; // Tell webpack this JS file uses this image
 import Background from './components/Background';
+import Tetris from './img/tetris.png';
 import TwoZeroFourEightDemo from './img/2048.png';
 import DobutsuShogi from './img/dobutsu-shogi.png';
 import Siege from './img/siege.png';
@@ -68,7 +69,7 @@ class Home extends React.Component {
           <ProjectCard
             width={WIDTH}
             height={MEDIA_HEIGHT}
-            img={TwoZeroFourEightDemo}
+            img={Tetris}
             title='Tetris'
             subTitle='developed in 2019'
             stacks={['React']}
