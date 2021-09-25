@@ -1,14 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
-import FlagTwoTone from '@material-ui/icons/FlagTwoTone';
 import useTetris from '../hooks/useTetris';
 import CenterWrapper from '../../../Layout/CenterWrapper';
 
-// Size of the canvas
-// Change this make Dimension may break the game
+// TODO:
+// 1. Use Gesture
+// 2. Use Hint message for control
+// 3. Use score board and best score
+
+// Size of the canvas , change this make Dimension may break the game
 const CANVAS_WIDTH = 244;
 const CANVAS_HEIGHT = 404;
 const CANVAS_BG_COLOR = '#7d7874';
@@ -37,7 +38,7 @@ const Record = styled.div`
 const POP_BG_COLOR = '#4e3c3be3';
 const BORDER_COLOR = '#c78282';
 
-const BUTTON_BG_COLOR = '#dbdce273';
+const BUTTON_BG_COLOR = '#dbdce2cf';
 const BUTTON_HOVER_BG_COLOR = '#4e3c3be9';
 const PopUpWrapper = styled(CenterWrapper)`
   flex-direction: column;
