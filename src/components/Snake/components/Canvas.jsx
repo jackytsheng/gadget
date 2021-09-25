@@ -126,7 +126,7 @@ export default () => {
         {lose && (
           <LosePop>
             <PopUpWrapper>
-              <LostText>Your lost !</LostText>
+              <LostText>You lost !</LostText>
               <LostText>Level : {record.level}</LostText>
               <LostText>Score : {record.score}</LostText>
               <RestartBtn

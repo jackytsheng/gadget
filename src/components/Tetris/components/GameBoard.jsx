@@ -34,11 +34,11 @@ const Record = styled.div`
   margin-top: 30px;
 `;
 
-const POP_BG_COLOR = '#d0d4ed8c';
-const BORDER_COLOR = '#353e69';
+const POP_BG_COLOR = '#4e3c3be3';
+const BORDER_COLOR = '#c78282';
 
 const BUTTON_BG_COLOR = '#dbdce273';
-const BUTTON_HOVER_BG_COLOR = '#353e69';
+const BUTTON_HOVER_BG_COLOR = '#4e3c3be9';
 const PopUpWrapper = styled(CenterWrapper)`
   flex-direction: column;
 `;
@@ -71,7 +71,7 @@ const RestartBtn = styled(Button)`
   border: 2px solid ${BORDER_COLOR} !important;
   cursor: pointer;
   &:hover {
-    color: ${POP_BG_COLOR} !important;
+    color: ${BUTTON_BG_COLOR} !important;
     background-color: ${BUTTON_HOVER_BG_COLOR} !important;
   }
 `;
@@ -93,10 +93,13 @@ export default () => {
   const SCALE = 10;
 
   const { useCtx, resetGame } = useTetris({
-    canvasHeight: CANVAS_HEIGHT,
-    canvasWidth: CANVAS_WIDTH,
-    canvasRef: canvasRef,
     canvasColor: CANVAS_BG_COLOR,
+    canvasWidth: CANVAS_WIDTH,
+    canvasHeight: CANVAS_HEIGHT,
+    useLose,
+    useRecord,
+    useBestRecord,
+    best,
   });
 
   // on Mount
@@ -128,7 +131,7 @@ export default () => {
         {lose && (
           <LosePop>
             <PopUpWrapper>
-              <LostText>Your lost !</LostText>
+              <LostText>You lost !</LostText>
               <LostText>Level : {record.level}</LostText>
               <LostText>Score : {record.score}</LostText>
               <RestartBtn

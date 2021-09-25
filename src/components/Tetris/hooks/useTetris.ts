@@ -4,10 +4,13 @@ import useArrowPad from '../../../hooks/arrowPad';
 import { createTetromino, Tshape, Oshape, Lshape, Jshape, Zshape, Sshape, Ishape } from '../components/Tetromino';
 
 type HookProps = {
-  canvasWidth: number;
-  canvasHeight: number;
-  canvasRef: Ref<Element>;
+  useLose: any,
+  useRecord: any,
+  useBestRecord: any,
+  best: any,
   canvasColor: string;
+  canvasWidth: number,
+  canvasHeight: number,
 }
 
 type RecordProps = {
@@ -25,64 +28,7 @@ enum KeyPress {
   Space = ' ',
 }
 
-export default ({
-  canvasColor
-}: HookProps) => {
-
-  // 12 wide and 20 height
-  const arrayWidth = 12;
-  const arrayHeight = 20;
-
-  // initially it starts at 2 second
-  const initialDropTime = 2000
-
-  // Initialising game data
-  const scoreRef = useRef<RecordProps>({ score: 0, level: 1, lineClear: 0 });
-
-  // DropEvent Ref
-  const dropEventRef = useRef(0);
-
-  // Passed by the parent on Mount
-  const [ctx, useCtx] = useState(undefined);
-
-  useTouchMoveHook();
-
-  // When ctx is received
-  useEffect(() => {
-    if (!ctx) {
-      return;
-    }
-
-    // draw the first tetromino
-    const firstTetramino = createTetromino();
-    let curTetromino = new Tetromino(firstTetramino.shape, firstTetramino.color, ctx);
-    curTetromino.drawTetromino();
-    const DropEvent = window.setInterval(() => {
-      curTetromino.update(KeyPress.Down);
-    }, initialDropTime / scoreRef.current.level);
-
-    const handleKeypress = (evt: KeyboardEvent) => {
-      const direction = evt.key.replace('Arrow', '');
-      curTetromino.update(direction as KeyPress);
-    }
-    //listen for key press
-    document.addEventListener('keydown', handleKeypress);
-
-    return () => {
-      clearInterval(DropEvent);
-      document.removeEventListener('keydown', handleKeypress)
-    }
-  }, [ctx, scoreRef.current.level]);
-
-
-  // Initialising game data
-  let score = 0;
-  let level = 1;
-  let lineClear = 0
-
-  // each block takes 20 pixel
-  const scale = 20;
-
+const initiateArrays = (arrayWidth: number, arrayHeight: number, scale: number, canvasColor: string) => {
   let coorArray = Array(arrayHeight)
     .fill(0)
     .map((row) => Array(arrayWidth).fill(0));
@@ -106,6 +52,87 @@ export default ({
     .fill(0)
     .map((row) => Array(arrayWidth).fill(canvasColor));
 
+  return { coorArray, gameBoardArray, stopedShapeArray, gameBoardColorArray }
+}
+
+
+
+export default ({
+  canvasColor,
+  useLose,
+  canvasWidth,
+  canvasHeight,
+  useRecord,
+  useBestRecord,
+  best,
+}: HookProps) => {
+
+  // 12 wide and 20 height
+  const arrayWidth = 12;
+  const arrayHeight = 20;
+
+  // each block takes 20 pixel
+  const scale = 20;
+
+  // initially it starts at 2 second
+  const initialDropTime = 2000
+
+  // Initialising game data
+  const recordRef = useRef<RecordProps>({ score: 0, level: 1, lineClear: 0 });
+
+  const gameInfoRef = useRef({ arrayHeight: 20, arrayWidth: 12, initialDropTime: 2000 })
+
+  // DropEvent Ref
+  const dropEventRef = useRef(0);
+
+  const curTetrominoRef = useRef<Tetromino>();
+
+  // Passed by the parent on Mount
+  const [ctx, useCtx] = useState<CanvasRenderingContext2D>();
+
+  useTouchMoveHook();
+
+  const initiateTetromino = () => {
+    const firstTetramino = createTetromino();
+    let curTetromino = new Tetromino(firstTetramino.shape, firstTetramino.color, ctx!);
+    curTetrominoRef.current = curTetromino;
+    curTetromino.drawTetromino();
+    dropEventRef.current = window.setInterval(() => {
+      curTetromino.update(KeyPress.Down);
+    }, gameInfoRef.current.initialDropTime / recordRef.current.level);
+
+    return curTetromino;
+  }
+  // When ctx is received
+  useEffect(() => {
+    if (!ctx) {
+      return;
+    }
+
+    // draw the first tetromino
+    initiateTetromino();
+
+    const handleKeypress = (evt: KeyboardEvent) => {
+      const direction = evt.key.replace('Arrow', '');
+      curTetrominoRef.current?.update(direction as KeyPress);
+    }
+
+    //listen for key press
+    document.addEventListener('keydown', handleKeypress);
+
+    return () => {
+      clearInterval(dropEventRef.current);
+      document.removeEventListener('keydown', handleKeypress)
+    }
+  }, [ctx, recordRef.current.level]);
+
+
+  let { coorArray, gameBoardArray, gameBoardColorArray, stopedShapeArray } = initiateArrays(arrayWidth, arrayHeight, scale, canvasColor);
+
+  // Initialising game data
+  let score = 0;
+  let level = 1;
+  let lineClear = 0
   class Tetromino {
     tetroArray: any;
     color: any;
@@ -123,7 +150,7 @@ export default ({
     }
 
     // this function will draw the tetromino and record it.
-    drawTetromino(y = this.startY, x = this.startX) {
+    drawTetromino = (y = this.startY, x = this.startX) => {
       for (let i = 0; i < this.tetroArray.length; i++) {
         this.ctx.fillStyle = this.color;
         // 16 16 because leaving 4 pixel for edges
@@ -142,7 +169,7 @@ export default ({
       }
     }
     // this function will delete the tetromino on the board.
-    deleteTetromino() {
+    deleteTetromino = () => {
       for (let i = 0; i < this.tetroArray.length; i++) {
         this.ctx.fillStyle = canvasColor;
         this.ctx.fillRect(
@@ -165,7 +192,7 @@ export default ({
     }
 
     // this function will update any changes
-    update(direction: KeyPress) {
+    update = (direction: KeyPress) => {
       this.deleteTetromino();
       if (
         direction === KeyPress.Left &&
@@ -195,7 +222,7 @@ export default ({
     }
 
     // redraw the new tetromino.
-    restart() {
+    reDrawNewTetrimino = () => {
       this.drawTetromino();
       //store this into a shtopedShapeArray for checking for horizontal collision
       stopedShapeArray = gameBoardArray;
@@ -207,23 +234,24 @@ export default ({
       this.startX = 5;
       this.startY = 0;
       this.shape = '';
-      //everytime we restart check if we lose
+      //everytime we redraw check if we lose
       if (this.checkLose()) {
         console.log('you lost');
-        alert(
-          `You lost! Your score is ${score}! You have reached level ${level},line clear was: ${lineClear}. Click 'Ok' to replay`
-        );
-        // do something when lose
+
+        useLose(true);
+
+        // Stop the game
+        window.clearInterval(dropEventRef.current)
       }
     }
 
     // check for vertical collision
-    VerticalCollision() {
+    VerticalCollision = () => {
       for (let i = 0; i < this.tetroArray.length; i++) {
         //must detected if it is 20 first, otherwise it will crash the program
         if (this.tetroArray[i][0] + this.startY + 1 === arrayHeight) {
           console.log('Hitting the bottom');
-          this.restart();
+          this.reDrawNewTetrimino();
           this.checkClearRow();
           this.drawTetromino();
           return true;
@@ -233,7 +261,7 @@ export default ({
           ] === 1
         ) {
           console.log('there is vertical collision');
-          this.restart();
+          this.reDrawNewTetrimino();
           this.checkClearRow();
           this.drawTetromino();
           return true;
@@ -243,14 +271,14 @@ export default ({
     }
 
     // hard dropping!!
-    hardDrop() {
+    hardDrop = () => {
       while (!this.VerticalCollision()) {
         this.startY++;
       }
     }
 
     // detect for horizontal boundary
-    hittingWall(direction: string) {
+    hittingWall = (direction: string) => {
       for (let i = 0; i < this.tetroArray.length; i++) {
         if (this.tetroArray[i][1] + this.startX === 0 && direction === 'Left') {
           console.log('Hitting the left wall');
@@ -267,7 +295,7 @@ export default ({
     }
 
     // check for collision
-    horizontalCollsion(direction: string) {
+    horizontalCollsion = (direction: string) => {
       for (let i = 0; i < this.tetroArray.length; i++) {
         if (
           stopedShapeArray[this.tetroArray[i][0] + this.startY][
@@ -291,7 +319,7 @@ export default ({
     }
 
     // Rotate right, hard coded it
-    rotateRight() {
+    rotateRight = () => {
       let rotateArray = [];
       if (this.tetroArray === Oshape || this.shape === 'O') {
         this.shape = 'O';
@@ -379,7 +407,7 @@ export default ({
       }
     }
     // Rotate left, hard coded it
-    rotateLeft() {
+    rotateLeft = () => {
       let rotateArray = [];
       if (this.tetroArray === Oshape || this.shape === 'O') {
         this.shape = 'O';
@@ -468,7 +496,7 @@ export default ({
     }
 
     // check for to see if it's rotatable
-    rotatable(rotateArray: number[][]) {
+    rotatable = (rotateArray: number[][]) => {
       for (let i = 0; i < rotateArray.length; i++) {
         if (
           rotateArray[i][0] + this.startY >= arrayHeight ||
@@ -490,7 +518,7 @@ export default ({
     }
 
     // check to see if a row can be cleared
-    checkClearRow() {
+    checkClearRow = () => {
       let combo = -1;
       for (let i = 0; i < stopedShapeArray.length; i++) {
         if (stopedShapeArray[i].indexOf(0) === -1) {
@@ -522,10 +550,8 @@ export default ({
             }
           }
           // account for combo score, and iterate it
-          console.log(combo);
-          console.log(score);
           score += 10 * combo + level * 5;
-          console.log(score);
+          console.log("Current Record", combo, level, score,);
           this.ctx.font = '21px Arial';
           this.ctx.fillStyle = 'white';
           this.ctx.fillRect(270, 29, 200, 24);
@@ -538,7 +564,7 @@ export default ({
     }
 
     // check to see if we can level up, it is set to be every 5 lines we can level up
-    levelUp() {
+    levelUp = () => {
       if (lineClear % 4 === 0 && lineClear != 0) {
         level++;
         window.clearInterval(dropEventRef.current);
@@ -546,6 +572,7 @@ export default ({
           this.update(KeyPress.Down);
           // set interval can drop faster over time
         }, initialDropTime / level);
+        console.log("New time interval: ", initialDropTime / level)
         this.ctx.font = '21px Arial';
         this.ctx.fillStyle = 'white';
         this.ctx.fillRect(270, 145, 200, 24);
@@ -557,7 +584,7 @@ export default ({
     }
 
     // check if we lost the game
-    checkLose() {
+    checkLose = () => {
       for (let i = 0; i < this.tetroArray.length; i++) {
         if (
           stopedShapeArray[this.tetroArray[i][0] + this.startY][
@@ -569,7 +596,31 @@ export default ({
       }
       return false;
     }
+
   }
 
-  return { useCtx };
+  const rePaintCanvas = () => {
+    console.log("Re painting the canvas", canvasColor, canvasWidth, canvasHeight)
+    console.log(ctx);
+    ctx!.fillStyle = canvasColor;
+    ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
+  }
+
+  // reset game
+  const resetGame = () => {
+    const { coorArray: newCoor, gameBoardArray: newGameboard, gameBoardColorArray: newGameboardColor, stopedShapeArray: newStopedShape } = initiateArrays(arrayWidth, arrayHeight, scale, canvasColor);
+
+    coorArray = newCoor;
+    gameBoardArray = newGameboard;
+    gameBoardColorArray = newGameboardColor;
+    stopedShapeArray = newStopedShape;
+
+    rePaintCanvas();
+
+    recordRef.current = { score: 0, level: 1, lineClear: 0 }
+
+    initiateTetromino();
+  }
+
+  return { useCtx, resetGame };
 };

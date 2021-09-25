@@ -41,7 +41,15 @@ export const Ishape = [
 	[0, 3],
 ];
 
-const tetrominos = [{ shape: Tshape, color: '#a8e6cf', shapeCode: 'T' }, { shape: Oshape, color: '#dcedc1', shapeCode: 'O' }, { shape: Lshape, color: '#ffd3b6', shapeCode: 'L' }, { shape: Jshape, color: '#ffaaa5', shapeCode: 'J' }, { shape: Zshape, color: '#ff8b94', shapeCode: "Z" }, { shape: Ishape, color: '#ff9f43', shapeCode: 'I' }, { shape: Sshape, color: '#00aedb', shapeCode: 'S' }];
+const tetrominos = [
+	{ shape: Tshape, color: '#a8e6cf', shapeCode: 'T' },
+	{ shape: Oshape, color: '#dcedc1', shapeCode: 'O' },
+	{ shape: Lshape, color: '#ffd3b6', shapeCode: 'L' },
+	{ shape: Jshape, color: '#ffaaa5', shapeCode: 'J' },
+	{ shape: Zshape, color: '#ff8b94', shapeCode: 'Z' },
+	{ shape: Ishape, color: '#ff9f43', shapeCode: 'I' },
+	{ shape: Sshape, color: '#00aedb', shapeCode: 'S' },
+];
 
 // create a random tetromino
 export const createTetromino = () => {
