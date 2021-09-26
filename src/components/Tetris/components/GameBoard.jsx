@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import useTetris from '../hooks/useTetris';
 import CenterWrapper from '../../../Layout/CenterWrapper';
+import Information from './Information';
 
 // TODO:
 // 1. Use Gesture
@@ -146,6 +147,7 @@ export default () => {
         )}
       </Wrapper>
       <Record></Record>
+      <Information />
     </>
   );
 };
