@@ -16,7 +16,6 @@ import SwipeRight from '../../../svgs/SwipeRight';
 import SwipeDown from '../../../svgs/SwipeDown';
 import SwipeUp from '../../../svgs/SwipeUp';
 import SwipeLeft from '../../../svgs/SwipeLeft';
-import ScrollHorizontal from '../../../svgs/ScrollHorizontal';
 
 import { Typography } from '@material-ui/core';
 
@@ -54,7 +53,6 @@ const generate = (Icon: any, text: any, classes: any) => {
 
 export default function InteractiveList() {
   const classes = useStyles();
-  const [dense, setDense] = React.useState(false);
 
   return (
     <div className={classes.root}>
@@ -62,7 +60,7 @@ export default function InteractiveList() {
         <Grid item xs={12} md={6}>
           <Typography variant='h6'>Desktop</Typography>
           <div className={classes.demo}>
-            <List dense={dense}>
+            <List dense={false}>
               {generate(
                 <ArrowForward color='primary' />,
                 'Move Right',
@@ -81,7 +79,7 @@ export default function InteractiveList() {
         <Grid item xs={12} md={6}>
           <Typography variant='h6'>Mobile</Typography>
           <div className={classes.demo}>
-            <List dense={dense}>
+            <List dense={false}>
               {generate(<SwipeRight />, 'Move Right', classes)}
               {generate(<SwipeLeft />, 'Move Left', classes)}
               {generate(<SwipeDown />, 'Move Down', classes)}

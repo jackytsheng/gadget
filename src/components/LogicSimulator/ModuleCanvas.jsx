@@ -1,19 +1,19 @@
-import React, { useRef, useState } from "react";
-import styled from "styled-components";
-import { theme, BasicShapeProps, BaseLineProps } from "./Theme";
-import { Stage, Layer, Rect, Line } from "react-konva";
-import InputSpace from "./InputSpace";
-import OutputSpace from "./OutputSpace";
+import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
+import { theme, BasicShapeProps, BaseLineProps } from './Theme';
+import { Stage, Layer, Rect, Line } from 'react-konva';
+import InputSpace from './InputSpace';
+import OutputSpace from './OutputSpace';
 
 const Wrapper = styled.div({
   width: `${theme.width.large}px`,
   minWidth: `${theme.width.large}px`,
   height: `${theme.height.large}px`,
-  borderRadius: "10px",
-  display: "flex",
-  alignItems: "center",
-  flexDirection: "column",
-  margin: "0 20px",
+  borderRadius: '10px',
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'column',
+  margin: '0 20px',
   backgroundColor: theme.color.Ebony,
 });
 
@@ -24,31 +24,31 @@ const Canvas = styled(Stage)({
 const BaseRectProps = { ...BasicShapeProps };
 
 const ModuleNameField = styled.input({
-  height: "50px",
-  textAlign: "center",
+  height: '50px',
+  textAlign: 'center',
   fontSize: theme.font.large,
   backgroundColor: theme.color.Ebony,
   color: theme.color.AshGray,
-  outline: "none",
-  letterSpacing: "4px",
-  border: "none",
-  "::placeholder": {
+  outline: 'none',
+  letterSpacing: '4px',
+  border: 'none',
+  '::placeholder': {
     color: theme.color.Artichoke,
     opacity: 0.5,
   },
 });
 
 const Row = styled.div({
-  width: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 });
 
 // TODO: not to clash with other components
 // TODO: connect dot to
 export default () => {
-  const [canvasHeight, setCanvasHeight] = useState(400);
+  const [canvasHeight] = useState(400);
 
   const [lines, setLines] = useState([]);
   const [connectingLine, setConnectingLine] = useState();
@@ -88,11 +88,11 @@ export default () => {
   const clickOnCircle = ({ evt }) => {
     registeringLine.current = !registeringLine.current;
     if (!registeringLine.current) {
-      console.log("finish registering");
+      console.log('finish registering');
       registerLine(evt.layerX, evt.layerY);
       setConnectingLine();
     } else if (registeringLine) {
-      console.log("registering for line");
+      console.log('registering for line');
       startPoint.current = { x: evt.layerX, y: evt.layerY };
       console.log(stageRef.current);
     }
@@ -132,15 +132,15 @@ export default () => {
         {...startPoint.current}
         {...BaseLineProps}
         onMouseEnter={() => {
-          stageRef.current.container().style.cursor = "pointer";
+          stageRef.current.container().style.cursor = 'pointer';
         }}
         onMouseLeave={() => {
-          stageRef.current.container().style.cursor = "default";
+          stageRef.current.container().style.cursor = 'default';
         }}
         onMouseDown={() => {
           let newLines = lines.filter((line) => line.key !== x + y);
           setLines(newLines);
-          stageRef.current.container().style.cursor = "default";
+          stageRef.current.container().style.cursor = 'default';
         }}
         points={[
           0,
@@ -160,7 +160,7 @@ export default () => {
   };
   return (
     <Wrapper>
-      <ModuleNameField placeholder="Enter Module Name" />
+      <ModuleNameField placeholder='Enter Module Name' />
       <Row>
         <Canvas
           width={theme.width.large}

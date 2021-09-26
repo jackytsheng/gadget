@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
-import { theme, BasicShapeProps } from "./Theme";
-import { Rect, Text, Circle } from "react-konva";
+import React, { useRef, useState } from 'react';
+import { theme, BasicShapeProps } from './Theme';
+import { Rect, Circle } from 'react-konva';
 
 const BaseCircleProps = {
   ...BasicShapeProps,
@@ -16,7 +15,7 @@ export default ({ stageRef, onClick }) => {
   const isRegisterable = useRef(true);
 
   const mouseOnInputSpace = ({ evt }) => {
-    stageRef.current.container().style.cursor = "pointer";
+    stageRef.current.container().style.cursor = 'pointer';
     let occupied = false;
     inputsPosHistory.forEach((yPos) => {
       if (
@@ -40,23 +39,23 @@ export default ({ stageRef, onClick }) => {
     } else {
       isRegisterable.current = false;
       setInputPlaceholder();
-      stageRef.current.container().style.cursor = "default";
+      stageRef.current.container().style.cursor = 'default';
     }
   };
 
   const mouseLeaveInputSpace = () => {
     setInputPlaceholder(undefined);
-    stageRef.current.container().style.cursor = "default";
+    stageRef.current.container().style.cursor = 'default';
   };
 
   const registerInputs = ({ evt }) => {
     const newInput = (
       <Circle
         onMouseEnter={() =>
-          (stageRef.current.container().style.cursor = "pointer")
+          (stageRef.current.container().style.cursor = 'pointer')
         }
         onMouseLeave={() =>
-          (stageRef.current.container().style.cursor = "default")
+          (stageRef.current.container().style.cursor = 'default')
         }
         onMouseDown={onClick}
         key={evt.layerY}
