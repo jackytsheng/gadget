@@ -5,6 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import FlagTwoTone from '@material-ui/icons/FlagTwoTone';
 import useSnakeHook from '../hooks/useSnakeHook';
+import Information from './Information';
 import CenterWrapper from '../../../Layout/CenterWrapper';
 
 const Wrapper = styled.div`
@@ -138,8 +139,9 @@ export default () => {
             </PopUpWrapper>
           </LosePop>
         )}
+        <Information />
       </Wrapper>
-      <Record>
+      {/* <Record>
         <Chip icon={<FlagTwoTone />} variant='outlined' label={record.score} />
         <Chip
           avatar={<Avatar>Lv</Avatar>}
@@ -158,7 +160,7 @@ export default () => {
           variant='outlined'
           label={best.level}
         />
-      </Record>
+      </Record> */}
     </>
   );
 };
