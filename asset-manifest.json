@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.9ea4740a.chunk.css",
-    "main.js": "/static/js/main.143a9479.chunk.js",
-    "main.js.map": "/static/js/main.143a9479.chunk.js.map",
+    "main.css": "/static/css/main.d33cf3ff.chunk.css",
+    "main.js": "/static/js/main.8ec2fe61.chunk.js",
+    "main.js.map": "/static/js/main.8ec2fe61.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.49c258f8.js",
     "runtime-main.js.map": "/static/js/runtime-main.49c258f8.js.map",
-    "static/js/2.659aa3f0.chunk.js": "/static/js/2.659aa3f0.chunk.js",
-    "static/js/2.659aa3f0.chunk.js.map": "/static/js/2.659aa3f0.chunk.js.map",
+    "static/js/2.1015c4a9.chunk.js": "/static/js/2.1015c4a9.chunk.js",
+    "static/js/2.1015c4a9.chunk.js.map": "/static/js/2.1015c4a9.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.2da20c9ffef4961562604db16b265931.js": "/precache-manifest.2da20c9ffef4961562604db16b265931.js",
+    "precache-manifest.9d99a2baf5db5a83963f26600b42aa02.js": "/precache-manifest.9d99a2baf5db5a83963f26600b42aa02.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.9ea4740a.chunk.css.map": "/static/css/main.9ea4740a.chunk.css.map",
-    "static/js/2.659aa3f0.chunk.js.LICENSE.txt": "/static/js/2.659aa3f0.chunk.js.LICENSE.txt",
+    "static/css/main.d33cf3ff.chunk.css.map": "/static/css/main.d33cf3ff.chunk.css.map",
+    "static/js/2.1015c4a9.chunk.js.LICENSE.txt": "/static/js/2.1015c4a9.chunk.js.LICENSE.txt",
     "static/media/2048.png": "/static/media/2048.4a1e885b.png",
     "static/media/DarkKnight.svg": "/static/media/DarkKnight.04f94a09.svg",
     "static/media/PlayerOneFence.svg": "/static/media/PlayerOneFence.28b9a08c.svg",
@@ -24,14 +24,15 @@
     "static/media/animals-lion.svg": "/static/media/animals-lion.211724e9.svg",
     "static/media/background.png": "/static/media/background.d6a3f052.png",
     "static/media/dobutsu-shogi.png": "/static/media/dobutsu-shogi.3268f699.png",
-    "static/media/siege.png": "/static/media/siege.d3fc5cbf.png",
-    "static/media/snake.png": "/static/media/snake.79561842.png",
-    "static/media/sudoku-demo.png": "/static/media/sudoku-demo.792ff564.png"
+    "static/media/siege.png": "/static/media/siege.7c645e76.png",
+    "static/media/snake.png": "/static/media/snake.c46e4223.png",
+    "static/media/sudoku-demo.png": "/static/media/sudoku-demo.792ff564.png",
+    "static/media/tetris.png": "/static/media/tetris.19faf62b.png"
   },
   "entrypoints": [
     "static/js/runtime-main.49c258f8.js",
-    "static/js/2.659aa3f0.chunk.js",
-    "static/css/main.9ea4740a.chunk.css",
-    "static/js/main.143a9479.chunk.js"
+    "static/js/2.1015c4a9.chunk.js",
+    "static/css/main.d33cf3ff.chunk.css",
+    "static/js/main.8ec2fe61.chunk.js"
   ]
 }
