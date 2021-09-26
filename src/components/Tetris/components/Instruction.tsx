@@ -13,11 +13,11 @@ import {
   ArrowDownward,
   ArrowUpward,
 } from '@material-ui/icons';
-import DoubleTap from '../svgs/DoubleTap';
-import SwipeLeft from '../svgs/SwipeLeft';
-import SwipeRight from '../svgs/SwipeRight';
-import SwipeDown from '../svgs/SwipeDown';
-import ScrollHorizontal from '../svgs/ScrollHorizontal';
+import DoubleTap from '../../../svgs/DoubleTap';
+import SwipeDown from '../../../svgs/SwipeDown';
+import SwipeUp from '../../../svgs/SwipeUp';
+import Press from '../../../svgs/Press';
+import ScrollHorizontal from '../../../svgs/ScrollHorizontal';
 
 import { Typography } from '@material-ui/core';
 
@@ -95,8 +95,8 @@ export default function InteractiveList() {
             <List dense={dense}>
               {generate(<ScrollHorizontal />, 'Move Horizontally', classes)}
               {generate(<SwipeDown />, 'Move Down', classes)}
-              {generate(<SwipeRight />, 'Rotate Clockwise', classes)}
-              {generate(<SwipeLeft />, 'Rotate AntiClockwise', classes)}
+              {generate(<SwipeUp />, 'Rotate Clockwise', classes)}
+              {generate(<Press />, 'Rotate AntiClockwise', classes)}
               {generate(<DoubleTap />, 'Hard Drop', classes)}
             </List>
           </div>

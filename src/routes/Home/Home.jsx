@@ -33,6 +33,7 @@ const Copyright = withStyles({
     display: 'flex',
     justifyContent: 'center',
     fontSize: '0.8rem',
+    color: '#3b3e40',
   },
 })(Typography);
 
@@ -144,7 +145,7 @@ class Home extends React.Component {
           <Filler />
         </DisplayContainer>
         <Redirect to={this.state.redirect} />
-        <Copyright component='div' color='#3b3e40'>
+        <Copyright component='div'>
           Copyright &copy; 2021 Jiajin Zheng. All rights reserved.
         </Copyright>
       </React.Fragment>

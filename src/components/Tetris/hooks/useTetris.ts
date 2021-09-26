@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, Ref, ContextType } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   createTetromino,
   Oshape,
@@ -10,8 +10,6 @@ import {
 type HookProps = {
   useLose: any;
   useRecord: any;
-  useBestRecord: any;
-  best: any;
   canvasColor: string;
   canvasWidth: number;
   canvasHeight: number;
@@ -23,7 +21,7 @@ type RecordProps = {
   lineClear: number;
 };
 
-enum KeyPress {
+export enum KeyPress {
   Up = 'Up',
   Down = 'Down',
   Left = 'Left',
@@ -69,6 +67,7 @@ export default ({
   useLose,
   canvasWidth,
   canvasHeight,
+  useRecord,
 }: HookProps) => {
   // 12 wide and 20 height
   const arrayWidth = 12;
@@ -96,7 +95,6 @@ export default ({
 
   // Passed by the parent on Mount
   const [ctx, useCtx] = useState<CanvasRenderingContext2D>();
-
   const initiateTetromino = () => {
     const firstTetramino = createTetromino();
     let curTetromino = new Tetromino(
@@ -112,13 +110,18 @@ export default ({
 
     return curTetromino;
   };
+
+  const updateMove = (direction: KeyPress) => {
+    if (direction) curTetrominoRef.current?.update(direction);
+  };
+
   // When ctx is received
   useEffect(() => {
     if (!ctx) {
       return;
     }
 
-    // draw the first tetromino
+    // draw the first tetromino, as long as this use effect not change state will be recorded
     initiateTetromino();
 
     const handleKeypress = (evt: KeyboardEvent) => {
@@ -133,15 +136,12 @@ export default ({
       clearInterval(dropEventRef.current);
       document.removeEventListener('keydown', handleKeypress);
     };
-  }, [ctx, recordRef.current.level]);
+  }, [ctx]);
 
   let { coorArray, gameBoardArray, gameBoardColorArray, stopedShapeArray } =
     initiateArrays(arrayWidth, arrayHeight, scale, canvasColor);
 
   // Initialising game data
-  let score = 0;
-  let level = 1;
-  let lineClear = 0;
   class Tetromino {
     tetroArray: any;
     color: any;
@@ -236,7 +236,7 @@ export default ({
 
     // redraw the new tetromino.
     reDrawNewTetrimino = () => {
-      this.drawTetromino();
+      curTetrominoRef.current?.drawTetromino();
       //store this into a shtopedShapeArray for checking for horizontal collision
       stopedShapeArray = gameBoardArray;
       console.log('Recreate tetro now!');
@@ -266,7 +266,6 @@ export default ({
           console.log('Hitting the bottom');
           this.reDrawNewTetrimino();
           this.checkClearRow();
-          this.drawTetromino();
           return true;
         } else if (
           stopedShapeArray[this.tetroArray[i][0] + this.startY + 1][
@@ -276,7 +275,6 @@ export default ({
           console.log('there is vertical collision');
           this.reDrawNewTetrimino();
           this.checkClearRow();
-          this.drawTetromino();
           return true;
         }
       }
@@ -535,18 +533,10 @@ export default ({
       for (let i = 0; i < stopedShapeArray.length; i++) {
         if (stopedShapeArray[i].indexOf(0) === -1) {
           console.log('clearing row');
+          let { lineClear, score } = recordRef.current;
           lineClear++;
           combo++;
           this.levelUp();
-          // print the lineClear after each clear
-          this.ctx.font = '21px Arial';
-          this.ctx.fillStyle = 'white';
-          this.ctx.fillRect(270, 88, 200, 24);
-          this.ctx.fillStyle = canvasColor;
-          this.ctx.strokeStyle = canvasColor;
-          this.ctx.strokeRect(270, 88, 200, 24);
-          this.ctx.fillText(lineClear.toString(), 280, 108);
-
           for (let j = i; j > 0; j--) {
             stopedShapeArray[j] = stopedShapeArray[j - 1];
             gameBoardColorArray[j] = gameBoardColorArray[j - 1];
@@ -554,7 +544,6 @@ export default ({
           stopedShapeArray[0] = Array(arrayWidth).fill(0);
           gameBoardColorArray[0] = Array(arrayWidth).fill(canvasColor);
           console.log('finish clearing row');
-          //console.log("here are all the y")
           for (let i = 0; i < coorArray.length; i++) {
             for (let j = 0; j < coorArray[i].length; j++) {
               this.ctx.fillStyle = gameBoardColorArray[i][j];
@@ -562,36 +551,27 @@ export default ({
             }
           }
           // account for combo score, and iterate it
+          let { level } = recordRef.current;
           score += 10 * combo + level * 5;
-          console.log('Current Record', combo, level, score);
-          this.ctx.font = '21px Arial';
-          this.ctx.fillStyle = 'white';
-          this.ctx.fillRect(270, 29, 200, 24);
-          this.ctx.strokeStyle = canvasColor;
-          this.ctx.fillStyle = canvasColor;
-          this.ctx.strokeRect(270, 29, 200, 24);
-          this.ctx.fillText(score.toString(), 280, 49);
+          recordRef.current = { score, level, lineClear };
         }
       }
+      useRecord(recordRef.current);
     };
 
     // check to see if we can level up, it is set to be every 5 lines we can level up
     levelUp = () => {
-      if (lineClear % 4 === 0 && lineClear != 0) {
+      let { level, lineClear } = recordRef.current;
+      if (lineClear % 4 === 0 && lineClear !== 0) {
         level++;
+        console.log(level);
+        recordRef.current = { ...recordRef.current, level };
         window.clearInterval(dropEventRef.current);
         dropEventRef.current = window.setInterval(() => {
-          this.update(KeyPress.Down);
+          curTetrominoRef.current?.update(KeyPress.Down);
           // set interval can drop faster over time
         }, initialDropTime / level);
         console.log('New time interval: ', initialDropTime / level);
-        this.ctx.font = '21px Arial';
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(270, 145, 200, 24);
-        this.ctx.fillStyle = canvasColor;
-        this.ctx.strokeStyle = canvasColor;
-        this.ctx.strokeRect(270, 145, 200, 24);
-        this.ctx.fillText(level.toString(), 280, 165);
       }
     };
 
@@ -643,5 +623,5 @@ export default ({
     initiateTetromino();
   };
 
-  return { useCtx, resetGame };
+  return { useCtx, resetGame, updateMove };
 };

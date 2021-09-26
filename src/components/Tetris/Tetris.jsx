@@ -6,6 +6,7 @@ import GameBoard from './components/GameBoard';
 const GRID_WIDTH = '300px';
 
 const Wrapper = styled(CenterWrapper)`
+  user-select: none;
   @media (max-width: 850px) {
     flex-direction: column;
   }
@@ -47,11 +48,9 @@ const FlexVerticalWrapper = styled.div`
   }
 `;
 
-const FlexVertical = styled.div`
+const Flex = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
   position: relative;
   margin: 20px 0;
   @media (max-width: 500px) {
@@ -66,9 +65,9 @@ export default () => {
         <Title>Tetris</Title>
         <SubTitle>By Jiajin Zheng</SubTitle>
       </FlexVerticalWrapper>
-      <FlexVertical>
+      <Flex>
         <GameBoard />
-      </FlexVertical>
+      </Flex>
     </Wrapper>
   );
 };
