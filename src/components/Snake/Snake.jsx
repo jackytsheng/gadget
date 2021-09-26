@@ -47,11 +47,9 @@ const FlexVerticalWrapper = styled.div`
   }
 `;
 
-const FlexVertical = styled.div`
+const Flex = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
   position: relative;
   margin: 20px 0;
   @media (max-width: 500px) {
@@ -66,9 +64,9 @@ export default () => {
         <Title>Snake</Title>
         <SubTitle>By Jiajin Zheng</SubTitle>
       </FlexVerticalWrapper>
-      <FlexVertical>
+      <Flex>
         <Canvas />
-      </FlexVertical>
+      </Flex>
     </Wrapper>
   );
 };

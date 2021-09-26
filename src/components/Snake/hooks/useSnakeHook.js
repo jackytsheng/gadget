@@ -2,15 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import useTouchMoveHook from '../../../hooks/touchMoveHook';
 import useArrowPad from '../../../hooks/arrowPad';
 
-export default (
-  width,
-  height,
-  scale,
-  useLose,
-  useRecord,
-  useBestRecord,
-  previousRecord
-) => {
+export default (width, height, scale, useLose, useRecord) => {
   // Note: This must be divisible
   const rows = height / scale;
   const columns = width / scale;
@@ -26,23 +18,25 @@ export default (
   });
   const snakeTailPosRef = useRef([{ x: 0, y: 0, id: '00' }]);
   const headingRef = useRef('Right');
-  const nextHeadingRef = useRef(null);
+  const curDirectionRef = useRef('Right');
+
   const speedRef = useRef({ xSpeed: scale, ySpeed: 0 });
-  const levelRef = useRef(1);
-  const scoreRef = useRef(0);
+  const lastEatenRef = useRef(Date.now());
+  const recordRef = useRef({ level: 1, length: 1, score: 0 });
+  const intervalRef = useRef(0);
 
   const changeDirection = (direction) => {
-    if (direction === 'Up' && headingRef.current !== 'Down') {
-      nextHeadingRef.current = direction;
+    if (direction === 'Up' && curDirectionRef.current !== 'Down') {
+      headingRef.current = direction;
       speedRef.current = { xSpeed: 0, ySpeed: -scale };
-    } else if (direction === 'Down' && headingRef.current !== 'Up') {
-      nextHeadingRef.current = direction;
+    } else if (direction === 'Down' && curDirectionRef.current !== 'Up') {
+      headingRef.current = direction;
       speedRef.current = { xSpeed: 0, ySpeed: scale };
-    } else if (direction === 'Left' && headingRef.current !== 'Right') {
-      nextHeadingRef.current = direction;
+    } else if (direction === 'Left' && curDirectionRef.current !== 'Right') {
+      headingRef.current = direction;
       speedRef.current = { xSpeed: -scale, ySpeed: 0 };
-    } else if (direction === 'Right' && headingRef.current !== 'Left') {
-      nextHeadingRef.current = direction;
+    } else if (direction === 'Right' && curDirectionRef.current !== 'Left') {
+      headingRef.current = direction;
       speedRef.current = { xSpeed: scale, ySpeed: 0 };
     }
   };
@@ -50,26 +44,7 @@ export default (
   useTouchMoveHook(changeDirection);
   useArrowPad(changeDirection);
 
-  // Scoring system
-  useEffect(() => {
-    const scoreInterval = setInterval(() => {
-      // If not lost
-      if (!checkLose(snakeTailPosRef.current[0].id)) {
-        // Update Scoring & Level
-        updateLevel();
-        if (scoreRef.current > previousRecord.score) {
-          useBestRecord({ score: scoreRef.current, level: levelRef.current });
-        }
-
-        useRecord({ score: scoreRef.current, level: levelRef.current });
-      }
-    }, 500);
-
-    return () => {
-      clearInterval(scoreInterval);
-    };
-  }, []);
-
+  const InitialTime = 400;
   // When ctx is received
   useEffect(() => {
     // Initial tail position is the same as the head
@@ -77,32 +52,42 @@ export default (
       return;
     }
 
-    const timeInterval = Math.floor(300 / (levelRef.current * 0.4 + 1));
-    console.log('Time Interval', timeInterval);
+    console.log('Time Interval', InitialTime);
 
-    const gameInterval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       // Checkout lose
       const lost = checkLose(snakeTailPosRef.current[0].id);
       if (lost) {
-        if (scoreRef.current > previousRecord.score) {
-          localStorage.setItem(
-            'Snake-Best',
-            JSON.stringify({ score: scoreRef.current, level: levelRef.current })
-          );
-        }
+        useLose(true);
+      } else {
+        update();
+        draw(ctx);
+      }
+    }, InitialTime);
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [ctx]);
+
+  const newInterval = () => {
+    const timeInterval = Math.floor(
+      InitialTime / (recordRef.current.level * 0.4 + 1)
+    );
+    clearInterval(intervalRef.current);
+    console.log('Time Interval', timeInterval);
+
+    intervalRef.current = setInterval(() => {
+      // Checkout lose
+      const lost = checkLose(snakeTailPosRef.current[0].id);
+      if (lost) {
         useLose(true);
       } else {
         update();
         draw(ctx);
       }
     }, timeInterval);
-
-    // Add a listening
-
-    return () => {
-      clearInterval(gameInterval);
-    };
-  }, [ctx, levelRef.current]);
+  };
 
   const resetAll = () => {
     snakePosRef.current = {
@@ -116,8 +101,7 @@ export default (
     snakeTailPosRef.current = [{ x: 0, y: 0, id: '00' }];
     headingRef.current = 'Right';
     speedRef.current = { xSpeed: scale, ySpeed: 0 };
-    levelRef.current = 1;
-    scoreRef.current = 0;
+    recordRef.current = { level: 1, length: 1, score: 0 };
   };
 
   const draw = (ctx) => {
@@ -138,6 +122,7 @@ export default (
   };
 
   const update = () => {
+    curDirectionRef.current = headingRef.current;
     let x = snakePosRef.current.x + speedRef.current.xSpeed;
     let y = snakePosRef.current.y + speedRef.current.ySpeed;
 
@@ -159,24 +144,30 @@ export default (
     // Set head position
     snakePosRef.current = { x, y };
 
-    // Set head direction, so that it won't react to keyboard too sensitively
-    headingRef.current = nextHeadingRef.current;
-
     // If eaten then not need to pop
     !eatenFruit() && snakeTailPosRef.current.pop();
   };
 
-  const calNextScore = () =>
-    Math.floor(
-      50 * (levelRef.current * 0.1 + levelRef.current) * levelRef.current
-    );
+  const UpdateRecord = () => {
+    // Get the time different between fruit eaten
+    const length = snakeTailPosRef.current?.length;
+    let { level, score } = recordRef.current;
+    const newNow = Date.now();
+    score += Math.floor(100000 / (newNow - lastEatenRef.current));
+    lastEatenRef.current = newNow;
 
-  const updateLevel = () => {
-    scoreRef.current += levelRef.current;
-    if (scoreRef.current > calNextScore()) {
-      levelRef.current += 1;
-      console.log('next level threshold', calNextScore());
+    // every 5 fruit, level up
+    const fruitEaten = length - 1;
+    if (fruitEaten % 4 === 0) {
+      // ignore the first
+      if (fruitEaten) {
+        level++;
+        newInterval();
+      }
     }
+
+    recordRef.current = { level, length, score };
+    useRecord(recordRef.current);
   };
 
   const checkLose = (id) => {
@@ -194,16 +185,12 @@ export default (
     const eaten = x === fx && y === fy;
 
     if (eaten) {
-      const bonus = Math.floor(
-        scoreRef.current * 0.03 + levelRef.current * 0.1 + levelRef.current
-      );
-      scoreRef.current += bonus;
-
-      console.log('Current Fruit Bonus:', bonus);
       fruitPosRef.current = {
         x: Math.floor(Math.random() * rows) * scale,
         y: Math.floor(Math.random() * columns) * scale,
       };
+
+      UpdateRecord();
     }
     return eaten;
   };

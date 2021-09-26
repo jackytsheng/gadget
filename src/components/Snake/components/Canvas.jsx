@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
-import FlagTwoTone from '@material-ui/icons/FlagTwoTone';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import AssistantPhoto from '@material-ui/icons/AssistantPhoto';
+import LinearScale from '@material-ui/icons/LinearScale';
 import useSnakeHook from '../hooks/useSnakeHook';
 import Information from './Information';
 import CenterWrapper from '../../../Layout/CenterWrapper';
@@ -16,11 +18,22 @@ const Wrapper = styled.div`
 
 const Record = styled.div`
   position: relative;
-  width: 100%;
+  width: 160px;
   display: flex;
-  justify-content: space-around;
-  margin-top: 30px;
+  flex-direction: column;
+
+  @media (max-width: 850px) {
+    position: fixed;
+    top: 10%;
+    right: 15%;
+  }
+  @media (max-width: 500px) {
+    position: fixed;
+    top: 10px;
+    right: 15%;
+  }
 `;
+
 const Canvas = styled.canvas`
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
@@ -45,6 +58,7 @@ const LosePop = styled.div`
   right: 0;
   background-color: ${POP_BG_COLOR};
 `;
+
 const LostText = styled.div`
   font-size: 25px;
   font-weight: 500;
@@ -52,6 +66,7 @@ const LostText = styled.div`
   color: ${BORDER_COLOR};
   letter-spacing: 0.3px;
 `;
+
 const RestartBtn = styled(Button)`
   margin-top: 15px !important;
   width: 120px;
@@ -70,15 +85,34 @@ const RestartBtn = styled(Button)`
   }
 `;
 
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    avatar: {
+      border: '1px solid #3f51b5',
+      backgroundColor: 'transparent',
+    },
+    chip: {
+      width: '150px',
+      justifyContent: 'flex-start',
+      paddingLeft: '10px',
+      margin: '10px 0 10px 10px',
+      '@media (max-width:850px)': {
+        paddingLeft: 0,
+        margin: '5px 0 5px 5px',
+      },
+      '@media (max-width:500px)': {
+        paddingLeft: 0,
+        margin: '1px 0 1px 1px',
+      },
+    },
+  })
+);
+
 export default () => {
+  const classes = useStyles();
   const canvasRef = useRef(null);
   const [lose, useLose] = useState(false);
-  const [record, useRecord] = useState({ score: 0, level: 1 });
-  const [best, useBestRecord] = useState(
-    localStorage.getItem('Snake-Best')
-      ? JSON.parse(localStorage.getItem('Snake-Best'))
-      : { score: 0, level: 1 }
-  );
+  const [record, useRecord] = useState({ score: 0, level: 1, length: 1 });
   const [clickRestart, useClickRestart] = useState(false);
   // Size of the canvas
   const CANVAS_WIDTH = 300;
@@ -92,9 +126,7 @@ export default () => {
     CANVAS_HEIGHT,
     SCALE,
     useLose,
-    useRecord,
-    useBestRecord,
-    best
+    useRecord
   );
 
   // on Mount
@@ -116,7 +148,7 @@ export default () => {
     useClickRestart(false);
 
     // Reset record
-    useRecord({ score: 0, level: 1 });
+    useRecord({ score: 0, level: 1, length: 1 });
 
     resetGame();
   }, [clickRestart]);
@@ -128,8 +160,9 @@ export default () => {
           <LosePop>
             <PopUpWrapper>
               <LostText>You lost !</LostText>
-              <LostText>Level : {record.level}</LostText>
               <LostText>Score : {record.score}</LostText>
+              <LostText>Snake Length : {record.length}</LostText>
+              <LostText>Level : {record.level}</LostText>
               <RestartBtn
                 variant='outlined'
                 onClick={() => useClickRestart(true)}
@@ -141,26 +174,26 @@ export default () => {
         )}
         <Information />
       </Wrapper>
-      {/* <Record>
-        <Chip icon={<FlagTwoTone />} variant='outlined' label={record.score} />
+      <Record>
         <Chip
-          avatar={<Avatar>Lv</Avatar>}
+          className={classes.chip}
+          icon={<AssignmentIcon />}
+          label={'Score: ' + record.score}
           variant='outlined'
-          label={record.level}
         />
         <Chip
-          color='primary'
-          icon={<FlagTwoTone />}
+          className={classes.chip}
+          icon={<LinearScale />}
+          label={'Length: ' + record.length}
           variant='outlined'
-          label={best.score}
         />
         <Chip
-          color='primary'
-          avatar={<Avatar>Lv</Avatar>}
+          className={classes.chip}
+          icon={<AssistantPhoto />}
+          label={'Level: ' + record.level}
           variant='outlined'
-          label={best.level}
         />
-      </Record> */}
+      </Record>
     </>
   );
 };
