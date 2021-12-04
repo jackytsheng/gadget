@@ -9,6 +9,7 @@ import ClearAll from '@material-ui/icons/ClearAll';
 import useTetris, { KeyPress } from '../hooks/useTetris';
 import CenterWrapper from '../../../Layout/CenterWrapper';
 import Information from './Information';
+import ArrowPad from '../../ArrowPad';
 import { GestureDetector } from 'react-onsenui';
 import { debounce } from '../../../utils/debounce';
 
@@ -209,6 +210,7 @@ export default () => {
           )}
         </Wrapper>
         <Information />
+        <ArrowPad />
       </GestureDetector>
       <Record>
         <Chip
