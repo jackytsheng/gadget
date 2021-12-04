@@ -11,11 +11,20 @@ import DobutsuShogi from '../components/DobutsuShogi';
 import Siege from '../components/Siege';
 import Snake from '../components/Snake';
 import LogicSimulator from '../components/LogicSimulator';
+import { useWindowSize } from '../hooks/useWindowSize';
+import { IconButton } from '@material-ui/core';
+import ArrowBackRounded from '@material-ui/icons/ArrowBackRounded';
+
 const ReturnHome = ({ handleClick }) => {
-  return (
+  const size = useWindowSize();
+  const mobileSize  = size.width < 500;
+  return ( mobileSize ?
+    <IconButton color="primary" aria-label="back to home" onClick={handleClick} >
+      <ArrowBackRounded />
+    </IconButton> : 
     <ReturnHomeBtn color='primary' onClick={handleClick}>
       Return Home
-    </ReturnHomeBtn>
+    </ReturnHomeBtn> 
   );
 };
 

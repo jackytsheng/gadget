@@ -1977,18 +1977,6 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@use-gesture/core@^10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@use-gesture/core/-/core-10.0.0.tgz#00caa83f8a5a4292f487862cc5186facb988fc3d"
-  integrity sha512-Xr8qusq1UeHy+UcEpw4yinwLLOhvyX9DOaNbiYruSYppdef2fEHC8JtA32jc1QEUU5C7DBEO1onvBQdZNXtlLg==
-
-"@use-gesture/react@^10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@use-gesture/react/-/react-10.0.0.tgz#31f1145bf9467c22acc4f1884dbdf3fbd41d6da3"
-  integrity sha512-ltJ+uvrqqHyeJhA4bpSj4hi7K59ijTMcjxKoHOEQdrIw5N8RVoByEw9P5EJPGA0TSHFe01lDIA+NIOiG6oG81w==
-  dependencies:
-    "@use-gesture/core" "^10.0.0"
-
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
   resolved "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.8.5.tgz"
@@ -11886,10 +11874,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.4.3:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.3.tgz#bdc5407caa2b109efd4f82fe130656f977a29324"
-  integrity sha512-4xfscpisVgqqDfPaJo5vkd+Qd/ItkoagnHpufr+i2QCHBsNYp+G7UAoyFl8aPtx879u38wPV65rZ8qbGZijalA==
+typescript@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.2.tgz#8ac1fba9f52256fdb06fb89e4122fa6a346c2998"
+  integrity sha512-5BlMof9H1yGt0P8/WF+wPNw6GfctgGjXp5hkblpyT+8rkASSmkUKMXrxR0Xg8ThVCi/JnHQiKXeBaEwCeQwMFw==
 
 unbox-primitive@^1.0.1:
   version "1.0.1"
