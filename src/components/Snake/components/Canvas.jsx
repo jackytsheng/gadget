@@ -7,8 +7,10 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import AssistantPhoto from '@material-ui/icons/AssistantPhoto';
 import LinearScale from '@material-ui/icons/LinearScale';
 import useSnakeHook from '../hooks/useSnakeHook';
+import { useWindowSize } from '../../../hooks/useWindowSize';
 import Information from './Information';
 import CenterWrapper from '../../../Layout/CenterWrapper';
+import ArrowPad from '../../ArrowPad';
 
 const Wrapper = styled.div`
   width: ${({ width }) => width}px;
@@ -114,6 +116,8 @@ export default () => {
   const [lose, useLose] = useState(false);
   const [record, useRecord] = useState({ score: 0, level: 1, length: 1 });
   const [clickRestart, useClickRestart] = useState(false);
+  const size = useWindowSize();
+  const isMobileSize = size.width < 500;
   // Size of the canvas
   const CANVAS_WIDTH = 300;
   const CANVAS_HEIGHT = 300;
@@ -121,13 +125,16 @@ export default () => {
   // Size of one Unit
   const SCALE = 10;
 
-  const { useCtx, resetGame } = useSnakeHook(
+  const { useCtx, resetGame, changeDirection } = useSnakeHook(
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
     SCALE,
     useLose,
     useRecord
   );
+  const setTouchPadDirection = (dir) => {
+    changeDirection(dir);
+  };
 
   // on Mount
   useEffect(() => {
@@ -173,6 +180,7 @@ export default () => {
           </LosePop>
         )}
         <Information />
+        {isMobileSize && <ArrowPad setDirection={setTouchPadDirection} />}
       </Wrapper>
       <Record>
         <Chip

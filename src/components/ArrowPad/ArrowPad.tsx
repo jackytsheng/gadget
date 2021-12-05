@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   margin-top: 10px;
 `;
 export default ({ setDirection }: any) => {
-  const [arrowPadOn, setArrowPadOn] = useState(true);
+  const [arrowPadOn, setArrowPadOn] = useState(false);
   return (
     <Wrapper>
       {arrowPadOn ? (

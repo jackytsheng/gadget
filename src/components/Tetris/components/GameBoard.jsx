@@ -12,6 +12,7 @@ import Information from './Information';
 import ArrowPad from '../../ArrowPad';
 import { GestureDetector } from 'react-onsenui';
 import { debounce } from '../../../utils/debounce';
+import { useWindowSize } from '../../../hooks/useWindowSize';
 
 // Size of the canvas , change this make Dimension may break the game
 const CANVAS_WIDTH = 244;
@@ -125,6 +126,8 @@ export default () => {
   const [lose, useLose] = useState(false);
   const [record, useRecord] = useState({ score: 0, level: 1, lineClear: 0 });
   const [clickRestart, useClickRestart] = useState(false);
+  const size = useWindowSize();
+  const isMobileSize = size.width < 500;
 
   const {
     useCtx,
@@ -139,6 +142,9 @@ export default () => {
   });
 
   const updateMove = debounce(updateMoveNonDebounce, 16);
+  const setTouchPadDirection = (dir) => {
+    updateMove(dir);
+  };
 
   // on Mount
   useEffect(() => {
@@ -162,6 +168,7 @@ export default () => {
 
     resetGame();
   }, [clickRestart]);
+
   return (
     <>
       <GestureDetector
@@ -210,8 +217,9 @@ export default () => {
           )}
         </Wrapper>
         <Information />
-        <ArrowPad />
+        {isMobileSize && <ArrowPad setDirection={setTouchPadDirection} />}
       </GestureDetector>
+
       <Record>
         <Chip
           className={classes.chip}

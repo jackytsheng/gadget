@@ -23,26 +23,25 @@ const Square = styled.i`
   height: 25px;
 `;
 
-export default ({ closeArrowPad, children }: any) => {
+export default ({ closeArrowPad, setDirection }: any) => {
   return (
     <Wrapper>
       <Square />
-      <IconButton color='primary'>
+      <IconButton color='primary' onClick={() => setDirection('Up')}>
         <ArrowDropUp />
       </IconButton>
       <IconButton color='primary' onClick={closeArrowPad}>
         <Cancel />
       </IconButton>
-      <IconButton color='primary'>
+      <IconButton color='primary' onClick={() => setDirection('Left')}>
         <ArrowLeft />
       </IconButton>
-      <IconButton color='primary'>
+      <IconButton color='primary' onClick={() => setDirection('Down')}>
         <ArrowDropDown />
       </IconButton>
-      <IconButton color='primary'>
+      <IconButton color='primary' onClick={() => setDirection('Right')}>
         <ArrowRight />
       </IconButton>
-      {children}
     </Wrapper>
   );
 };

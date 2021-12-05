@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import useTouchMoveHook from '../../../hooks/touchMoveHook';
 import useArrowPad from '../../../hooks/arrowPad';
+import ArrowPad from '../../ArrowPad';
 
 export default (width, height, scale, useLose, useRecord) => {
   // Note: This must be divisible
@@ -195,5 +196,5 @@ export default (width, height, scale, useLose, useRecord) => {
     return eaten;
   };
 
-  return { useCtx, resetGame: resetAll };
+  return { useCtx, resetGame: resetAll, changeDirection };
 };

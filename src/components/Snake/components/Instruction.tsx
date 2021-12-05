@@ -77,7 +77,7 @@ export default function InteractiveList() {
           </div>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant='h6'>Mobile</Typography>
+          <Typography variant='h6'>Mobile Screen</Typography>
           <div className={classes.demo}>
             <List dense={false}>
               {generate(<SwipeRight />, 'Move Right', classes)}

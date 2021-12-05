@@ -89,7 +89,7 @@ export default function InteractiveList() {
           </div>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant='h6'>Mobile</Typography>
+          <Typography variant='h6'>Mobile Screen Only</Typography>
           <div className={classes.demo}>
             <List dense={false}>
               {generate(<ScrollHorizontal />, 'Move Horizontally', classes)}
@@ -99,6 +99,10 @@ export default function InteractiveList() {
               {generate(<DoubleTap />, 'Hard Drop', classes)}
             </List>
           </div>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Typography variant='h6'>Arrow Pad Can Work With Gesture</Typography>
         </Grid>
       </Grid>
     </div>
