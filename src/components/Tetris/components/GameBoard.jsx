@@ -84,7 +84,7 @@ const ButtonWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  margin-top: 20px;
+  margin-top: ${(props) => (props.isMobile ? '0px' : '20px')};
 `;
 const RestartBtn = styled(Button)`
   margin-top: 15px !important;
@@ -223,7 +223,7 @@ export default () => {
             </LosePop>
           )}
         </Wrapper>
-        <ButtonWrapper>
+        <ButtonWrapper isMobile = {isMobileSize}}>
           <Information size={isMobileSize ? 'small' : ''} />
           {isMobileSize && (
             <ArrowPad size={'small'} setDirection={setTouchPadDirection} />
