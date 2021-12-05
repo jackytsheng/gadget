@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
-import { Chip } from '@material-ui/core';
+import { Chip, ButtonGroup } from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AssistantPhoto from '@material-ui/icons/AssistantPhoto';
 import ClearAll from '@material-ui/icons/ClearAll';
@@ -79,6 +79,13 @@ const LostText = styled.div`
   letter-spacing: 0.3px;
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+`;
 const RestartBtn = styled(Button)`
   margin-top: 15px !important;
   width: 120px;
@@ -216,8 +223,12 @@ export default () => {
             </LosePop>
           )}
         </Wrapper>
-        <Information />
-        {isMobileSize && <ArrowPad setDirection={setTouchPadDirection} />}
+        <ButtonWrapper>
+          <Information size={isMobileSize ? 'small' : ''} />
+          {isMobileSize && (
+            <ArrowPad size={'small'} setDirection={setTouchPadDirection} />
+          )}
+        </ButtonWrapper>
       </GestureDetector>
 
       <Record>

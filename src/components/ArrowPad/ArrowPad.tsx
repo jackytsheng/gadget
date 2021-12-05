@@ -6,9 +6,8 @@ import Arrow from './Arrow';
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 10px;
 `;
-export default ({ setDirection }: any) => {
+export default ({ setDirection, size }: any) => {
   const [arrowPadOn, setArrowPadOn] = useState(false);
   return (
     <Wrapper>
@@ -19,6 +18,7 @@ export default ({ setDirection }: any) => {
         />
       ) : (
         <Button
+          size={size}
           variant='outlined'
           color='primary'
           onClick={() => setArrowPadOn(true)}

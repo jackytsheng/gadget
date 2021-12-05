@@ -21,10 +21,9 @@ const ListWrapper = styled.div`
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 30px;
 `;
 
-const Information = () => {
+const Information = ({ size }: any) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -37,8 +36,13 @@ const Information = () => {
 
   return (
     <Wrapper>
-      <Button variant='outlined' color='primary' onClick={handleClickOpen}>
-        How to control
+      <Button
+        variant='outlined'
+        color='primary'
+        size={size}
+        onClick={handleClickOpen}
+      >
+        How to Play
       </Button>
       <Dialog
         open={open}
