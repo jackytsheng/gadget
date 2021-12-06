@@ -223,7 +223,7 @@ export default () => {
             </LosePop>
           )}
         </Wrapper>
-        <ButtonWrapper isMobile = {isMobileSize}}>
+        <ButtonWrapper isMobile={isMobileSize}>
           <Information size={isMobileSize ? 'small' : ''} />
           {isMobileSize && (
             <ArrowPad size={'small'} setDirection={setTouchPadDirection} />
