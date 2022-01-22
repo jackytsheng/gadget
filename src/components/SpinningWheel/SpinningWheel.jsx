@@ -64,7 +64,6 @@ const LabelLists = styled.div`
 `;
 const CirclePicker = styled(Circle)`
   span:nth-child(${(props) => {
-        console.log(props.selectedColorPosition);
         return props.selectedColorPosition;
       }})
     div
@@ -88,59 +87,37 @@ const InputGroup = styled.div`
   align-items: center;
 `;
 const rouletteData = [
+  '1. Prize',
   '1',
-  '1. 指定',
-  '1. 喝酒',
+  '1. Punish',
   '2',
-  '2. 喝酒',
+  '2. Punish',
   '3',
-  '3. 喝酒',
+  '3. Punish',
   '4',
-  '2. 指定',
-  '4. 喝酒',
+  '2. Prize',
+  '4. Punish',
   '5',
-  '5. 喝酒',
+  '5. Punish',
   '6',
-  '6. 喝酒',
+  '6. Punish',
   '7',
-  '3. 指定',
-  '7. 喝酒',
+  '3. Prize',
+  '7. Punish',
   '8',
-  '8. 喝酒',
+  '8. Punish',
   '9',
-  '9. 喝酒',
+  '9. Punish',
   '10',
-  '4. 指定',
-  '10. 喝酒',
-  '11',
-  '11. 喝酒',
-  '12',
-  '12. 喝酒',
-  '13',
-  '13. 喝酒',
-  '5. 指定',
-  '14',
-  '14. 喝酒',
-  '15',
-  '15. 喝酒',
-  '16',
-  '16. 喝酒',
-  '6. 指定',
-  '17',
-  '17. 喝酒',
-  '18',
-  '18. 喝酒',
-  '19.',
-  '19. 喝酒',
 ];
 
 const defaultColors = [colors.RED, colors.GREEN, colors.YELLOW];
 
 const pickColor = (text) => {
   switch (text.split(' ')[1]) {
-    case '指定':
+    case 'Prize':
       return defaultColors[1];
-    case '喝酒':
+    case 'Punish':
       return defaultColors[0];
     default:
       return defaultColors[2];

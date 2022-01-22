@@ -73,10 +73,10 @@ export default ({ rouletteData, setRouletteData }) => {
           variant='outlined'
           onClick={() =>
             setRouletteData([
-              { option: 'Option 1', style: {} },
-              { option: 'Option 2', style: {} },
-              { option: 'Option 3', style: {} },
-              { option: 'Option 4', style: {} },
+              { option: 'Option 1', style: { backgroundColor: colors.RED } },
+              { option: 'Option 2', style: { backgroundColor: colors.YELLOW } },
+              { option: 'Option 3', style: { backgroundColor: colors.RED } },
+              { option: 'Option 4', style: { backgroundColor: colors.YELLOW } },
             ])
           }
           endIcon={<Delete />}
