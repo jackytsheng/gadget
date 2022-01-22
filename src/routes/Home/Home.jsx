@@ -127,6 +127,18 @@ class Home extends React.Component {
             }}
             stacks={['React']}
           />
+          <ProjectCard
+            width={WIDTH}
+            img={Siege}
+            height={MEDIA_HEIGHT}
+            title='Spinning Wheel'
+            subTitle='developed in 2021'
+            description='Want to enjoy the most out of your party game ? Spin this roulette'
+            handleClick={() => {
+              this.handleClick('/spinning-wheel');
+            }}
+            stacks={['React']}
+          />
           {/* <ProjectCard
             width={WIDTH}
             img={Siege}

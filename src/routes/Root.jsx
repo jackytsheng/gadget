@@ -10,6 +10,7 @@ import Tetris from '../components/Tetris';
 import DobutsuShogi from '../components/DobutsuShogi';
 import Siege from '../components/Siege';
 import Snake from '../components/Snake';
+import SpinningWheel from '../components/SpinningWheel';
 import LogicSimulator from '../components/LogicSimulator';
 import { useWindowSize } from '../hooks/useWindowSize';
 import { IconButton } from '@material-ui/core';
@@ -17,14 +18,15 @@ import ArrowBackRounded from '@material-ui/icons/ArrowBackRounded';
 
 const ReturnHome = ({ handleClick }) => {
   const size = useWindowSize();
-  const mobileSize  = size.width < 500;
-  return ( mobileSize ?
-    <IconButton color="primary" aria-label="back to home" onClick={handleClick} >
+  const mobileSize = size.width < 500;
+  return mobileSize ? (
+    <IconButton color='primary' aria-label='back to home' onClick={handleClick}>
       <ArrowBackRounded />
-    </IconButton> : 
+    </IconButton>
+  ) : (
     <ReturnHomeBtn color='primary' onClick={handleClick}>
       Return Home
-    </ReturnHomeBtn> 
+    </ReturnHomeBtn>
   );
 };
 
@@ -89,6 +91,11 @@ export default () => {
         <Route path='/logicsimulator' exact>
           <FullSizeCanvas>
             <LogicSimulator />
+          </FullSizeCanvas>
+        </Route>
+        <Route path='/spinning-wheel' exact>
+          <FullSizeCanvas>
+            <SpinningWheel />
           </FullSizeCanvas>
         </Route>
         <Route path='/' exact>

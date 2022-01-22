@@ -100,7 +100,9 @@ export default ({
     let curTetromino = new Tetromino(
       firstTetramino.shape,
       firstTetramino.color,
-      ctx!
+      ctx!,
+      () => useLose(true),
+      (record) => useRecord(record)
     );
     curTetrominoRef.current = curTetromino;
     curTetromino.drawTetromino();
@@ -140,7 +142,6 @@ export default ({
 
   let { coorArray, gameBoardArray, gameBoardColorArray, stopedShapeArray } =
     initiateArrays(arrayWidth, arrayHeight, scale, canvasColor);
-
   // Initialising game data
   class Tetromino {
     tetroArray: any;
@@ -149,10 +150,15 @@ export default ({
     startY: any;
     shape: string = '';
     ctx: CanvasRenderingContext2D;
+    setLosed: () => void;
+    setRecord: (record: RecordProps) => void;
+
     constructor(
       tetro: number[][],
       color: string,
-      ctx: CanvasRenderingContext2D
+      ctx: CanvasRenderingContext2D,
+      setLosed: () => void,
+      setRecord: (record: RecordProps) => void
     ) {
       this.tetroArray = tetro;
       //every time start at the fifth column of the game board
@@ -160,6 +166,8 @@ export default ({
       this.startY = 0;
       this.color = color;
       this.ctx = ctx;
+      this.setLosed = setLosed;
+      this.setRecord = setRecord;
     }
 
     // this function will draw the tetromino and record it.
@@ -251,7 +259,7 @@ export default ({
       if (this.checkLose()) {
         console.log('you lost');
 
-        useLose(true);
+        this.setLosed();
 
         // Stop the game
         window.clearInterval(dropEventRef.current);
@@ -556,7 +564,7 @@ export default ({
           recordRef.current = { score, level, lineClear };
         }
       }
-      useRecord(recordRef.current);
+      this.setRecord(recordRef.current);
     };
 
     // check to see if we can level up, it is set to be every 5 lines we can level up
