@@ -9,6 +9,7 @@ import Tetris from './img/tetris.png';
 import TwoZeroFourEightDemo from './img/2048.png';
 import DobutsuShogi from './img/dobutsu-shogi.png';
 import Siege from './img/siege.png';
+import SpinningWheel from './img/spinning-wheel.png';
 import Snake from './img/snake.png';
 import Typography from '@material-ui/core/Typography';
 
@@ -129,7 +130,7 @@ class Home extends React.Component {
           />
           <ProjectCard
             width={WIDTH}
-            img={Siege}
+            img={SpinningWheel}
             height={MEDIA_HEIGHT}
             title='Spinning Wheel'
             subTitle='developed in 2021'
