@@ -140,6 +140,18 @@ class Home extends React.Component {
             }}
             stacks={['React']}
           />
+          <ProjectCard
+            width={WIDTH}
+            img={SpinningWheel}
+            height={MEDIA_HEIGHT}
+            title='Tic Tac Bigger Toe'
+            subTitle='developed in 2022'
+            description='Of course you know how to play Tic Tac Toe, but what about this variant ? bigger toe?'
+            handleClick={() => {
+              this.handleClick('/tictacbiggertoe');
+            }}
+            stacks={['React']}
+          />
           {/* <ProjectCard
             width={WIDTH}
             img={Siege}
@@ -159,7 +171,7 @@ class Home extends React.Component {
         </DisplayContainer>
         <Redirect to={this.state.redirect} />
         <Copyright component='div'>
-          Copyright &copy; 2021 Jiajin Zheng. All rights reserved.
+          Copyright &copy; 2022 Jiajin Zheng. All rights reserved.
         </Copyright>
       </React.Fragment>
     );
