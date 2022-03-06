@@ -11,6 +11,7 @@ import DobutsuShogi from './img/dobutsu-shogi.png';
 import Siege from './img/siege.png';
 import SpinningWheel from './img/spinning-wheel.png';
 import Snake from './img/snake.png';
+import TicTacBiggerToe from './img/tictacbiggertoe.png';
 import Typography from '@material-ui/core/Typography';
 
 const WIDTH = '325px';
@@ -142,7 +143,7 @@ class Home extends React.Component {
           />
           <ProjectCard
             width={WIDTH}
-            img={SpinningWheel}
+            img={TicTacBiggerToe}
             height={MEDIA_HEIGHT}
             title='Tic Tac Bigger Toe'
             subTitle='developed in 2022'
