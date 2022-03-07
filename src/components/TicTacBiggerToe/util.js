@@ -45,3 +45,57 @@ export const makeMove = (playerGrids, row, column) => {
 };
 
 export const deepCopy = (a) => JSON.parse(JSON.stringify(a));
+
+export const checkNoMoreMove = (gameGrid) => {
+  let count3 = 0;
+  let count2 = 0;
+  gameGrid.forEach((r) =>
+    r.forEach((c) => {
+      switch (c[1]) {
+        case '3':
+          count3++;
+          break;
+        case '2':
+          count2++;
+          break;
+        default:
+          break;
+      }
+    })
+  );
+  return count3 === 6 && count2 === 3;
+};
+
+export const takeOutFromGrid = (
+  gameGrid,
+  currentPlayerPiece,
+  playerGrid,
+  row,
+  col
+) => {
+  const copyGrids = deepCopy(playerGrid);
+  const currentOnGrid = gameGrid[row][col];
+  if (currentOnGrid && currentOnGrid[0] !== currentPlayerPiece) {
+    if (copyGrids.rows[row] !== 0) {
+      copyGrids.rows[row] -= 1;
+    }
+
+    if (copyGrids.cols[col] !== 0) {
+      copyGrids.cols[col] -= 1;
+    }
+
+    if (row === col) {
+      if (copyGrids.diag[row] !== 0) {
+        copyGrids.diag[row] -= 1;
+      }
+    }
+
+    if (row + col + 1 === 3) {
+      if (copyGrids.oDiag[row] !== 0) {
+        copyGrids.oDiag[row] -= 1;
+      }
+    }
+  }
+
+  return copyGrids;
+};

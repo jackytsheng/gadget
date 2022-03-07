@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
-import { checkWin, deepCopy, isGameEnd, makeMove } from './util';
+import {
+  checkWin,
+  deepCopy,
+  isGameEnd,
+  makeMove,
+  checkNoMoreMove,
+  takeOutFromGrid,
+} from './util';
 import Button from '@material-ui/core/Button';
 import darkPawn from './assets/dark-pawn.svg';
 import lightPawn from './assets/light-pawn.svg';
@@ -267,7 +274,8 @@ const TicTacBiggerToe = () => {
       copiedGrid[row][col] = 'O' + P1Holder[selectedPiece];
       setP1Holder(copiedP1Holder);
       nextPos = nextBiggest(P2Holder);
-      setP1Grid(makeMove(p1Grid, row, col), () => {});
+      setP1Grid(makeMove(p1Grid, row, col));
+      setP2Grid(takeOutFromGrid(grid, 'O', p2Grid, row, col));
       registerMoveToGrid(row, col);
       setP1Turn(false);
     } else {
@@ -277,6 +285,7 @@ const TicTacBiggerToe = () => {
       setP2Holder(copiedP2Holder);
       nextPos = nextBiggest(P1Holder);
       setP2Grid(makeMove(p2Grid, row, col));
+      setP1Grid(takeOutFromGrid(grid, 'X', p1Grid, row, col));
       registerMoveToGrid(row, col);
       setP1Turn(true);
     }
@@ -337,32 +346,12 @@ const TicTacBiggerToe = () => {
   useEffect(() => {
     checkWin(p1Grid.rows, p1Grid.cols, p1Grid.diag, p1Grid.oDiag) &&
       setWinner(1);
-  }, [p1Grid]);
-
-  useEffect(() => {
     checkWin(p2Grid.rows, p2Grid.cols, p2Grid.diag, p2Grid.oDiag) &&
       setWinner(2);
-  }, [p2Grid]);
+  }, [p1Grid, p2Grid]);
 
-  const checkNoMoreMove = () => {
-    let playerBiggest;
-    if (p1Turn) {
-      playerBiggest = 'O' + nextBiggest(P2Holder);
-    } else {
-      playerBiggest = 'X' + nextBiggest(P1Holder);
-    }
-    let canStillBePlace = 0;
-    grid.forEach((r) =>
-      r.forEach((c) => {
-        if (checkPlaceable(c, playerBiggest)) {
-          canStillBePlace = 1;
-        }
-      })
-    );
-    return canStillBePlace !== 1;
-  };
   useEffect(() => {
-    if (isGameEnd(grid) && checkNoMoreMove()) {
+    if (isGameEnd(grid) && checkNoMoreMove(grid)) {
       setNoMoreMove(true);
     }
   }, [grid]);
@@ -455,7 +444,7 @@ const TicTacBiggerToe = () => {
         {(winner || noMoreMove) && (
           <Modal>
             <ModalWrapper>
-              {winner ? `Player ${winner} Win !` : 'Draw !'}
+              {winner ? `Player ${winner} Win` : 'Draw'}
             </ModalWrapper>
             <RestartBtn onClick={reset}>Restart</RestartBtn>
           </Modal>

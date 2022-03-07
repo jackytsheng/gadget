@@ -1,4 +1,10 @@
-import { checkWin, isGameEnd, makeMove } from './util';
+import {
+  checkNoMoreMove,
+  checkWin,
+  isGameEnd,
+  makeMove,
+  takeOutFromGrid,
+} from './util';
 describe('Util test', () => {
   it.each`
     rows         | columns      | diag         | oDiag        | result
@@ -18,6 +24,7 @@ describe('Util test', () => {
     pGrids                                                                     | row  | col  | resultGrid
     ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${0} | ${0} | ${{ rows: [1, 0, 0], cols: [1, 0, 0], diag: [1, 0, 0], oDiag: [0, 0, 0] }}
     ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${2} | ${0} | ${{ rows: [0, 0, 1], cols: [1, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 1] }}
+    ${{ rows: [1, 0, 0], cols: [0, 1, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${1} | ${1} | ${{ rows: [1, 1, 0], cols: [0, 2, 0], diag: [0, 1, 0], oDiag: [0, 1, 0] }}
     ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${0} | ${1} | ${{ rows: [1, 0, 0], cols: [0, 1, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }}
     ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${1} | ${0} | ${{ rows: [0, 1, 0], cols: [1, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }}
   `(
@@ -25,6 +32,23 @@ describe('Util test', () => {
     ({ pGrids, row, col, resultGrid }) => {
       expect(JSON.stringify(makeMove(pGrids, row, col))).toBe(
         JSON.stringify(resultGrid)
+      );
+    }
+  );
+  it.each`
+    grid                                                            | cur    | resultGrids                                                                | row  | col  | pGrids
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${'X'} | ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${0} | ${0} | ${{ rows: [1, 0, 0], cols: [1, 0, 0], diag: [1, 0, 0], oDiag: [0, 0, 0] }}
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${'X'} | ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${2} | ${0} | ${{ rows: [0, 0, 1], cols: [1, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 1] }}
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${'X'} | ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${0} | ${1} | ${{ rows: [1, 0, 0], cols: [0, 1, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }}
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${'O'} | ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${1} | ${0} | ${{ rows: [0, 1, 0], cols: [1, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }}
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${'O'} | ${{ rows: [1, 0, 1], cols: [1, 0, 1], diag: [1, 0, 1], oDiag: [0, 0, 0] }} | ${1} | ${1} | ${{ rows: [1, 0, 1], cols: [1, 0, 1], diag: [1, 0, 1], oDiag: [0, 0, 0] }}
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${'X'} | ${{ rows: [0, 0, 0], cols: [0, 0, 0], diag: [0, 0, 0], oDiag: [0, 0, 0] }} | ${1} | ${1} | ${{ rows: [0, 1, 0], cols: [0, 1, 0], diag: [0, 1, 0], oDiag: [0, 1, 0] }}
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${'O'} | ${{ rows: [2, 0, 1], cols: [0, 2, 0], diag: [1, 0, 0], oDiag: [0, 0, 0] }} | ${1} | ${1} | ${{ rows: [2, 0, 1], cols: [0, 2, 0], diag: [1, 0, 0], oDiag: [0, 0, 0] }}
+  `(
+    'checking result for placement on $row $col and taken out',
+    ({ grid, cur, pGrids, row, col, resultGrids }) => {
+      expect(JSON.stringify(takeOutFromGrid(grid, cur, pGrids, row, col))).toBe(
+        JSON.stringify(resultGrids)
       );
     }
   );
@@ -38,4 +62,12 @@ describe('Util test', () => {
       expect(isGameEnd(gameGrid)).toBe(result);
     }
   );
+  it.each`
+    gameGrid                                                        | result
+    ${[['O2', 'O2', 'X3'], ['X3', 'O1', 'X3'], ['O1', 'O1', 'X1']]} | ${false}
+    ${[['O2', 'O2', 'X3'], ['X2', 'O3', 'X3'], ['O3', 'O3', 'X3']]} | ${true}
+    ${[['O2', 'O2', 'X3'], ['X2', 'O3', 'X3'], ['O3', 'O3', 'X2']]} | ${false}
+  `('check is game has any more move for result', ({ gameGrid, result }) => {
+    expect(checkNoMoreMove(gameGrid)).toBe(result);
+  });
 });
